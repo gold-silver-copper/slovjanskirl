@@ -49,7 +49,7 @@ impl Action {
         println!("WAIT WHATTT");
 
         match destination {
-            LocativeID::Cardinal(cd) => panic!("not implemented"), //world.move_entity_in_direction(subject, cd),
+            LocativeID::Cardinal(cd) => world.move_entity_in_direction(subject, cd), //world.move_entity_in_direction(subject, cd),
             LocativeID::Entity(_) => {
                 panic!("not implemented")
             }

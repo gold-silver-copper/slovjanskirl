@@ -126,14 +126,14 @@ impl MyWorld {
         let mut batchvec = Vec::new();
         for x in 0..100 {
             for y in 0..100 {
-                for z in 0..=1 {
+               
                     batchvec.push(Voxel {
                         floor: (),
                         furniture: (),
                         roof: (),
                         voxel_pos: (x, y),
                     });
-                }
+                
             }
         }
         let newtree = RTree::bulk_load(batchvec);
@@ -163,7 +163,8 @@ impl MyWorld {
 
     pub fn voxel_blocks_movement_at(&self, point: &MyPoint) -> bool {
         if let Some(got_point) = self.get_voxel_at(point) {
-            todo!("implement voxel blocking movements");
+            //todo!("implement voxel blocking movements");
+            return false;
         } else {
             if point.0 > 0 && point.1 > 0 {
                 return false;
@@ -312,7 +313,7 @@ impl MyWorld {
                 messages_to_render: Vec::new(),
             }
         } else {
-            //   println!("DESSSSSS");
+              // println!("DESSSSSS");
             RenderPacket::new()
         }
     }

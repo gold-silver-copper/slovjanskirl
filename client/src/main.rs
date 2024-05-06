@@ -120,6 +120,7 @@ fn local_world_process(mut masterok : ResMut<Masterik>){
 }
 
 fn create_local_account(mut masterok : ResMut<Masterik>){
+
     let local_info = masterok.client_world.make_account();
     masterok.player_id = local_info.0;
     masterok.location = local_info.1;
@@ -151,6 +152,13 @@ fn keyboard_input_system(input: Res<ButtonInput<KeyCode>> ,mut masterok : ResMut
        panic!("BYE");
      }
 
-     masterok.client_world.receive((client_action,client_id));
+     if client_action != ActionType::Wait {
+        masterok.client_world.receive((client_action,client_id));
+        println!("{:#?}",masterok.client_world.components);
+
+
+     }
+
+  
 
 }
