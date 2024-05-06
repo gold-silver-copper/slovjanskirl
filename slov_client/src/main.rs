@@ -42,14 +42,14 @@ fn ui_example_system(
 
     egui::CentralPanel::default().frame(Frame::none()).show(contexts.ctx_mut(), |ui| {
 
-            let av_height = ui.available_height().clamp(0., 2000.);
-            let av_width = ui.available_width().clamp(0., 2000.);
+            let av_height = ui.available_height().clamp(100., 2000.) -20.;
+            let av_width = ui.available_width().clamp(100., 2000.) -10.;
 
            
-            egui::SidePanel::right("b").min_width(av_width/(4.)).frame(Frame::none()).show_inside(ui, |ui| {
+            egui::SidePanel::right("b").min_width(av_width/(4.)).max_width(av_width/(4.)).show_inside(ui, |ui| {
                 ui.add(termres.terminal_info.backend_mut());
             });
-            egui::TopBottomPanel::top("a").min_height(av_height).frame(Frame::none()).show_inside(ui, |ui| {
+            egui::TopBottomPanel::top("a").min_height(av_height).max_height(av_height).frame(Frame::none()).show_inside(ui, |ui| {
                 ui.add(termres.terminal_game.backend_mut());
             });
        
@@ -129,10 +129,13 @@ struct BevyTerminal<RataguiBackend: ratatui::backend::Backend> {
 // Implement default on the resource to initialize it
 impl Default for BevyTerminal<RataguiBackend> {
     fn default() -> Self {
-        let backend1 = RataguiBackend::new(20, 20);
+        let mut backend1 = RataguiBackend::new(20, 20);
+        backend1.set_font_size(15);
         let mut terminal1 = Terminal::new(backend1).unwrap();
 
-        let backend2 = RataguiBackend::new(20, 20);
+
+        let mut backend2 = RataguiBackend::new(20, 20);
+        backend2.set_font_size(11);
         let mut terminal2 = Terminal::new(backend2).unwrap();
         BevyTerminal {
             terminal_game: terminal1,
