@@ -56,10 +56,15 @@ impl MyWorld {
         // Extend with actual game logic
     }
     //z must be above 0 for movement
-    pub fn make_account(&mut self) -> EntityID {
+    pub fn make_account(&mut self) -> (EntityID,MyPoint) {
         let eid = self.new_entity(&(9, 9), &EntityType::Player);
+        self.server_stuff.account_counter+=1;
 
-        eid
+        self.server_stuff.entity_accid_map.insert(eid.clone(), self.server_stuff.account_counter.clone());
+
+        let my_point = self.components.ent_loc_index.get(&eid).unwrap() ;
+
+        (eid,my_point.clone())
     }
 
     pub fn new_entity(&mut self, point: &MyPoint, spawn_type: &EntityType) -> EntityID {
