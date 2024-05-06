@@ -10,10 +10,10 @@ pub type GraphicTriple = (String, Color, Color);
 pub type RoofType = ();
 pub type FloorType = ();
 pub type FurnitureType = ();
-pub type Nominative = EntityID;
-pub type Accusative = EntityID;
-pub type Dative = EntityID;
-pub type Instrumental = EntityID;
+pub type NominativeID = EntityID;
+pub type AccusativeID = EntityID;
+pub type DativeID = EntityID;
+pub type InstrumentalID = EntityID;
 pub type PlayerMessage = String;
 
 
@@ -94,7 +94,7 @@ impl EntityType {
 }
 
 #[derive(Clone, Debug, PartialEq)]
-pub enum Locative {
+pub enum LocativeID {
     Cardinal(CardinalDirection),
     Entity(EntityID),
     Point(MyPoint),

@@ -3,10 +3,10 @@ use crate::*;
 #[derive(Clone, Debug, PartialEq)]
 pub enum ActionType {
     Wait,
-    Take(Accusative),
-    Give(Accusative, Dative),
-    Hit(Accusative, Instrumental),
-    Go(Locative),
+    Take(AccusativeID),
+    Give(AccusativeID, DativeID),
+    Hit(AccusativeID, InstrumentalID),
+    Go(LocativeID),
     Quit,
 }
 
@@ -45,15 +45,15 @@ impl PointDistance for ActionPacket {
 pub struct Action {}
 
 impl Action {
-    pub fn go(world: &mut MyWorld, subject: &EntityID, destination: &Locative) -> SuccessType {
+    pub fn go(world: &mut MyWorld, subject: &EntityID, destination: &LocativeID) -> SuccessType {
         println!("WAIT WHATTT");
 
         match destination {
-            Locative::Cardinal(cd) => panic!("not implemented"), //world.move_entity_in_direction(subject, cd),
-            Locative::Entity(_) => {
+            LocativeID::Cardinal(cd) => panic!("not implemented"), //world.move_entity_in_direction(subject, cd),
+            LocativeID::Entity(_) => {
                 panic!("not implemented")
             }
-            Locative::Point(_) => {
+            LocativeID::Point(_) => {
                 panic!("not implemented")
             }
         }
