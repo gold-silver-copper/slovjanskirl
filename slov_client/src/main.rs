@@ -9,6 +9,14 @@ use ratatui::{
 use ratframe::RataguiBackend;
 use slov_common::*;
 
+
+
+use bevy::{ time::common_conditions::on_timer};
+
+use slov_server::{PingPayload, PongPayload};
+use std::time::Duration;
+
+
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
@@ -161,4 +169,52 @@ fn keyboard_input_system(input: Res<ButtonInput<KeyCode>> ,mut masterok : ResMut
 
   
 
+}
+
+
+
+
+
+
+
+
+
+
+
+fn main() {
+    App::new()
+        .add_plugins(MinimalPlugins)
+        .add_plugins(LogPlugin::default())
+        .add_plugins(RtcClientPlugin {
+            // CAREFUL: This encoding MUST match the server encoding!
+            encoding: TransportEncoding::Json,
+        })
+        .add_client_wo_protocol::<PingPayload>()
+        .add_client_ro_protocol::<PongPayload>(1)
+        .add_systems(
+            OnEnter(RtcClientStatus::Disconnected), // Automatically-reconnect
+            |mut connection_requests: EventWriter<RtcClientRequestEvent>| {
+                connection_requests.send(RtcClientRequestEvent::Connect {
+                    addr: "ws://127.0.0.1:3536".to_string(),
+                });
+            },
+        )
+        .add_systems(
+            Update,
+            {
+                |mut writer: RtcClient<PingPayload>| {
+                    writer.reliable_to_host(PingPayload);
+                    info!("Sent ping...")
+                }
+            }
+            .run_if(
+                on_timer(Duration::from_secs(1)).and_then(in_state(RtcClientStatus::Connected)),
+            ),
+        )
+        .add_systems(Update, |mut reader: RtcClient<PongPayload>| {
+            for _pong in reader.read() {
+                info!("...Received pong!");
+            }
+        })
+        .run();
 }
