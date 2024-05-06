@@ -18,7 +18,7 @@ pub use ratatui::style::{Color, Style, Stylize};
 pub use ratatui::text::Span;
 
 pub use rstar::RTree;
-pub use rstar::{Envelope, PointDistance, RTreeObject, SelectionFunction, AABB};
+pub use rstar::{RTree,Envelope, PointDistance, RTreeObject, SelectionFunction, AABB};
 pub use serde::{Deserialize, Serialize};
 pub use std::collections::HashMap;
 pub use std::collections::HashSet;

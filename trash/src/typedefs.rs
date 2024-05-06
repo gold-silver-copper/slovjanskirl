@@ -8,6 +8,12 @@ pub type Nominative = EntityID;
 pub type Accusative = EntityID;
 pub type Dative = EntityID;
 pub type Instrumental = EntityID;
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+pub enum Locative {
+    Cardinal(CardinalDirection),
+    Entity(EntityID),
+    Point(MyPoint),
+}
 
 pub type PlayerMessage = String;
 pub type GraphicTriple = (String, Color, Color);
@@ -68,12 +74,7 @@ pub struct EntityPacket {
     pub entity_type: EntityType,
     pub entity_id: EntityID,
 }
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
-pub enum Locative {
-    Cardinal(CardinalDirection),
-    Entity(EntityID),
-    Point(MyPoint),
-}
+
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CreateCharacterData {

@@ -10,3 +10,12 @@ exclude = ["assets/*", ".github", "Makefile.toml", "*.log", "tags"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+ratatui = "0.26.2"
+rstar = { git = "https://github.com/georust/rstar.git", branch = "master" }
+serde = "1.0.200"
+
+
+
+[[example]]
+name = "lol"
+doc-scrape-examples = false
