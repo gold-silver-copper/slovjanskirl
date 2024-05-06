@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use bevy_egui::{egui, EguiContexts, EguiPlugin};
+use bevy_egui::{egui::{self, Frame}, EguiContexts, EguiPlugin};
 use ratatui::{
     layout::Rect,
     prelude::{Line, Stylize, Terminal},
@@ -38,27 +38,21 @@ fn ui_example_system(
     );
     draw_ascii_info(&mut termres.terminal_info, &masterok);
 
-    /*
-      egui::Area::new().show(contexts.ctx_mut(), |ui| {
-            ui.add(termres.terminal_info.backend_mut());
-        });
-        egui::SidePanel::right("a").show(contexts.ctx_mut(), |ui| {
-            ui.add(termres.terminal_game.backend_mut());
-        });
+   
 
-    */
+    egui::CentralPanel::default().frame(Frame::none()).show(contexts.ctx_mut(), |ui| {
 
-    println!("context size is {:#?}", contexts.ctx_mut().screen_rect());
+            let av_height = ui.available_height().clamp(0., 2000.);
+            let av_width = ui.available_width().clamp(0., 2000.);
 
-    egui::CentralPanel::default().show(contexts.ctx_mut(), |ui| {
-        egui::Frame::none().fill(egui::Color32::RED).show(ui, |ui| {
-            egui::SidePanel::left("bbb").show_inside(ui, |ui| {
-                ui.add(termres.terminal_game.backend_mut());
-            });
-            egui::SidePanel::right("b").show_inside(ui, |ui| {
+           
+            egui::SidePanel::right("b").min_width(av_width/(4.)).frame(Frame::none()).show_inside(ui, |ui| {
                 ui.add(termres.terminal_info.backend_mut());
             });
-        });
+            egui::TopBottomPanel::top("a").min_height(av_height).frame(Frame::none()).show_inside(ui, |ui| {
+                ui.add(termres.terminal_game.backend_mut());
+            });
+       
     });
 }
 
