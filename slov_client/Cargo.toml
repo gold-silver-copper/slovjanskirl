@@ -15,4 +15,5 @@ ratframe = {version = "1.1.4", default-features = false}
 
 
 slov_common = { path = "../slov_common" }
-slov_server = { path = "../server" }
+
+slov_server = { path = "../slov_server" }
