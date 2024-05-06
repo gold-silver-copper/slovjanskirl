@@ -96,3 +96,8 @@ single - launches u into a game
 multi - show connect screen - ip, user , pass  - then sync
 
 quit-quit
+
+
+
+the overworld is singleplayer and has random seeds for players
+the dungeons are randomly generated and each linked to its own multiplayer instance
