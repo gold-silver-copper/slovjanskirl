@@ -5,7 +5,7 @@ pub type AccountID = u64;
 pub type Health = u64;
 pub type CoordinateUnit = i64;
 pub const LOCAL_RANGE: i64 = 4000;
-pub type MyPoint = (CoordinateUnit, CoordinateUnit, CoordinateUnit);
+pub type MyPoint = (CoordinateUnit, CoordinateUnit);
 pub type GraphicTriple = (String, Color, Color);
 pub type RoofType = ();
 pub type FloorType = ();
@@ -31,15 +31,19 @@ pub enum CardinalDirection {
 impl CardinalDirection {
     pub fn to_xyz(&self) -> MyPoint {
         match self {
-            CardinalDirection::North => (0, 1, 0),
-            CardinalDirection::West => (-1, 0, 0),
-            CardinalDirection::South => (0, -1, 0),
-            CardinalDirection::East => (1, 0, 0),
+            CardinalDirection::North => (0, 1),
+            CardinalDirection::West => (-1, 0),
+            CardinalDirection::South => (0, -1),
+            CardinalDirection::East => (1, 0),
         }
     }
 }
 
 pub struct MyWorld {
+
+    terrain: Terrain,
+    server_stuff: ServerStuff,
+    components: Components,
   
    
  
@@ -79,19 +83,19 @@ pub struct PositionComponent {
 }
 
 impl RTreeObject for PositionComponent {
-    type Envelope = AABB<(i64, i64, i64)>;
+    type Envelope = AABB<(i64, i64)>;
 
     fn envelope(&self) -> Self::Envelope {
-        AABB::from_point((self.point.0, self.point.1, self.point.2))
+        AABB::from_point((self.point.0, self.point.1,))
     }
 }
 
 impl PointDistance for PositionComponent {
-    fn distance_2(&self, point: &(i64, i64, i64)) -> i64 {
+    fn distance_2(&self, point: &(i64, i64)) -> i64 {
         self.point.distance_2(point)
     }
 
-    fn contains_point(&self, point: &(i64, i64, i64)) -> bool {
+    fn contains_point(&self, point: &(i64, i64)) -> bool {
         self.point.contains_point(point)
     }
 }
@@ -126,19 +130,19 @@ impl Voxel {
 }
 
 impl RTreeObject for Voxel {
-    type Envelope = AABB<(i64, i64, i64)>;
+    type Envelope = AABB<(i64, i64)>;
 
     fn envelope(&self) -> Self::Envelope {
-        AABB::from_point((self.voxel_pos.0, self.voxel_pos.1, self.voxel_pos.2))
+        AABB::from_point((self.voxel_pos.0, self.voxel_pos.1,))
     }
 }
 
 impl PointDistance for Voxel {
-    fn distance_2(&self, point: &(i64, i64, i64)) -> i64 {
+    fn distance_2(&self, point: &(i64, i64)) -> i64 {
         self.voxel_pos.distance_2(point)
     }
 
-    fn contains_point(&self, point: &(i64, i64, i64)) -> bool {
+    fn contains_point(&self, point: &(i64, i64)) -> bool {
         self.voxel_pos.contains_point(point)
     }
 }
@@ -176,23 +180,23 @@ pub struct ActionPacket {
 }
 
 impl RTreeObject for ActionPacket {
-    type Envelope = AABB<(i64, i64, i64)>;
+    type Envelope = AABB<(i64, i64)>;
 
     fn envelope(&self) -> Self::Envelope {
         AABB::from_point((
             self.action_location.0,
             self.action_location.1,
-            self.action_location.2,
+          
         ))
     }
 }
 
 impl PointDistance for ActionPacket {
-    fn distance_2(&self, point: &(i64, i64, i64)) -> i64 {
+    fn distance_2(&self, point: &(i64, i64)) -> i64 {
         self.action_location.distance_2(point)
     }
 
-    fn contains_point(&self, point: &(i64, i64, i64)) -> bool {
+    fn contains_point(&self, point: &(i64, i64)) -> bool {
         self.action_location.contains_point(point)
     }
 }
@@ -205,7 +209,7 @@ impl Action {
         println!("WAIT WHATTT");
 
         match destination {
-            Locative::Cardinal(cd) => world.move_entity_in_direction(subject, cd),
+            Locative::Cardinal(cd) => panic!("not implemented"), //world.move_entity_in_direction(subject, cd),
             Locative::Entity(_) => {
                 panic!("not implemented")
             }
