@@ -74,6 +74,8 @@ fn ui_example_system(mut contexts: EguiContexts, mut termres: ResMut<BevyTermina
     });
 }
 
+
+
 fn draw_ascii_game ( terminal: &mut Terminal<RataguiBackend> , client_world: &MyWorld , client_id : &EntityID) {
 
     
@@ -138,6 +140,7 @@ struct Masterik {
     location: MyPoint,
     messages: Vec<String>,
     client_world: MyWorld,
+    is_logged_in: bool,
 
 }
 
@@ -146,7 +149,8 @@ impl Default for Masterik {
         Self { player_id: 0,
             location: (0, 0),
             messages: Vec::new(),
-            client_world: MyWorld::default(), }
+            client_world: MyWorld::default(),  is_logged_in: false, }
+          
     }
 }
 

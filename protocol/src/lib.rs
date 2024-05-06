@@ -1,5 +1,6 @@
 use bevy_rtc::protocol::Protocol;
 use serde::{Deserialize, Serialize};
+use slov_common::{MyPoint, EntityID};
 
 // Used by painting demo
 
@@ -12,9 +13,14 @@ pub struct DrawLinePayload {
 }
 
 #[derive(Protocol, Serialize, Deserialize, Debug, Clone)]
-pub struct ChatPayload {
-    pub from: String,
-    pub message: String,
+pub struct LoginLoad {
+    pub username: String,
+    pub password: String,
+}
+#[derive(Protocol, Serialize, Deserialize, Debug, Clone)]
+pub struct LoginAnswer {
+    pub player_id: EntityID,
+    pub player_location: MyPoint,
 }
 
 // Used by ping demo
