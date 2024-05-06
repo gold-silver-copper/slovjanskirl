@@ -42,8 +42,8 @@ fn ui_example_system(
 
     egui::CentralPanel::default().frame(Frame::none()).show(contexts.ctx_mut(), |ui| {
 
-            let av_height = ui.available_height().clamp(100., 2000.) -20.;
-            let av_width = ui.available_width().clamp(100., 2000.) -10.;
+            let av_height = ui.available_height().clamp(100., 2000.) ;
+            let av_width = ui.available_width().clamp(100., 2000.) ;
 
            
             egui::SidePanel::right("b").min_width(av_width/(4.)).max_width(av_width/(4.)).show_inside(ui, |ui| {
