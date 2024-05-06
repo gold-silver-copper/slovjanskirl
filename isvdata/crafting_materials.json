@@ -1,0 +1,49 @@
+[{
+    "id": "ostrje",
+    "type": "ITEM",
+    "name": "ostŕje",
+    "symbol": "o",
+    "description": "czastj noza ili miecza.",
+    "crafting_options" : ["dlina", "solid_material"],
+    
+    
+    "flags": [ "CRAFT_COMPONENT" ],
+  
+    "comments": "When crafting the creator can choose what dlina they want the blade to be, a short blade would create a knife, a long blade would create a sword"
+  }, 
+  {
+    "id": "rukojet",
+    "type": "ITEM",
+    "name": "rųkojęt́",
+    "symbol": "r",
+    "description": "koristajet sie dla derzzanije predmetov",
+    "crafting_options" : ["dlina", "solid_material"],
+    
+    "flags": [ "CRAFT_COMPONENT" ],
+  
+    "comments": "When crafting the creator can choose what dlina they want the blade to be, a short blade would create a knife, a long blade would create a sword"
+  },
+  {
+    "id": "rame_luka",
+    "type": "ITEM",
+    "name": "dŕžak",
+    "symbol": "d",
+    "description": "koristajet sie dla delanje luka",
+    "crafting_options" : ["dlina", "drva"],
+    
+    "flags": [ "CRAFT_COMPONENT" ],
+  
+    "comments": "When crafting the creator can choose what dlina they want the blade to be, a short blade would create a knife, a long blade would create a sword"
+  },
+  {
+    "id": "tetiva",
+    "type": "ITEM",
+    "name": "dŕžak",
+    "symbol": "d",
+    "description": "koristajet sie dla struny luka",
+    "crafting_options" : ["dlina", "solid_material"],
+    
+    "flags": [ "CRAFT_COMPONENT" ],
+  
+    "comments": "When crafting the creator can choose what dlina they want the blade to be, a short blade would create a knife, a long blade would create a sword"
+  }]

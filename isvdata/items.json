@@ -1,0 +1,25 @@
+[ 
+  {
+    "id": "nozz",
+    "type": "ITEM",
+    "name": "nož",
+    "symbol": "n",
+    "description": "Nož, vilica i žlica dio su pribora za jelo.",
+    "components": [ "ostrje", "rukojet" ],
+    "flags": [ "MELEE_WEAPON" ],
+  
+    "comments": "The weight and length of the knife is determined by the components, so is the damage"
+  },
+   
+  {
+    "id": "luk",
+    "type": "ITEM",
+    "name": "lųk",
+    "symbol": ")",
+    "description": "luk zeby strelati strely",
+    "components": [ "rame_luka", "tetiva" ],
+    "flags": [ "RANGED_WEAPON" ],
+  
+    "comments": "The weight and length of the bow is determined by the components, so is the damage"
+  },
+]

@@ -1,0 +1,86 @@
+animals: fish, birds, land animals , insects
+you fish for fish, you can hunt land animals on foot, and can hunt birds with ranged weapons
+
+plants: trees, grass, shrub
+grass gives grain, trees give logs , shrubs give...
+
+weapons:
+
+clothing:
+
+animal skin
+you can process a dead land animal to get its hide, a bird for its feathers,a fish for bones
+bones any animal
+skin land or bird
+feathers bird
+meat any animal
+
+
+Containers: vedro , paket , sumka
+
+mythical creatures: rusalka, gryf, stwolin
+
+
+character is created and those things are saved as a character creation data object
+, that is attached to the entity., then the entity is given an id, and an inventory, a health component, position,
+
+world is a struct that is say 100 x 100 and containts elements which are chunks. these chunks contain a rng seed
+for generating the base terrain, they also contain the diffs which will be player or entity affected .
+maybe they will contain biome information as well? maybe they can also be tagged with containing a world structure
+whose information will be prefabd, or contain rng for a structure, or use the existing rng for it...
+
+trees can be cut down with an axe. a tree gives X logs, Y branches/stick, Z leaves, roots,
+so each of these logs,branches, etc will be tagged as being that type of tree
+apple trees give apple tree logs, apple tree stick, apple tree seeds,
+
+terrain... a tile can have a terrain, a furniture, and an entity. terrain should have both a ground component, a ground covering component, and then furntire
+because you need dirt on the bottom, then grass on top, then a fence post or a table.
+
+grass can be harvested with any cutting instrument like knife or sickle and gives seeds . but only when it is ready, so have growth cycles
+same with bushes but they provide vines or berries
+have saplings for trees i guess
+
+
+game should probably be built on bevy
+
+but idk about networking...replicon mebe
+
+add a game guide in the game that players can read and find out about things that can be done in the game.
+
+tech stack
+
+
+common: rstar world
+
+server: ezsocket http server... but which
+alternative client: macroquad-egui , reqwest
+
+bevy_rtc 
+
+what i have to create is, first a menu that greets you and then allows you to connect to a server 
+to connect to the server you enter a username and password
+
+if its a new account you go through character creation, if its an existing account you get put back in, if wrong credentials for existing account eror
+
+character creation - in game name (randomly generated)
+hair style, hair color, eye color gender - character chosen
+
+
+You then are spawned randomly in a forest where you can pick berries
+
+
+you can sharpen a weapon to make it sharp , through use it becomes dull and has to be resharpened occasionally
+
+
+woodcrafting skill, metalworking, rock knapping
+
+
+
+you fell a tree, then u have a fallen tree. a fallen tree u can then obrabotati, to get its branches, bark, and timber. a tree will have a size like 5
+and that is how many times u can harvest a fallen tree for a set amount of branches bark and timber each time, 
+
+the more u use a single item the more ur affinity towards that item
+grows and thats the only way to gain skill is to stay with one item?
+players will be so mad if they lose an item
+no skills...
+

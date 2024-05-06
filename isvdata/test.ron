@@ -1,0 +1,69 @@
+DrevoSuper( // optional struct name
+    vidy: ["breza","lipa"],
+
+)
+
+Vecz(
+    kod: "nozz"
+    ime: "nož",
+    znak: "n",
+    komponenty: ["ostrje","rukojet"],
+    flagi: ["BLIZKO_ORUZZJE"]
+)
+
+Stvar(
+    kod: "ostrje",
+    ime:"ostŕje",
+    znak:"o",
+    vozmozzny_material:["metal","drevo","kost","kamenj"],
+
+)
+
+Vidy(
+    tipy: {
+        "metal": ["bronza","zlato","zzelezo","srebro","medj"],
+        "drevo": ["brest","jasenj","lipa","jablanj","kalina","jalovec","brek"],
+        "kamenj": ["granit","kremenj","rubin","mramor","bazalt","kvarc","ametist"],
+        "sosavec": ["los","jelenj","krava","pes"],
+        "ryba":["losos","tunec","karas"],
+        "ptica":["sova","vrabec","vran","gavran","kos"],
+        "gad":["jaszczer","iguana"],
+        "insekt":["nasekomo","szestinozzka","zzuzzelka","mravka"]
+      
+
+    }
+
+)
+
+
+Vecz(
+    kod: "luk"
+    ime: "lųk",
+    znak: "l",
+    komponenty: ["rame_luka", "tetiva"],
+    flagi: ["STRELNO_ORUZZJE"]
+)
+
+Vecz(
+    kod: "sekyra"
+    ime: "sěkyra",
+    znak: "s",
+    komponenty: ["ostrje","rukojet", "obuh"],
+    flagi: ["BLIZKO_ORUZZJE"]
+)
+
+Vecz(
+    kod: "kopje"
+    ime: "kopje",
+    znak: "k",
+    komponenty: ["ostrje","palka"],
+    flagi: ["BLIZKO_ORUZZJE"]
+)
+
+Vecz(
+    kod: "kyj"
+    ime: "kyj",
+    znak: "k",
+    komponenty: ["palka"],
+    flagi: ["BLIZKO_ORUZZJE"]
+)
