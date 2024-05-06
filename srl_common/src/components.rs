@@ -1,8 +1,5 @@
 use crate::*;
 
-
-
-
 #[derive(Clone, Debug)]
 pub struct Components {
     pub entities: HashSet<EntityID>,

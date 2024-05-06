@@ -27,7 +27,7 @@ mod server_stuff;
 pub use server_stuff::*;
 
 pub use ratatui::style::{Color, Style, Stylize};
-pub use ratatui::text::Line;
+use ratatui::{layout::Rect, text::Line};
 pub use ratatui::text::Span;
 pub use rstar::{Envelope, PointDistance, RTree, RTreeObject, SelectionFunction, AABB};
 pub use std::collections::HashMap;

@@ -42,10 +42,10 @@ impl CardinalDirection {
 }
 
 pub fn add_two_points(p1: &MyPoint, p2: &MyPoint) -> MyPoint {
-    let mut result = (0, 0, 0);
+    let mut result = (0, 0);
     result.0 = p1.0 + p2.0;
     result.1 = p1.1 + p2.1;
-    result.2 = p1.2 + p2.2;
+
     result
 }
 
@@ -55,10 +55,10 @@ pub fn create_2d_array(render_width: usize, render_height: usize) -> Vec<Vec<Gra
     grid
 }
 
-pub fn locate_square(e_pos: &MyPoint, w_radius: i64, h_radius: i64, z_shift: i64) -> AABB<MyPoint> {
+pub fn locate_square(e_pos: &MyPoint, w_radius: i64, h_radius: i64) -> AABB<MyPoint> {
     AABB::from_corners(
-        (e_pos.0 - w_radius, e_pos.1 - h_radius, e_pos.2 + z_shift),
-        (e_pos.0 + w_radius, e_pos.1 + h_radius, e_pos.2 + z_shift),
+        (e_pos.0 - w_radius, e_pos.1 - h_radius),
+        (e_pos.0 + w_radius, e_pos.1 + h_radius),
     )
 }
 

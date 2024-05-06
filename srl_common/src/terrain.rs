@@ -1,6 +1,5 @@
 use crate::*;
 
-
 #[derive(Clone, Debug)]
 pub struct Terrain {
     pub voxeltile_grid: RTree<Voxel>,

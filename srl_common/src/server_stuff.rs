@@ -1,6 +1,5 @@
 use crate::*;
 
-
 #[derive(Clone, Debug)]
 pub struct ServerStuff {
     pub input_queue: HashMap<EntityID, ActionType>,
@@ -14,7 +13,7 @@ impl Default for ServerStuff {
         Self {
             input_queue: HashMap::default(),
             output_queue: RTree::default(),
-          
+
             entity_accid_map: HashMap::default(),
         }
     }
