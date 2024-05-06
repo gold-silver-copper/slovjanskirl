@@ -7,9 +7,7 @@ pub type CoordinateUnit = i64;
 pub const LOCAL_RANGE: i64 = 4000;
 pub type MyPoint = (CoordinateUnit, CoordinateUnit);
 pub type GraphicTriple = (String, Color, Color);
-pub type RoofType = ();
-pub type FloorType = ();
-pub type FurnitureType = ();
+
 pub type NominativeID = EntityID;
 pub type AccusativeID = EntityID;
 pub type DativeID = EntityID;
