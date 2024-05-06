@@ -1,4 +1,8 @@
 use bevy::prelude::*;
+use bevy_rtc::protocol::Protocol;
+use bevy_rtc::prelude::*;
+use serde::{Deserialize, Serialize};
+
 
 use bevy_egui::{egui, EguiContexts, EguiPlugin};
 use ratatui::{
@@ -12,6 +16,21 @@ use slov_common::*;
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
+        .add_plugins(RtcServerPlugin {
+            port: 3536,
+       
+        })
+        .add_server_ro_protocol::<PingPayload>(1)
+        .add_server_wo_protocol::<PongPayload>()
+        .add_systems(
+            Update,
+            |mut reader: RtcServer<PingPayload>, mut writer: RtcServer<PongPayload>| {
+                for (peer_id, _ping) in reader.read() {
+                    info!("Received ping! Sending pong...");
+                    writer.reliable_to_peer(peer_id, PongPayload);
+                }
+            },
+        )
         .init_resource::<BevyTerminal<RataguiBackend>>()
         //Initialize the ratatui terminal
         .init_resource::<Masterik>()
@@ -162,3 +181,25 @@ fn keyboard_input_system(input: Res<ButtonInput<KeyCode>> ,mut masterok : ResMut
   
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Used by ping demo
+
+#[derive(Protocol, Serialize, Deserialize, Debug, Clone)]
+pub struct PingPayload;
+
+#[derive(Protocol, Serialize, Deserialize, Debug, Clone)]
+pub struct PongPayload;
