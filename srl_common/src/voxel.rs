@@ -1,10 +1,9 @@
 use crate::*;
-#[derive(Clone, Debug,  PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Voxel {
     pub roof: RoofType,
     pub floor: FloorType,
     pub furniture: FurnitureType,
-
 
     pub voxel_pos: MyPoint,
 }
@@ -26,7 +25,7 @@ impl RTreeObject for Voxel {
     type Envelope = AABB<(i64, i64)>;
 
     fn envelope(&self) -> Self::Envelope {
-        AABB::from_point((self.voxel_pos.0, self.voxel_pos.1,))
+        AABB::from_point((self.voxel_pos.0, self.voxel_pos.1))
     }
 }
 

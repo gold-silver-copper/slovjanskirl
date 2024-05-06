@@ -15,14 +15,12 @@ pub type Accusative = EntityID;
 pub type Dative = EntityID;
 pub type Instrumental = EntityID;
 
-
-#[derive(Clone, Debug, )]
+#[derive(Clone, Debug)]
 pub enum EntityType {
     Player,
     Item,
     Monster,
 }
-
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum Locative {

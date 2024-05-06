@@ -1,6 +1,6 @@
 use crate::*;
 
-#[derive(Clone, Debug,PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum ActionType {
     Wait,
     Take(Accusative),
@@ -10,12 +10,12 @@ pub enum ActionType {
     Quit,
 }
 
-#[derive(Clone, Debug, )]
+#[derive(Clone, Debug)]
 pub enum SuccessType {
     Success,
     Failure,
 }
-#[derive(Clone, Debug, )]
+#[derive(Clone, Debug)]
 pub struct ActionPacket {
     pub action: ActionType,
     pub success: SuccessType,
@@ -27,11 +27,7 @@ impl RTreeObject for ActionPacket {
     type Envelope = AABB<(i64, i64)>;
 
     fn envelope(&self) -> Self::Envelope {
-        AABB::from_point((
-            self.action_location.0,
-            self.action_location.1,
-          
-        ))
+        AABB::from_point((self.action_location.0, self.action_location.1))
     }
 }
 
@@ -45,7 +41,7 @@ impl PointDistance for ActionPacket {
     }
 }
 
-#[derive(Clone, Debug, )]
+#[derive(Clone, Debug)]
 pub struct Action {}
 
 impl Action {

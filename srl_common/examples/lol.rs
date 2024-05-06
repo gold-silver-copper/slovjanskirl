@@ -1,9 +1,8 @@
-
 use srl_common::*;
-fn main (){
+fn main() {
+    let boop: MyPoint = (5, 5);
+    let nw = MyWorld::default();
 
-    let boop: MyPoint = (5,5);
-
-    println!("{:#?}",boop);
-
+    println!("{:#?}", boop);
+    println!("{:#?}", nw);
 }
