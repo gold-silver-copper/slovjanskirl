@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-
+use protocol::{PingPayload, PongPayload};
 use bevy_egui::{egui, EguiContexts, EguiPlugin};
 use ratatui::{
     prelude::{Stylize, Terminal,Line},
@@ -13,7 +13,7 @@ use bevy_rtc::prelude::*;
 
 use bevy::{ time::common_conditions::on_timer};
 
-use slov_server::{PingPayload, PongPayload};
+
 use std::time::Duration;
 
 

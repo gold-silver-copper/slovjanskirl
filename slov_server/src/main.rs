@@ -2,8 +2,7 @@ use bevy::prelude::*;
 use bevy_rtc::protocol::Protocol;
 use bevy_rtc::prelude::*;
 use serde::{Deserialize, Serialize};
-
-
+use protocol::{PingPayload, PongPayload};
 use bevy_egui::{egui, EguiContexts, EguiPlugin};
 use ratatui::{
     prelude::{Stylize, Terminal,Line},
@@ -194,12 +193,3 @@ fn keyboard_input_system(input: Res<ButtonInput<KeyCode>> ,mut masterok : ResMut
 
 
 
-
-
-// Used by ping demo
-
-#[derive(Protocol, Serialize, Deserialize, Debug, Clone)]
-pub struct PingPayload;
-
-#[derive(Protocol, Serialize, Deserialize, Debug, Clone)]
-pub struct PongPayload;
