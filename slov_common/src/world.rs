@@ -180,7 +180,7 @@ impl MyWorld {
         for ent in ents_at {
             if let Some(etype) = self.components.entity_types.get(&ent) {
                 match etype {
-                    EntityType::Item => {
+                    EntityType::Item(_) => {
                         return false;
                     }
                     EntityType::Player => {

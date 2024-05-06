@@ -13,6 +13,7 @@ exclude = ["assets/*", ".github", "Makefile.toml", "*.log", "tags"]
 ratatui = { version = "0.26.2", default-features = false }
 rstar = { git = "https://github.com/georust/rstar.git", branch = "master" }
 serde = "1.0.200"
+my_display_macro = { path = "../my_display_macro" }
 
 [[example]]
 name = "lol"

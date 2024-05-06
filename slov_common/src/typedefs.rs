@@ -76,14 +76,16 @@ impl RenderPacket {
 #[derive(Clone, Debug)]
 pub enum EntityType {
     Player,
-    Item,
+    Item(ItemType),
     Monster,
 }
+
+
 
 impl EntityType {
     pub fn to_graphictriple(&self) -> GraphicTriple {
         let ent_char = match self {
-            EntityType::Item => "i",
+            EntityType::Item(_) => "i",
             EntityType::Monster => "M",
             EntityType::Player => "@",
         };
