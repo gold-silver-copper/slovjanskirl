@@ -11,14 +11,12 @@ bevy_rtc = { version = "0.3.1", features = ["server"] }
 
 
 
-bevy_egui = "0.27.0"
-
 ratatui = { version = "0.26.2", default-features = false }
 ratframe = {version = "1.1.4", default-features = false}
 #disable defaults features for rat frame if you do not want to import eframe
 
 
 
-
 slov_common = { path = "../slov_common" }
 serde = "1.0.200"
+
