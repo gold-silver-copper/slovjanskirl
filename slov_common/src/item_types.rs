@@ -196,6 +196,11 @@ pub struct MyEntity {
 
 }
 
+pub struct Player {
+    inventory: Vec<Item>,
+    
+}
+
 #[derive(Clone, Debug)]
 pub enum EntityType {
     Player,
