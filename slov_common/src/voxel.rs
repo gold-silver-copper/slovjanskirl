@@ -44,7 +44,7 @@ impl Floor {
 
 impl Voxel {
     pub fn to_graphic(&self) -> GraphicTriple {
-        let voxel_character: String = self.furniture.to_char();
+        let voxel_character: String = self.furniture.to_displaychar();
 
         let voxel_color = self.furniture.to_color();
         let floor_color = self.floor.to_color();

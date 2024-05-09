@@ -18,7 +18,7 @@ impl Default for MyWorld {
         let rngik: u32 = 87243563;
 
         Self {
-            voxeltile_grid: MyWorld::generate_test(rngik),
+           
             entity_tree: RTree::new(),
             entity_map: HashMap::new(),
             server_stuff: ServerStuff::default(),
@@ -26,6 +26,7 @@ impl Default for MyWorld {
             world_seed: rngik.clone(),
             entity_counter: 1,
             ent_loc_index: HashMap::new(),
+            voxeltile_grid: MyWorld::generate_test(rngik),
         }
     }
 }
@@ -102,7 +103,10 @@ impl MyWorld {
     // World initialization function.
     pub fn init_world(&mut self) -> RTree<Voxel> {
         let rngik = self.world_seed.clone();
-        MyWorld::generate_test(rngik)
+  
+      let a =  MyWorld::generate_test(rngik);
+ 
+      a
     }
 
     pub fn generate_test(seed: u32) -> RTree<Voxel> {

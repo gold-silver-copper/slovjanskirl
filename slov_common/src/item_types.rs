@@ -136,7 +136,7 @@ impl PlantType {
             _ => Color::Rgb(34, 139, 34),
         }
     }
-    pub fn to_char(&self) -> String {
+    pub fn to_displaychar(&self) -> String {
         match &self {
             Self::Trava => "'".into(),
             Self::Kovylj => "\"".into(),
@@ -264,17 +264,17 @@ pub enum AmmoType {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct AnimalPart {
-    animal_type: AnimalType,
-    animal_part: AnimalPartType,
+   pub animal_type: AnimalType,
+  pub  animal_part: AnimalPartType,
 }
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Animal {
-    animal_type: AnimalType,
+   pub animal_type: AnimalType,
 }
 
 impl Animal {
-    pub fn to_char(&self) -> String {
+    pub fn to_displaychar(&self) -> String {
         let item_str = match &self.animal_type {
             AnimalType::Bird(x) => {
                 format!("{}", &x)
@@ -351,7 +351,7 @@ pub struct Item {
 }
 
 impl Item {
-    pub fn to_char(&self) -> String {
+    pub fn to_displaychar(&self) -> String {
         let item_str = match &self.item_type {
             ItemType::Melee(x) => {
                 format!("{}", &x.weapon_type)
@@ -400,10 +400,10 @@ pub enum EntityType {
 }
 
 impl EntityType {
-    pub fn to_char(&self) -> String {
+    pub fn to_displaychar(&self) -> String {
         match self {
-            EntityType::Item(x) => x.to_char(),
-            EntityType::Monster(x) => x.to_char(),
+            EntityType::Item(x) => x.to_displaychar(),
+            EntityType::Monster(x) => x.to_displaychar(),//x.to_displaychar(),
             EntityType::Player(_) => "@".into(),
         }
     }
@@ -417,7 +417,7 @@ impl EntityType {
     }
 
     pub fn to_graphictriple(&self) -> GraphicTriple {
-        let ent_char = self.to_char();
+        let ent_char = self.to_displaychar();
         let ent_color = self.to_color();
         (ent_char, ent_color, Color::Black)
     }
@@ -446,7 +446,7 @@ pub struct Mebelj {
 }
 
 impl Mebelj {
-    pub fn to_char(&self) -> String {
+    pub fn to_displaychar(&self) -> String {
         match &self.mebelj_type {
             MebeljType::Stěna => "#".into(),
             MebeljType::Dvėrj => "+".into(),
@@ -470,13 +470,13 @@ pub enum FurnitureType {
 }
 
 impl Furniture {
-    pub fn to_char(&self) -> String {
+    pub fn to_displaychar(&self) -> String {
         match &self.furniture_type {
             FurnitureType::Air => " ".into(),
-            FurnitureType::Drěvo(x) => "♣".into(),
+            FurnitureType::Drěvo(x) => "t".into(),
             FurnitureType::Kust(x) => "*".into(),
-            FurnitureType::Råstlina(x) => x.to_char(),
-            FurnitureType::Mebelj(x) => x.to_char(),
+            FurnitureType::Råstlina(x) => x.to_displaychar(),
+            FurnitureType::Mebelj(x) => x.to_displaychar(),
         }
     }
     pub fn to_color(&self) -> Color {

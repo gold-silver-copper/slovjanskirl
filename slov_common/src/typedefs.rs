@@ -4,7 +4,7 @@ pub type EntityID = u64;
 pub type AccountID = u64;
 pub type Health = i64;
 pub type CoordinateUnit = i64;
-pub const LOCAL_RANGE: i64 = 200;
+pub const LOCAL_RANGE: i64 = 2000;
 pub type MyPoint = (CoordinateUnit, CoordinateUnit);
 pub type GraphicTriple = (String, Color, Color);
 
