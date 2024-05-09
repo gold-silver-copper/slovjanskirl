@@ -6,8 +6,8 @@ pub enum MeleeWeaponType {
     Kyj,
     Meč,
     Kopje,
-
 }
+
 
 
 #[derive(Clone, Debug, Display)]
@@ -39,7 +39,7 @@ pub enum MetalType {
     Zlåto,
     Železo,
     Srebro,
-    Medj
+    Medj,
 }
 
 #[derive(Clone, Debug, Display)]
@@ -51,26 +51,7 @@ pub enum WoodType {
     Kalina,
     Jalovec,
     Brek,
-    Kaštan
-}
-
-
-#[derive(Clone, Debug)]
-pub struct MeleeWeapon {
-    weapon_type : MeleeWeaponType,
-    material_type: Material
-}
-
-
-#[derive(Clone, Debug)]
-pub struct Bow {
-    rame_luka : WoodType,
-    tetiva: Fabric
-}
-
-#[derive(Clone, Debug)]
-pub struct Sling {
-    material_type: Fabric,
+    Kaštan,
 }
 
 
@@ -84,105 +65,158 @@ pub enum FurnitureType {
     Vråta,
     Vaza,
     Škaf,
-
-   
 }
 
-#[derive(Clone, Debug)]
-pub struct Furniture {
-    furniture_type: FurnitureType,
-    material_type: Material
-}
 
 #[derive(Clone, Debug, Display)]
 pub enum PlantType {
-   Trava,
-   Kovylj, //needle grass
-   Burjan, // high grass
-   Kanabis,
-
-
-
-   
+    Trava,
+    Kovylj, //needle grass
+    Burjan, // high grass
+    Kanabis,
 }
 #[derive(Clone, Debug, Display)]
-pub enum AnimalType{ 
+pub enum AnimalType {
     Mammal(MammalType),
     Fish(FishType),
     Bird(BirdType),
-    Lizard(LizardType)
-
+    Lizard(LizardType),
 }
 
 #[derive(Clone, Debug, Display)]
 pub enum MammalType {
-   Los,
-   Jelenj,
-   Krava,
-   Pes,
-   Tigr,
-   
+    Los,
+    Jelenj,
+    Krava,
+    Pes,
+    Tigr,
 }
 
 #[derive(Clone, Debug, Display)]
 pub enum FishType {
-   Losos,
-   Tunec,
-   Karas,
-   
+    Losos,
+    Tunec,
+    Karas,
 }
 
 #[derive(Clone, Debug, Display)]
 pub enum BirdType {
-   Sova,
-   Vrabec,
-   Vran,
-   Gavran,
-   Kos,
-   
+    Sova,
+    Vrabec,
+    Vran,
+    Gavran,
+    Kos,
 }
 
 #[derive(Clone, Debug, Display)]
 pub enum LizardType {
-   Gad,
-   Jaščer,
-   Iguana,
-   Vųž,
-   
+    Gad,
+    Jaščer,
+    Iguana,
+    Vųž,
 }
 
 #[derive(Clone, Debug, Display)]
 pub enum AnimalPartType {
-   Head,
-   Tail,
-   Body,
-   Leg,
-   Feather,
-   Skin,
-   Hair,
-   Breast,
-   Bone,
-   
-}
-
-#[derive(Clone, Debug)]
-pub struct AnimalPart {
-    animal_type : AnimalType,
-    animal_part: AnimalPartType
-}
-
-
-#[derive(Clone, Debug)]
-pub struct Ammo {
-    ammo_type : AmmoType,
-    material_type: Material,
-    quantity: i64
+    Head,
+    Tail,
+    Body,
+    Leg,
+    Feather,
+    Skin,
+    Hair,
+    Breast,
+    Bone,
 }
 
 
 #[derive(Clone, Debug, Display)]
 pub enum AmmoType {
-   Kulja,
-   Strěla
+    Kulja,
+    Strěla,
+}
+
+#[derive(Clone, Debug)]
+pub struct AnimalPart {
+    animal_type: AnimalType,
+    animal_part: AnimalPartType,
+}
+
+#[derive(Clone, Debug)]
+pub struct Animal {
+    animal_type: AnimalType,
    
+}
+
+#[derive(Clone, Debug)]
+pub struct Ammo {
+    ammo_type: AmmoType,
+    material_type: Material,
+    quantity: i64,
+}
+
+
+#[derive(Clone, Debug)]
+pub struct MeleeWeapon {
+    weapon_type: MeleeWeaponType,
+    material_type: Material,
+}
+
+#[derive(Clone, Debug)]
+pub struct Bow {
+    rame_luka: WoodType,
+    tetiva: Fabric,
+}
+
+#[derive(Clone, Debug)]
+pub struct Sling {
+    material_type: Fabric,
+}
+#[derive(Clone, Debug, Display)]
+pub enum ItemType {
+
+    Melee(MeleeWeapon),
+    Bow(Bow),
+    Sling(Sling),
+    Ammo(Ammo),
+
+}
+
+
+#[derive(Clone, Debug)]
+pub struct Item {
+    item_type: ItemType,
+    
+}
+
+
+pub struct MyEntity {
+    position_component: PositionComponent,
+    entity_type: EntityType,
+
+}
+
+#[derive(Clone, Debug)]
+pub enum EntityType {
+    Player,
+    Item(Item),
+    Monster(AnimalType),
+}
+
+impl EntityType {
+    pub fn to_graphictriple(&self) -> GraphicTriple {
+        let ent_char = match self {
+            EntityType::Item(_) => "i",
+            EntityType::Monster(_) => "M",
+            EntityType::Player => "@",
+        };
+        (ent_char.into(), Color::Red, Color::Black)
+    }
+}
+
+
+#[derive(Clone, Debug)]
+pub struct Furniture {
+    furniture_type: FurnitureType,
+    material_type: Material,
 }

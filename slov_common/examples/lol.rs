@@ -7,5 +7,5 @@ fn main() {
     println!("{:#?}", boop);
     println!("{:#?}", nw);
     println!("swordik is {}", swordik);
-  //  println!("typik is {}", typik);
+    //  println!("typik is {}", typik);
 }

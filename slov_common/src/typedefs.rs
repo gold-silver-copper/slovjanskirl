@@ -65,23 +65,7 @@ impl RenderPacket {
     }
 }
 
-#[derive(Clone, Debug)]
-pub enum EntityType {
-    Player,
-    Item,
-    Monster,
-}
 
-impl EntityType {
-    pub fn to_graphictriple(&self) -> GraphicTriple {
-        let ent_char = match self {
-            EntityType::Item => "i",
-            EntityType::Monster => "M",
-            EntityType::Player => "@",
-        };
-        (ent_char.into(), Color::Red, Color::Black)
-    }
-}
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum LocativeID {
