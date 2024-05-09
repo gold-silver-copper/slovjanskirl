@@ -4,7 +4,7 @@ pub struct Voxel {
     pub roof: Roof,
     pub floor: Floor,
     pub furniture: Furniture,
-    pub entity: Option<MyEntity>,
+   
 
     pub voxel_pos: MyPoint,
 }
@@ -43,15 +43,19 @@ impl Floor {
     }
 }
 
-//FIX ALL THIS STUFF
-//FIX ALL THIS STUFF
-//FIX ALL THIS STUFF
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct MyEntity {
+    pub entity_id : EntityID,
+    
+    pub entity_type: EntityType,
+    pub entity_pos: MyPoint,
+}
+
 impl Voxel {
     pub fn to_graphic(&self) -> GraphicTriple {
 
-        let voxel_character:String = if self.entity != None {self.entity.clone().unwrap().entity_type.to_char()
-
-        } else {self.furniture.to_char()};
+        let voxel_character:String = self.furniture.to_char();
       
         let voxel_color = self.furniture.to_color();
         let floor_color = self.floor.to_color();
@@ -75,5 +79,24 @@ impl PointDistance for Voxel {
 
     fn contains_point(&self, point: &(i64, i64)) -> bool {
         self.voxel_pos.contains_point(point)
+    }
+}
+
+
+impl RTreeObject for MyEntity {
+    type Envelope = AABB<(i64, i64)>;
+
+    fn envelope(&self) -> Self::Envelope {
+        AABB::from_point((self.entity_pos.0, self.entity_pos.1))
+    }
+}
+
+impl PointDistance for MyEntity {
+    fn distance_2(&self, point: &(i64, i64)) -> i64 {
+        self.entity_pos.distance_2(point)
+    }
+
+    fn contains_point(&self, point: &(i64, i64)) -> bool {
+        self.entity_pos.contains_point(point)
     }
 }

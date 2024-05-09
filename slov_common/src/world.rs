@@ -2,11 +2,13 @@ use crate::*;
 
 #[derive(Clone, Debug)]
 pub struct MyWorld {
-    pub terrain: Terrain,
+    pub voxeltile_grid: RTree<Voxel>,
+    pub entity_tree: RTree<MyEntity>,
     pub server_stuff: ServerStuff,
     
     pub world_seed: u32,
     pub entity_counter: u64,
+    pub ent_loc_index: HashMap<EntityID,MyPoint>
 }
 
 impl Default for MyWorld {
@@ -14,11 +16,13 @@ impl Default for MyWorld {
         let rngik: u32 = 87243563;
 
         Self {
-            terrain: Terrain::new(rngik.clone()),
+            voxeltile_grid: MyWorld::generate_test(rngik),
+            entity_tree: RTree::new(),
             server_stuff: ServerStuff::default(),
    
             world_seed: rngik.clone(),
-            entity_counter: 1
+            entity_counter: 1,
+            ent_loc_index: HashMap::new()
         }
     }
 }
@@ -37,7 +41,7 @@ impl MyWorld {
         self.server_stuff.output_queue = RTree::new();
 
         for (eid, action) in &my_clone {
-            if let Some(ent_loc) = self.components.ent_loc_index.get(&eid) {
+            if let Some(ent_loc) = self.ent_loc_index.get(&eid) {
                 let caller_loc = ent_loc.clone();
 
                 let success_type = match action {
@@ -79,17 +83,22 @@ impl MyWorld {
         //GET ENTITY ID AND START ADDING COMPONENTS AFTER IT
         let eid = self.entity_counter.clone();
 
-        let pc = PositionComponent {
-            entity_id: eid.clone(),
-            point: point.clone(),
-        };
+      
 
         let my_ent = MyEntity {
+            entity_id: eid.clone(),
             
             entity_type: spawn_type.clone(),
+            entity_pos: point.clone()
         };
 
-       let boop =  self.terrain.voxeltile_grid.locate_at_point_mut(point);
+        self.ent_loc_index.insert(eid.clone(), point.clone());
+
+    
+
+      self.entity_tree.insert(my_ent);
+
+
 
 
         //END ADDING COMPONENTS HERE EXTRA INCREMENT CAUSE WHY NOT
@@ -98,25 +107,7 @@ impl MyWorld {
         return eid;
     }
 
-    pub fn get_ents_at_point(&self, point: &MyPoint) -> Vec<EntityID> {
-        let mut mvec = Vec::new();
-        let boop = self.components.positions.locate_all_at_point(point);
-
-        for player in boop {
-            mvec.push(player.entity_id.clone());
-        }
-        mvec
-    }
-
-    pub fn get_ents_in_aabb(&self, p1: &(i64, i64), p2: &(i64, i64)) -> Vec<EntityID> {
-        let mut mvec = Vec::new();
-
-        let unit_square = AABB::from_corners(p1.clone(), p2.clone());
-        for player in self.components.positions.locate_in_envelope(&unit_square) {
-            mvec.push(player.entity_id.clone());
-        }
-        mvec
-    }
+ 
 
     // World initialization function.
     pub fn init_world(&mut self) -> RTree<Voxel> {
@@ -144,7 +135,7 @@ impl MyWorld {
                     furniture: Furniture {
                         furniture_type
                     },
-                    entity:None,
+                   
                     roof: Roof::Air,
                     voxel_pos: (x, y),
                 });
@@ -157,18 +148,18 @@ impl MyWorld {
 
     pub fn set_voxel_at(&mut self, vox: &Voxel) {
         if let Some(boop) = self
-            .terrain
+         
             .voxeltile_grid
             .locate_at_point_mut(&vox.voxel_pos)
         {
             *boop = vox.clone();
         } else {
-            self.terrain.voxeltile_grid.insert(vox.clone())
+            self.voxeltile_grid.insert(vox.clone())
         }
     }
 
     pub fn get_voxel_at(&self, point: &MyPoint) -> Option<Voxel> {
-        if let Some(boop) = self.terrain.voxeltile_grid.locate_at_point(point) {
+        if let Some(boop) = self.voxeltile_grid.locate_at_point(point) {
             Some(boop.clone())
         } else {
             None
@@ -189,25 +180,7 @@ impl MyWorld {
     }
 
     pub fn entity_blocks_movement_at(&self, point: &MyPoint) -> bool {
-        let ents_at = self.get_ents_at_point(point);
-
-        for ent in ents_at {
-            if let Some(entt) = self.components.entities.get(&ent) {
-                match entt.entity_type {
-                    EntityType::Item(_) => {
-                        return false;
-                    }
-                    EntityType::Player(_) => {
-                        return true;
-                    }
-                    EntityType::Monster(_) => {
-                        return true;
-                    }
-                }
-            }
-
-            // let obj = self.en
-        }
+       
 
         if point.0 > 0 && point.1 > 0 {
             return false;
@@ -237,7 +210,7 @@ impl MyWorld {
         ent: &EntityID,
         render_rect: &Rect,
     ) -> RenderPacket {
-        if let Some(e_pos) = self.components.ent_loc_index.get(ent) {
+        if let Some(e_pos) = self.ent_loc_index.get(ent) {
             let render_width = render_rect.width;
             let render_height = render_rect.height;
             let w_radius = render_width / 2;

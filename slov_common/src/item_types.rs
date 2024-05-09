@@ -378,11 +378,6 @@ impl Item {
 }
 
 #[derive(Clone, Debug, PartialEq)]
-pub struct MyEntity {
-    
-    pub entity_type: EntityType,
-}
-#[derive(Clone, Debug, PartialEq)]
 pub struct Player {
     inventory: InventoryComponent,
     health: HealthComponent,
