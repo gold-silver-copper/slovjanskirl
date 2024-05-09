@@ -8,15 +8,21 @@ pub struct Voxel {
     pub voxel_pos: MyPoint,
 }
 
+#[derive(Clone, Debug, PartialEq)]
+pub enum Roof {
+    Air,
+}
 
 #[derive(Clone, Debug, PartialEq)]
-pub enum Roof {Air}
+pub enum Floor {
+    Air,
+    Dirt,
+}
 
 #[derive(Clone, Debug, PartialEq)]
-pub enum Floor {Air,Dirt}
-
-#[derive(Clone, Debug, PartialEq)]
-pub enum Furniture {Air,}
+pub enum Furniture {
+    Air,
+}
 
 //FIX ALL THIS STUFF
 //FIX ALL THIS STUFF

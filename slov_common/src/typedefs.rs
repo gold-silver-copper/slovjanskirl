@@ -14,8 +14,6 @@ pub type DativeID = EntityID;
 pub type InstrumentalID = EntityID;
 pub type PlayerMessage = String;
 
-
-
 #[derive(Clone, Debug)]
 pub struct GameDataPacket {
     pub entity_info: Vec<EntityPacket>,
@@ -28,10 +26,6 @@ pub struct EntityPacket {
     pub entity_type: EntityType,
     pub entity_id: EntityID,
 }
-
-
-
-
 
 pub fn add_two_points(p1: &MyPoint, p2: &MyPoint) -> MyPoint {
     let mut result = (0, 0);
@@ -54,7 +48,6 @@ pub fn locate_square(e_pos: &MyPoint, w_radius: i64, h_radius: i64) -> AABB<MyPo
     )
 }
 
-
 #[derive(Debug)]
 pub struct RenderPacket {
     pub spans_to_render: Vec<Vec<GraphicTriple>>,
@@ -72,20 +65,17 @@ impl RenderPacket {
     }
 }
 
-
 #[derive(Clone, Debug)]
 pub enum EntityType {
     Player,
-    Item(ItemType),
+    Item,
     Monster,
 }
-
-
 
 impl EntityType {
     pub fn to_graphictriple(&self) -> GraphicTriple {
         let ent_char = match self {
-            EntityType::Item(_) => "i",
+            EntityType::Item => "i",
             EntityType::Monster => "M",
             EntityType::Player => "@",
         };

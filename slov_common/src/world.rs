@@ -56,15 +56,17 @@ impl MyWorld {
         // Extend with actual game logic
     }
     //z must be above 0 for movement
-    pub fn make_account(&mut self) -> (EntityID,MyPoint) {
+    pub fn make_account(&mut self) -> (EntityID, MyPoint) {
         let eid = self.new_entity(&(9, 9), &EntityType::Player);
-        self.server_stuff.account_counter+=1;
+        self.server_stuff.account_counter += 1;
 
-        self.server_stuff.entity_accid_map.insert(eid.clone(), self.server_stuff.account_counter.clone());
+        self.server_stuff
+            .entity_accid_map
+            .insert(eid.clone(), self.server_stuff.account_counter.clone());
 
-        let my_point = self.components.ent_loc_index.get(&eid).unwrap() ;
+        let my_point = self.components.ent_loc_index.get(&eid).unwrap();
 
-        (eid,my_point.clone())
+        (eid, my_point.clone())
     }
 
     pub fn new_entity(&mut self, point: &MyPoint, spawn_type: &EntityType) -> EntityID {
@@ -126,14 +128,12 @@ impl MyWorld {
         let mut batchvec = Vec::new();
         for x in 0..100 {
             for y in 0..100 {
-               
-                    batchvec.push(Voxel {
-                        floor: Floor::Dirt,
-                        furniture: Furniture::Air,
-                        roof: Roof::Air,
-                        voxel_pos: (x, y),
-                    });
-                
+                batchvec.push(Voxel {
+                    floor: Floor::Dirt,
+                    furniture: Furniture::Air,
+                    roof: Roof::Air,
+                    voxel_pos: (x, y),
+                });
             }
         }
         let newtree = RTree::bulk_load(batchvec);
@@ -180,7 +180,7 @@ impl MyWorld {
         for ent in ents_at {
             if let Some(etype) = self.components.entity_types.get(&ent) {
                 match etype {
-                    EntityType::Item(_) => {
+                    EntityType::Item => {
                         return false;
                     }
                     EntityType::Player => {
@@ -195,7 +195,7 @@ impl MyWorld {
             // let obj = self.en
         }
 
-        if point.0 > 0 && point.1 > 0  {
+        if point.0 > 0 && point.1 > 0 {
             return false;
         } else {
             return true;
@@ -236,14 +236,11 @@ impl MyWorld {
             let local_voxel_diffs = self.terrain.voxeltile_diffs.locate_in_envelope(&same_z);
 
             let local_actions = self
-                .server_stuff.output_queue
+                .server_stuff
+                .output_queue
                 .locate_within_distance(e_pos.clone(), LOCAL_RANGE);
 
-            let bottom_left_of_game_screen = (
-                e_pos.0 - w_radius as i64,
-                e_pos.1 - h_radius as i64,
-               
-            );
+            let bottom_left_of_game_screen = (e_pos.0 - w_radius as i64, e_pos.1 - h_radius as i64);
 
             // THIS GRID IS INDEXD Y FIRST
             let mut voxel_grid = create_2d_array(render_width.into(), render_height.into());
@@ -313,7 +310,7 @@ impl MyWorld {
                 messages_to_render: Vec::new(),
             }
         } else {
-              // println!("DESSSSSS");
+            // println!("DESSSSSS");
             RenderPacket::new()
         }
     }
@@ -321,13 +318,16 @@ impl MyWorld {
     pub fn create_game_data_packet_for_entity(&self, ent: &EntityID) -> Option<GameDataPacket> {
         if let Some(e_pos) = self.components.ent_loc_index.get(ent) {
             let local_ents = self
-                .components.positions
+                .components
+                .positions
                 .locate_within_distance(e_pos.clone(), LOCAL_RANGE * 2);
             let local_voxels = self
-                .terrain.voxeltile_diffs
+                .terrain
+                .voxeltile_diffs
                 .locate_within_distance(e_pos.clone(), LOCAL_RANGE / 2);
             let local_actions = self
-                .server_stuff.output_queue
+                .server_stuff
+                .output_queue
                 .locate_within_distance(e_pos.clone(), LOCAL_RANGE / 8);
 
             let mut e_info = Vec::new();
@@ -378,7 +378,9 @@ impl MyWorld {
                 entity_id: ent.clone(),
                 point: destination.clone(),
             });
-            self.components.ent_loc_index.insert(ent.clone(), destination.clone());
+            self.components
+                .ent_loc_index
+                .insert(ent.clone(), destination.clone());
         }
     }
 
