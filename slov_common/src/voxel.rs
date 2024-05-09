@@ -12,11 +12,27 @@ pub struct Voxel {
 pub enum Roof {
     Air,
 }
-
+impl Roof {
+    pub fn to_color(&self) -> Color {
+        match &self {
+            Self::Air => Color::Rgb(239, 240, 235),
+        }
+    }
+}
 #[derive(Clone, Debug, PartialEq)]
 pub enum Floor {
     Air,
     Dirt,
+}
+
+impl Floor {
+    pub fn to_color(&self) -> Color {
+        match &self {
+            Self::Air => Color::Rgb(239, 240, 235),
+            Self::Dirt => Color::Rgb(155,118,83)
+
+        }
+    }
 }
 
 
@@ -26,9 +42,9 @@ pub enum Floor {
 //FIX ALL THIS STUFF
 impl Voxel {
     pub fn to_graphic(&self) -> GraphicTriple {
-        let voxel_character = ",".into();
-        let voxel_color = Color::Green;
-        let floor_color = Color::White;
+        let voxel_character = self.furniture.to_char();
+        let voxel_color = self.furniture.to_color();
+        let floor_color = self.floor.to_color();
 
         (voxel_character, voxel_color, floor_color)
     }

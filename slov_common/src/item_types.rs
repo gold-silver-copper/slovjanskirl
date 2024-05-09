@@ -34,35 +34,37 @@ impl RangedWeaponType {
 
 #[derive(Clone, Debug, Display,PartialEq)]
 pub enum Material {
-    Wood(WoodType),
+    Drěvo(WoodType),
     Metal(MetalType),
-    Stone(StoneType),
+    Kamenj(StoneType),
 }
 
 impl Material {
     pub fn to_color(&self) -> Color {
         match &self {
             Self::Metal(x) => x.to_color(),
-            Self::Stone(x) => x.to_color(),
-            Self::Wood(x) => x.to_color(),
+            Self::Drěvo(x) => x.to_color(),
+            Self::Kamenj(x) => x.to_color(),
         }
     }
 }
 
 #[derive(Clone, Debug, Display,PartialEq)]
 pub enum Fabric {
-    Pulp(WoodType),
-    Hair(MammalType),
-    Leather(MammalType),
-    Cloth(PlantType),
+    Pulpa(WoodType),
+    Vlås(MammalType),
+    Koža(MammalType),
+    Tkanina(PlantType),
+    Plåtno(BushType)
 }
 
 impl Fabric {
     pub fn to_color(&self) -> Color {
         match &self {
-            Self::Cloth(x) => x.to_color(),
-            Self::Hair(x) | Self::Leather(x) => x.to_color(),
-            Self::Pulp(x) => x.to_color(),
+            Self::Tkanina(x) => x.to_color(),
+            Self::Vlås(x) | Self::Koža(x) => x.to_color(),
+            Self::Pulpa(x) => x.to_color(),
+            Self::Plåtno(x) => x.to_color()
         }
     }
 }
@@ -120,22 +122,7 @@ impl StoneType {
     }
 }
 
-#[derive(Clone, Debug, Display,PartialEq)]
-pub enum FurnitureType {
-    Stěna(Material),
-    Stol(Material),
-    Stul(Material),
-    Skrinja(Material), //sunduk
-    Dvėrj(Material),
-    Vråta(Material),
-    Vaza(Material),
-    Škaf(Material),
-    Drěvo(WoodType),
-    Råstlina(PlantType),
-    Statuja(AnimalType),
-    Air
 
-}
 
 #[derive(Clone, Debug, Display,PartialEq)]
 pub enum PlantType {
@@ -152,6 +139,29 @@ impl PlantType {
         }
     }
 }
+
+#[derive(Clone, Debug, Display,PartialEq)]
+pub enum BushType {
+    Klubnika,
+    Jagoda, //needle grass
+    Zemljanika, // high grass
+    Ježina,
+    Kųpina,
+    Brusnica,
+    Malina,
+    Kljukva,
+    Črnica,
+    Žuravina,
+    Bȯzina
+}
+impl BushType {
+    pub fn to_color(&self) -> Color {
+        match &self {
+            _ => Color::Rgb(228, 46, 103),
+        }
+    }
+}
+
 #[derive(Clone, Debug, Display,PartialEq)]
 pub enum AnimalType {
     Mammal(MammalType),
@@ -408,3 +418,49 @@ pub struct Furniture {
    pub furniture_type: FurnitureType,
     
 }
+
+#[derive(Clone, Debug, Display,PartialEq)]
+pub enum FurnitureType {
+    Stěna(Material),
+    Stol(Material),
+    Stul(Material),
+    Skrinja(Material), //sunduk
+    Dvėrj(Material),
+    Vråta(Material),
+    Vaza(Material),
+    Škaf(Material),
+    Drěvo(WoodType),
+    Råstlina(PlantType),
+    Kust(BushType),
+    Statuja(AnimalType),
+    Air
+
+}
+
+impl Furniture {
+    pub fn to_char(&self) -> String {
+        match &self.furniture_type {
+            FurnitureType::Air => " ".into(),
+            FurnitureType::Drěvo(x) => "♣".into(),
+            FurnitureType::Kust(x) => "*".into(),
+            FurnitureType::Stěna(x)=> "#".into(),
+            FurnitureType::Dvėrj(x)=> "+".into(),
+            FurnitureType::Vråta(x)=> "=".into(),
+            _ => format!("{}", self.furniture_type).chars().nth(0).unwrap().to_string()
+
+
+        }
+    }
+    pub fn to_color(&self) -> Color {
+        match &self.furniture_type {
+            FurnitureType::Air => Color::White,
+            FurnitureType::Drěvo(x) => x.to_color(),
+            FurnitureType::Kust(x) => x.to_color(),
+            FurnitureType::Stěna(x)=> x.to_color(),
+            FurnitureType::Dvėrj(x)=> x.to_color(),
+            FurnitureType::Vråta(x)=> x.to_color(),
+            _ => Color::Blue
+        }
+    }
+}
+
