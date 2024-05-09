@@ -52,3 +52,13 @@ pub struct HealthComponent {
     pub cur_health: Health,
     pub max_health: Health,
 }
+
+
+impl HealthComponent{
+    pub fn new(max:&i64) -> HealthComponent {
+
+        HealthComponent { cur_health: max.clone(), max_health: max.clone() }
+    }
+}
+
+pub type InventoryComponent = Vec<Item>;

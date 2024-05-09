@@ -197,13 +197,17 @@ pub struct MyEntity {
 }
 #[derive(Clone, Debug)]
 pub struct Player {
-    inventory: Vec<Item>,
+    inventory: InventoryComponent,
+    health: HealthComponent
 
 }
+
+
 impl Default for Player {
     fn default() -> Self {
         Self{
             inventory: Vec::new(),
+            health: HealthComponent::new(&100),
         }
     }
 }
@@ -212,7 +216,7 @@ impl Default for Player {
 pub enum EntityType {
     Player(Player),
     Item(Item),
-    Monster(AnimalType),
+    Monster(Animal),
 }
 
 impl EntityType {

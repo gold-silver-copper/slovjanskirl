@@ -2,7 +2,7 @@ use crate::*;
 
 pub type EntityID = u64;
 pub type AccountID = u64;
-pub type Health = u64;
+pub type Health = i64;
 pub type CoordinateUnit = i64;
 pub const LOCAL_RANGE: i64 = 4000;
 pub type MyPoint = (CoordinateUnit, CoordinateUnit);
@@ -13,6 +13,7 @@ pub type AccusativeID = EntityID;
 pub type DativeID = EntityID;
 pub type InstrumentalID = EntityID;
 pub type PlayerMessage = String;
+
 
 #[derive(Clone, Debug)]
 pub struct GameDataPacket {
