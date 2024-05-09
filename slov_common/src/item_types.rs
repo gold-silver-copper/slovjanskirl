@@ -17,7 +17,19 @@ pub enum RangedWeaponType {
     Šlojder(Sling),
     Kuša(CrossBow),
     Samostrěl(CrossBow),
-    Arbalet(CrossBow)
+    Arbalet(CrossBow),
+}
+
+impl RangedWeaponType {
+    pub fn to_color(&self) -> Color {
+        match &self {
+            Self::Arbalet(x) | Self::Kuša(x) | Self::Samostrěl(x) => x.telo.to_color(),
+            Self::Šlojder(x) | Self::Prak(x) | Self::Prašča(x) | Self::Proca(x) => {
+                x.material_type.to_color()
+            }
+            Self::Lųk(x) => x.rame_luka.to_color(),
+        }
+    }
 }
 
 #[derive(Clone, Debug, Display)]
@@ -27,12 +39,32 @@ pub enum Material {
     Stone(StoneType),
 }
 
+impl Material {
+    pub fn to_color(&self) -> Color {
+        match &self {
+            Self::Metal(x) => x.to_color(),
+            Self::Stone(x) => x.to_color(),
+            Self::Wood(x) => x.to_color(),
+        }
+    }
+}
+
 #[derive(Clone, Debug, Display)]
 pub enum Fabric {
     Pulp(WoodType),
     Hair(MammalType),
     Leather(MammalType),
     Cloth(PlantType),
+}
+
+impl Fabric {
+    pub fn to_color(&self) -> Color {
+        match &self {
+            Self::Cloth(x) => x.to_color(),
+            Self::Hair(x) | Self::Leather(x) => x.to_color(),
+            Self::Pulp(x) => x.to_color(),
+        }
+    }
 }
 
 #[derive(Clone, Debug, Display)]
@@ -64,6 +96,30 @@ pub enum WoodType {
     Kaštan,
 }
 
+impl WoodType {
+    pub fn to_color(&self) -> Color {
+        match &self {
+            _ => Color::Rgb(139, 69, 19),
+        }
+    }
+}
+
+impl MetalType {
+    pub fn to_color(&self) -> Color {
+        match &self {
+            _ => Color::Rgb(170, 169, 173),
+        }
+    }
+}
+
+impl StoneType {
+    pub fn to_color(&self) -> Color {
+        match &self {
+            _ => Color::Rgb(118, 91, 70),
+        }
+    }
+}
+
 #[derive(Clone, Debug, Display)]
 pub enum FurnitureType {
     Stěna,
@@ -83,6 +139,13 @@ pub enum PlantType {
     Burjan, // high grass
     Kanabis,
 }
+impl PlantType {
+    pub fn to_color(&self) -> Color {
+        match &self {
+            _ => Color::Rgb(34, 139, 34),
+        }
+    }
+}
 #[derive(Clone, Debug, Display)]
 pub enum AnimalType {
     Mammal(MammalType),
@@ -100,11 +163,27 @@ pub enum MammalType {
     Tigr,
 }
 
+impl MammalType {
+    pub fn to_color(&self) -> Color {
+        match &self {
+            _ => Color::Rgb(210, 180, 140),
+        }
+    }
+}
+
 #[derive(Clone, Debug, Display)]
 pub enum FishType {
     Losos,
     Tunec,
     Karas,
+}
+
+impl FishType {
+    pub fn to_color(&self) -> Color {
+        match &self {
+            _ => Color::Rgb(102, 205, 170),
+        }
+    }
 }
 
 #[derive(Clone, Debug, Display)]
@@ -114,7 +193,15 @@ pub enum BirdType {
     Vran,
     Gavran,
     Kos,
-    Gųsę
+    Gųsę,
+}
+
+impl BirdType {
+    pub fn to_color(&self) -> Color {
+        match &self {
+            _ => Color::Rgb(128, 128, 0),
+        }
+    }
 }
 
 #[derive(Clone, Debug, Display)]
@@ -123,6 +210,14 @@ pub enum LizardType {
     Jaščer,
     Iguana,
     Vųž,
+}
+
+impl LizardType {
+    pub fn to_color(&self) -> Color {
+        match &self {
+            _ => Color::Rgb(0, 128, 128),
+        }
+    }
 }
 
 #[derive(Clone, Debug, Display)]
@@ -155,6 +250,37 @@ pub struct Animal {
     animal_type: AnimalType,
 }
 
+impl Animal {
+    pub fn to_char(&self) -> String {
+        let item_str = match &self.animal_type {
+            AnimalType::Bird(x) => {
+                format!("{}", &x)
+            }
+            AnimalType::Mammal(x) => {
+                format!("{}", &x)
+            }
+            AnimalType::Lizard(x) => {
+                format!("{}", &x)
+            }
+            AnimalType::Fish(x) => {
+                format!("{}", &x)
+            }
+        };
+
+        // let item_str = format!("{}", self.item_type);
+        let ch = item_str.chars().nth(0).unwrap().to_string();
+        ch
+    }
+    pub fn to_color(&self) -> Color {
+        match &self.animal_type {
+            AnimalType::Bird(x) => x.to_color(),
+            AnimalType::Mammal(x) => x.to_color(),
+            AnimalType::Lizard(x) => x.to_color(),
+            AnimalType::Fish(x) => x.to_color(),
+        }
+    }
+}
+
 #[derive(Clone, Debug)]
 pub struct Ammo {
     ammo_type: AmmoType,
@@ -171,7 +297,6 @@ pub struct MeleeWeapon {
 #[derive(Clone, Debug)]
 pub struct RangedWeapon {
     pub weapon_type: RangedWeaponType,
-    
 }
 
 #[derive(Clone, Debug)]
@@ -204,17 +329,28 @@ pub struct Item {
 
 impl Item {
     pub fn to_char(&self) -> String {
-
         let item_str = match &self.item_type {
-            ItemType::Melee(x) => {format!("{}", &x.weapon_type)},
-            ItemType::Ranged(x) => {format!("{}", &x.weapon_type)},
-            ItemType::Ammo(x) => {format!("{}", &x.ammo_type)},
-
+            ItemType::Melee(x) => {
+                format!("{}", &x.weapon_type)
+            }
+            ItemType::Ranged(x) => {
+                format!("{}", &x.weapon_type)
+            }
+            ItemType::Ammo(x) => {
+                format!("{}", &x.ammo_type)
+            }
         };
 
-       // let item_str = format!("{}", self.item_type);
+        // let item_str = format!("{}", self.item_type);
         let ch = item_str.chars().nth(0).unwrap().to_lowercase().to_string();
         ch
+    }
+    pub fn to_color(&self) -> Color {
+        match &self.item_type {
+            ItemType::Melee(x) => x.material_type.to_color(),
+            ItemType::Ranged(x) => x.weapon_type.to_color(),
+            ItemType::Ammo(x) => x.material_type.to_color(),
+        }
     }
 }
 
@@ -249,10 +385,15 @@ impl EntityType {
     pub fn to_graphictriple(&self) -> GraphicTriple {
         let ent_char = match self {
             EntityType::Item(x) => x.to_char(),
-            EntityType::Monster(_) => "M".into(),
+            EntityType::Monster(x) => x.to_char(),
             EntityType::Player(_) => "@".into(),
         };
-        (ent_char.into(), Color::Red, Color::Black)
+        let ent_color = match self {
+            EntityType::Item(x) => x.to_color(),
+            EntityType::Monster(x) => x.to_color(),
+            EntityType::Player(_) => Color::Red,
+        };
+        (ent_char, ent_color, Color::Black)
     }
 }
 

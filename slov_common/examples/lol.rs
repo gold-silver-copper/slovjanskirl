@@ -10,7 +10,7 @@ fn main() {
         }),
     };
 
-  //  let ne = EntityType::Item(myitem);
+    //  let ne = EntityType::Item(myitem);
 
     println!("{:#?}", boop);
     println!("{:#?}", nw);
