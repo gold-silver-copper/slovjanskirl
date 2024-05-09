@@ -7,9 +7,9 @@ pub struct Terrain {
 }
 
 impl Terrain {
-    pub fn new(rngik: i64) -> Terrain {
+    pub fn new(rngik: u32) -> Terrain {
         Terrain {
-            voxeltile_grid: MyWorld::init_world(),
+            voxeltile_grid: MyWorld::init_world(rngik),
             voxeltile_diffs: RTree::default(),
         }
     }

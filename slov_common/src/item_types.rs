@@ -1,5 +1,5 @@
 use crate::*;
-#[derive(Clone, Debug, Display,PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq)]
 pub enum MeleeWeaponType {
     Nož,
     Sěkyra,
@@ -8,7 +8,7 @@ pub enum MeleeWeaponType {
     Kopje,
 }
 
-#[derive(Clone, Debug, Display,PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq)]
 pub enum RangedWeaponType {
     Lųk(Bow),
     Proca(Sling),
@@ -32,7 +32,7 @@ impl RangedWeaponType {
     }
 }
 
-#[derive(Clone, Debug, Display,PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq)]
 pub enum Material {
     Drěvo(WoodType),
     Metal(MetalType),
@@ -49,13 +49,13 @@ impl Material {
     }
 }
 
-#[derive(Clone, Debug, Display,PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq)]
 pub enum Fabric {
     Pulpa(WoodType),
     Vlås(MammalType),
     Koža(MammalType),
     Tkanina(PlantType),
-    Plåtno(BushType)
+    Plåtno(BushType),
 }
 
 impl Fabric {
@@ -64,12 +64,12 @@ impl Fabric {
             Self::Tkanina(x) => x.to_color(),
             Self::Vlås(x) | Self::Koža(x) => x.to_color(),
             Self::Pulpa(x) => x.to_color(),
-            Self::Plåtno(x) => x.to_color()
+            Self::Plåtno(x) => x.to_color(),
         }
     }
 }
 
-#[derive(Clone, Debug, Display,PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq)]
 pub enum StoneType {
     Granit,
     Kremenj,
@@ -77,7 +77,7 @@ pub enum StoneType {
     Mramor,
 }
 
-#[derive(Clone, Debug, Display,PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq)]
 pub enum MetalType {
     Bronza,
     Zlåto,
@@ -86,7 +86,7 @@ pub enum MetalType {
     Medj,
 }
 
-#[derive(Clone, Debug, Display,PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq)]
 pub enum WoodType {
     Brest,
     Jasenj,
@@ -122,15 +122,13 @@ impl StoneType {
     }
 }
 
-
-
-#[derive(Clone, Debug, Display,PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq)]
 pub enum PlantType {
     Trava,
     Kovylj, //needle grass
     Burjan, // high grass
     Kanabis,
-    Jasenėc
+    Jasenėc,
 }
 impl PlantType {
     pub fn to_color(&self) -> Color {
@@ -144,16 +142,15 @@ impl PlantType {
             Self::Kovylj => "\"".into(),
             Self::Burjan => "/".into(),
             Self::Kanabis => "⚕".into(),
-            Self::Jasenėc => "⚘".into()
-
+            Self::Jasenėc => "⚘".into(),
         }
     }
 }
 
-#[derive(Clone, Debug, Display,PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq)]
 pub enum BushType {
     Klubnika,
-    Jagoda, //needle grass
+    Jagoda,     //needle grass
     Zemljanika, // high grass
     Ježina,
     Kųpina,
@@ -162,7 +159,7 @@ pub enum BushType {
     Kljukva,
     Črnica,
     Žuravina,
-    Bȯzina
+    Bȯzina,
 }
 impl BushType {
     pub fn to_color(&self) -> Color {
@@ -172,7 +169,7 @@ impl BushType {
     }
 }
 
-#[derive(Clone, Debug, Display,PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq)]
 pub enum AnimalType {
     Mammal(MammalType),
     Fish(FishType),
@@ -180,7 +177,7 @@ pub enum AnimalType {
     Lizard(LizardType),
 }
 
-#[derive(Clone, Debug, Display,PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq)]
 pub enum MammalType {
     Los,
     Jelenj,
@@ -197,7 +194,7 @@ impl MammalType {
     }
 }
 
-#[derive(Clone, Debug, Display,PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq)]
 pub enum FishType {
     Losos,
     Tunec,
@@ -212,7 +209,7 @@ impl FishType {
     }
 }
 
-#[derive(Clone, Debug, Display,PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq)]
 pub enum BirdType {
     Sova,
     Vrabec,
@@ -230,7 +227,7 @@ impl BirdType {
     }
 }
 
-#[derive(Clone, Debug, Display,PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq)]
 pub enum LizardType {
     Gad,
     Jaščer,
@@ -246,7 +243,7 @@ impl LizardType {
     }
 }
 
-#[derive(Clone, Debug, Display,PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq)]
 pub enum AnimalPartType {
     Head,
     Tail,
@@ -259,19 +256,19 @@ pub enum AnimalPartType {
     Bone,
 }
 
-#[derive(Clone, Debug, Display,PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq)]
 pub enum AmmoType {
     Kulja,
     Strěla,
 }
 
-#[derive(Clone, Debug,PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct AnimalPart {
     animal_type: AnimalType,
     animal_part: AnimalPartType,
 }
 
-#[derive(Clone, Debug,PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Animal {
     animal_type: AnimalType,
 }
@@ -307,48 +304,48 @@ impl Animal {
     }
 }
 
-#[derive(Clone, Debug,PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Ammo {
     ammo_type: AmmoType,
     material_type: Material,
     quantity: i64,
 }
 
-#[derive(Clone, Debug,PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct MeleeWeapon {
     pub weapon_type: MeleeWeaponType,
     pub material_type: Material,
 }
 
-#[derive(Clone, Debug,PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct RangedWeapon {
     pub weapon_type: RangedWeaponType,
 }
 
-#[derive(Clone, Debug,PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Bow {
     pub rame_luka: WoodType,
     pub tetiva: Fabric,
 }
 
-#[derive(Clone, Debug,PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct CrossBow {
     pub luk: Bow,
     pub telo: Material,
 }
 
-#[derive(Clone, Debug,PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Sling {
     pub material_type: Fabric,
 }
-#[derive(Clone, Debug, Display,PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq)]
 pub enum ItemType {
     Melee(MeleeWeapon),
     Ranged(RangedWeapon),
     Ammo(Ammo),
 }
 
-#[derive(Clone, Debug,PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Item {
     pub item_type: ItemType,
 }
@@ -380,12 +377,12 @@ impl Item {
     }
 }
 
-#[derive(Clone, Debug,PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct MyEntity {
     pub position_component: PositionComponent,
     pub entity_type: EntityType,
 }
-#[derive(Clone, Debug,PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Player {
     inventory: InventoryComponent,
     health: HealthComponent,
@@ -400,7 +397,7 @@ impl Default for Player {
     }
 }
 
-#[derive(Clone, Debug, Display,PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq)]
 pub enum EntityType {
     Player(Player),
     Item(Item),
@@ -425,10 +422,9 @@ impl EntityType {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Furniture {
-   pub furniture_type: FurnitureType,
-    
+    pub furniture_type: FurnitureType,
 }
-#[derive(Clone, Debug, Display,PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq)]
 pub enum MebeljType {
     Stěna,
     Stol,
@@ -438,14 +434,12 @@ pub enum MebeljType {
     Vråta,
     Vaza,
     Škaf,
-
 }
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Mebelj {
     mebelj_type: MebeljType,
-    material: Material
-
+    material: Material,
 }
 
 impl Mebelj {
@@ -454,10 +448,7 @@ impl Mebelj {
             MebeljType::Stěna => "#".into(),
             MebeljType::Dvėrj => "+".into(),
             MebeljType::Vråta => "=".into(),
-            _ => todo!("implement mebelj")
-        
-
-
+            _ => todo!("implement mebelj"),
         }
     }
     pub fn to_color(&self) -> Color {
@@ -465,19 +456,15 @@ impl Mebelj {
     }
 }
 
-
-#[derive(Clone, Debug, Display,PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq)]
 pub enum FurnitureType {
     Mebelj(Mebelj),
     Drěvo(WoodType),
     Råstlina(PlantType),
     Kust(BushType),
     //Statuja(AnimalType),
-    Air
-
+    Air,
 }
-
-
 
 impl Furniture {
     pub fn to_char(&self) -> String {
@@ -487,8 +474,6 @@ impl Furniture {
             FurnitureType::Kust(x) => "*".into(),
             FurnitureType::Råstlina(x) => x.to_char(),
             FurnitureType::Mebelj(x) => x.to_char(),
-
-
         }
     }
     pub fn to_color(&self) -> Color {
@@ -496,9 +481,8 @@ impl Furniture {
             FurnitureType::Air => Color::White,
             FurnitureType::Drěvo(x) => x.to_color(),
             FurnitureType::Kust(x) => x.to_color(),
-         FurnitureType::Mebelj(x) => x.to_color(),
-         FurnitureType::Råstlina(x) => x.to_color()
+            FurnitureType::Mebelj(x) => x.to_color(),
+            FurnitureType::Råstlina(x) => x.to_color(),
         }
     }
 }
-

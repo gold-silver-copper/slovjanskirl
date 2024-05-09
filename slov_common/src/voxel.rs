@@ -23,19 +23,18 @@ impl Roof {
 pub enum Floor {
     Air,
     Dirt,
+    Water,
 }
 
 impl Floor {
     pub fn to_color(&self) -> Color {
         match &self {
             Self::Air => Color::Rgb(239, 240, 235),
-            Self::Dirt => Color::Rgb(155,118,83)
-
+            Self::Dirt => Color::Rgb(155, 118, 83),
+            Self::Water => Color::Rgb(15, 94, 156),
         }
     }
 }
-
-
 
 //FIX ALL THIS STUFF
 //FIX ALL THIS STUFF

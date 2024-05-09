@@ -1,4 +1,6 @@
+use noise::{NoiseFn, Perlin, Seedable};
 use slov_common::*;
+
 fn main() {
     let boop: MyPoint = (5, 5);
     let nw = MyWorld::default();
@@ -16,5 +18,9 @@ fn main() {
     println!("{:#?}", nw);
     println!("swordik is {}", swordik);
     println!("myitem is is {}", myitem.to_char());
+
+    let perlin = Perlin::new(1);
+    let val = perlin.get([41111.0, 379999.7]);
+    println!("val is {}", val);
     //  println!("typik is {}", typik);
 }

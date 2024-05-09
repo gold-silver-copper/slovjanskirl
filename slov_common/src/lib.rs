@@ -29,6 +29,7 @@ pub use terrain::*;
 mod server_stuff;
 pub use server_stuff::*;
 
+pub use noise::*;
 pub use ratatui::style::{Color, Style, Stylize};
 pub use ratatui::text::Span;
 use ratatui::{layout::Rect, text::Line};

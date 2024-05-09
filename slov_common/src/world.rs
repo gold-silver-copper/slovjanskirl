@@ -5,12 +5,12 @@ pub struct MyWorld {
     pub terrain: Terrain,
     pub server_stuff: ServerStuff,
     pub components: Components,
-    pub world_seed: i64,
+    pub world_seed: u32,
 }
 
 impl Default for MyWorld {
     fn default() -> Self {
-        let rngik = 100;
+        let rngik: u32 = 87243563;
 
         Self {
             terrain: Terrain::new(rngik.clone()),
@@ -119,13 +119,30 @@ impl MyWorld {
     }
 
     // World initialization function.
-    pub fn init_world() -> RTree<Voxel> {
+    pub fn init_world(rngik: u32) -> RTree<Voxel> {
+        MyWorld::generate_waterdirt(rngik)
+    }
+
+    pub fn generate_waterdirt(seed: u32) -> RTree<Voxel> {
+        
+        let hasher = noise::permutationtable::PermutationTable::new(0);
+        let boop = noise::utils::PlaneMapBuilder::new_fn(|point| noise::core::open_simplex::open_simplex_2d(point.into(), &hasher))
+            .set_size(100, 100)
+            .set_x_bounds(-5.0, 5.0)
+            .set_y_bounds(-5.0, 5.0)
+            .build();
+
         let mut batchvec = Vec::new();
         for x in 0..100 {
             for y in 0..100 {
+                let val = boop.get_value(x as usize, y as usize);
+                let floor = if val > 0.01 { Floor::Dirt } else { Floor::Water };
+
                 batchvec.push(Voxel {
-                    floor: Floor::Dirt,
-                    furniture: Furniture{furniture_type: FurnitureType::Air},
+                    floor: floor,
+                    furniture: Furniture {
+                        furniture_type: FurnitureType::Air,
+                    },
                     roof: Roof::Air,
                     voxel_pos: (x, y),
                 });

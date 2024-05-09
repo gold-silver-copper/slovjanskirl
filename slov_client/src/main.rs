@@ -1,6 +1,9 @@
 use bevy::prelude::*;
 
-use bevy_egui::{egui::{self, Frame}, EguiContexts, EguiPlugin};
+use bevy_egui::{
+    egui::{self, Frame},
+    EguiContexts, EguiPlugin,
+};
 use ratatui::{
     layout::Rect,
     prelude::{Line, Stylize, Terminal},
@@ -38,22 +41,26 @@ fn ui_example_system(
     );
     draw_ascii_info(&mut termres.terminal_info, &masterok);
 
-   
+    egui::CentralPanel::default()
+        .frame(Frame::none())
+        .show(contexts.ctx_mut(), |ui| {
+            let av_height = ui.available_height().clamp(100., 2000.);
+            let av_width = ui.available_width().clamp(100., 2000.);
 
-    egui::CentralPanel::default().frame(Frame::none()).show(contexts.ctx_mut(), |ui| {
-
-            let av_height = ui.available_height().clamp(100., 2000.) ;
-            let av_width = ui.available_width().clamp(100., 2000.) ;
-
-           
-            egui::SidePanel::right("b").min_width(av_width/(4.)).max_width(av_width/(4.)).show_inside(ui, |ui| {
-                ui.add(termres.terminal_info.backend_mut());
-            });
-            egui::TopBottomPanel::top("a").min_height(av_height).max_height(av_height).frame(Frame::none()).show_inside(ui, |ui| {
-                ui.add(termres.terminal_game.backend_mut());
-            });
-       
-    });
+            egui::SidePanel::right("b")
+                .min_width(av_width / (4.))
+                .max_width(av_width / (4.))
+                .show_inside(ui, |ui| {
+                    ui.add(termres.terminal_info.backend_mut());
+                });
+            egui::TopBottomPanel::top("a")
+                .min_height(av_height)
+                .max_height(av_height)
+                .frame(Frame::none())
+                .show_inside(ui, |ui| {
+                    ui.add(termres.terminal_game.backend_mut());
+                });
+        });
 }
 
 fn draw_ascii_game(
@@ -132,7 +139,6 @@ impl Default for BevyTerminal<RataguiBackend> {
         let mut backend1 = RataguiBackend::new(20, 20);
         backend1.set_font_size(15);
         let mut terminal1 = Terminal::new(backend1).unwrap();
-
 
         let mut backend2 = RataguiBackend::new(20, 20);
         backend2.set_font_size(11);
