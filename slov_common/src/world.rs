@@ -4,12 +4,13 @@ use crate::*;
 pub struct MyWorld {
     pub voxeltile_grid: RTree<Voxel>,
     pub entity_tree: RTree<PositionComponent>,
-    pub entity_map: HashMap<EntityID,MyEntity>,
+    pub entity_map: HashMap<EntityID, EntityType>,
+    pub ent_loc_index: HashMap<EntityID, MyPoint>,
     pub server_stuff: ServerStuff,
-    
+
     pub world_seed: u32,
     pub entity_counter: u64,
-    pub ent_loc_index: HashMap<EntityID,MyPoint>
+  
 }
 
 impl Default for MyWorld {
@@ -21,10 +22,10 @@ impl Default for MyWorld {
             entity_tree: RTree::new(),
             entity_map: HashMap::new(),
             server_stuff: ServerStuff::default(),
-   
+
             world_seed: rngik.clone(),
             entity_counter: 1,
-            ent_loc_index: HashMap::new()
+            ent_loc_index: HashMap::new(),
         }
     }
 }
@@ -65,7 +66,6 @@ impl MyWorld {
     }
     //z must be above 0 for movement
     pub fn make_account(&mut self) -> (EntityID, MyPoint) {
-
         let pp = (80, 80);
         let eid = self.new_entity(&pp, &EntityType::Player(Player::default()));
         self.server_stuff.account_counter += 1;
@@ -73,8 +73,6 @@ impl MyWorld {
         self.server_stuff
             .entity_accid_map
             .insert(eid.clone(), self.server_stuff.account_counter.clone());
-
-     
 
         (eid, pp)
     }
@@ -85,34 +83,21 @@ impl MyWorld {
         //GET ENTITY ID AND START ADDING COMPONENTS AFTER IT
         let eid = self.entity_counter.clone();
 
-        let pc = PositionComponent {entity_id:eid.clone(), point:point.clone()};
-
-      
-
-        let my_ent = MyEntity {
-          
-            
-            entity_type: spawn_type.clone(),
-          
+        let pc = PositionComponent {
+            entity_id: eid.clone(),
+            point: point.clone(),
         };
 
         self.ent_loc_index.insert(eid.clone(), point.clone());
 
-    
-
-      self.entity_tree.insert(pc);
-      self.entity_map.insert(eid.clone(), my_ent);
-
-
-
+        self.entity_tree.insert(pc);
+        self.entity_map.insert(eid.clone(), spawn_type.clone());
 
         //END ADDING COMPONENTS HERE EXTRA INCREMENT CAUSE WHY NOT
         self.entity_counter += 1;
 
         return eid;
     }
-
- 
 
     // World initialization function.
     pub fn init_world(&mut self) -> RTree<Voxel> {
@@ -121,26 +106,43 @@ impl MyWorld {
     }
 
     pub fn generate_test(seed: u32) -> RTree<Voxel> {
-        
         let hasher = noise::permutationtable::PermutationTable::new(seed);
-        let boop = noise::utils::PlaneMapBuilder::new_fn(|point| noise::core::open_simplex::open_simplex_2d(point.into(), &hasher))
-            .set_size(300, 300)
-            .set_x_bounds(-5.0, 5.0)
-            .set_y_bounds(-5.0, 5.0)
-            .build();
+        let boop = noise::utils::PlaneMapBuilder::new_fn(|point| {
+            noise::core::open_simplex::open_simplex_2d(point.into(), &hasher)
+        })
+        .set_size(300, 300)
+        .set_x_bounds(-5.0, 5.0)
+        .set_y_bounds(-5.0, 5.0)
+        .build();
 
         let mut batchvec = Vec::new();
         for x in 0..300 {
             for y in 0..300 {
                 let val = boop.get_value(x as usize, y as usize);
-                let floor = if val > 0.4 { Floor::DarkGrass } else if val > -0.1 { Floor::LightGrass } else if val > -0.2 { Floor::Dirt } else if val > -0.3 { Floor::Sand }  else  { Floor::Water };
-                let furniture_type = if val > 0.8 {FurnitureType::Air} else if val > 0.5 {FurnitureType::Drěvo(WoodType::Jablanj)} else if val > 0.0 {FurnitureType::Råstlina(PlantType::Kanabis)} else {FurnitureType::Air};
+                let floor = if val > 0.4 {
+                    Floor::DarkGrass
+                } else if val > -0.1 {
+                    Floor::LightGrass
+                } else if val > -0.2 {
+                    Floor::Dirt
+                } else if val > -0.3 {
+                    Floor::Sand
+                } else {
+                    Floor::Water
+                };
+                let furniture_type = if val > 0.8 {
+                    FurnitureType::Air
+                } else if val > 0.5 {
+                    FurnitureType::Drěvo(WoodType::Jablanj)
+                } else if val > 0.0 {
+                    FurnitureType::Råstlina(PlantType::Kanabis)
+                } else {
+                    FurnitureType::Air
+                };
                 batchvec.push(Voxel {
                     floor: floor,
-                    furniture: Furniture {
-                        furniture_type
-                    },
-                   
+                    furniture: Furniture { furniture_type },
+
                     roof: Roof::Air,
                     voxel_pos: (x, y),
                 });
@@ -152,11 +154,7 @@ impl MyWorld {
     }
 
     pub fn set_voxel_at(&mut self, vox: &Voxel) {
-        if let Some(boop) = self
-         
-            .voxeltile_grid
-            .locate_at_point_mut(&vox.voxel_pos)
-        {
+        if let Some(boop) = self.voxeltile_grid.locate_at_point_mut(&vox.voxel_pos) {
             *boop = vox.clone();
         } else {
             self.voxeltile_grid.insert(vox.clone())
@@ -185,8 +183,6 @@ impl MyWorld {
     }
 
     pub fn entity_blocks_movement_at(&self, point: &MyPoint) -> bool {
-       
-
         if point.0 > 0 && point.1 > 0 {
             return false;
         } else {
@@ -225,8 +221,6 @@ impl MyWorld {
             let local_ents = self.entity_tree.locate_in_envelope(&same_z);
             let local_voxels = self.voxeltile_grid.locate_in_envelope(&same_z);
 
-
-
             let local_actions = self
                 .server_stuff
                 .output_queue
@@ -242,10 +236,9 @@ impl MyWorld {
             for pc in local_ents {
                 let relative_point_x = pc.point.0 - bottom_left_of_game_screen.0;
                 let relative_point_y = pc.point.1 - bottom_left_of_game_screen.1;
-                let et = self.entity_map.get(&pc.entity_id).unwrap().entity_type.clone();
-                
-                    ent_vec.push(((relative_point_x, relative_point_y), et.to_graphictriple()))
-              
+                let et = self.entity_map.get(&pc.entity_id).unwrap().clone();
+
+                ent_vec.push(((relative_point_x, relative_point_y), et.to_graphictriple()))
             }
 
             for lv in local_voxels {
@@ -261,7 +254,6 @@ impl MyWorld {
                     voxel_grid[relative_point_y as usize][relative_point_x as usize] = boop;
                 }
             }
-       
 
             //merge grids
 
@@ -297,7 +289,6 @@ impl MyWorld {
                 .entity_tree
                 .locate_within_distance(e_pos.clone(), LOCAL_RANGE * 2);
             let local_voxels = self
-                
                 .voxeltile_grid
                 .locate_within_distance(e_pos.clone(), LOCAL_RANGE / 2);
             let local_actions = self
@@ -310,11 +301,11 @@ impl MyWorld {
             let mut actions = Vec::new();
 
             for pc in local_ents {
-                let et = self.entity_map.get(&pc.entity_id).unwrap().entity_type.clone();
+                let et = self.entity_map.get(&pc.entity_id).unwrap().clone();
                 e_info.push(EntityPacket {
                     entity_pos: pc.point.clone(),
                     entity_id: pc.entity_id.clone(),
-                    entity_type: et.clone()
+                    entity_type: et.clone(),
                 })
             }
 
@@ -354,9 +345,7 @@ impl MyWorld {
                 entity_id: ent.clone(),
                 point: destination.clone(),
             });
-            self
-                .ent_loc_index
-                .insert(ent.clone(), destination.clone());
+            self.ent_loc_index.insert(ent.clone(), destination.clone());
         }
     }
 

@@ -4,7 +4,6 @@ pub struct Voxel {
     pub roof: Roof,
     pub floor: Floor,
     pub furniture: Furniture,
-   
 
     pub voxel_pos: MyPoint,
 }
@@ -27,7 +26,7 @@ pub enum Floor {
     Water,
     LightGrass,
     DarkGrass,
-    Sand
+    Sand,
 }
 
 impl Floor {
@@ -36,27 +35,17 @@ impl Floor {
             Self::Air => Color::Rgb(239, 240, 235),
             Self::Dirt => Color::Rgb(155, 118, 83),
             Self::Water => Color::Rgb(15, 94, 156),
-            Self::LightGrass => Color::Rgb(65,152,1),
-            Self::DarkGrass => Color::Rgb(19,109,21),
-            Self::Sand => Color::Rgb(242,210,169)
+            Self::LightGrass => Color::Rgb(65, 152, 1),
+            Self::DarkGrass => Color::Rgb(19, 109, 21),
+            Self::Sand => Color::Rgb(242, 210, 169),
         }
     }
 }
 
-
-#[derive(Clone, Debug, PartialEq)]
-pub struct MyEntity {
-    
-    
-    pub entity_type: EntityType,
-
-}
-
 impl Voxel {
     pub fn to_graphic(&self) -> GraphicTriple {
+        let voxel_character: String = self.furniture.to_char();
 
-        let voxel_character:String = self.furniture.to_char();
-      
         let voxel_color = self.furniture.to_color();
         let floor_color = self.floor.to_color();
 
@@ -81,4 +70,3 @@ impl PointDistance for Voxel {
         self.voxel_pos.contains_point(point)
     }
 }
-

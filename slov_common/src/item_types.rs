@@ -400,18 +400,15 @@ pub enum EntityType {
 }
 
 impl EntityType {
-
-
     pub fn to_char(&self) -> String {
         match self {
             EntityType::Item(x) => x.to_char(),
             EntityType::Monster(x) => x.to_char(),
             EntityType::Player(_) => "@".into(),
         }
-
     }
 
-    pub fn to_color(&self) -> Color { 
+    pub fn to_color(&self) -> Color {
         match self {
             EntityType::Item(x) => x.to_color(),
             EntityType::Monster(x) => x.to_color(),

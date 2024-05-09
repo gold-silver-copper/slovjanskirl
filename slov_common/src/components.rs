@@ -1,6 +1,5 @@
 use crate::*;
 
-
 #[derive(Clone, Debug, PartialEq)]
 pub struct PositionComponent {
     pub entity_id: EntityID,

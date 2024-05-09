@@ -229,6 +229,6 @@ fn keyboard_input_system(input: Res<ButtonInput<KeyCode>>, mut masterok: ResMut<
 
     if client_action != ActionType::Wait {
         masterok.client_world.receive((client_action, client_id));
-      //  println!("{:#?}", masterok.client_world);
+        //  println!("{:#?}", masterok.client_world);
     }
 }
