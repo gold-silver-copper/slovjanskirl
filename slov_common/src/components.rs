@@ -2,10 +2,9 @@ use crate::*;
 
 #[derive(Clone, Debug)]
 pub struct Components {
-    pub entities: HashMap<EntityID,MyEntity>,
+    pub entities: HashMap<EntityID, MyEntity>,
     pub positions: RTree<PositionComponent>,
     pub ent_loc_index: HashMap<EntityID, MyPoint>, //xyz
-    
 
     pub entity_counter: u64,
 }
@@ -16,8 +15,7 @@ impl Default for Components {
             entities: HashMap::new(),
             positions: RTree::new(),
             ent_loc_index: HashMap::new(),
-          
-           
+
             entity_counter: 1,
         }
     }
@@ -53,11 +51,12 @@ pub struct HealthComponent {
     pub max_health: Health,
 }
 
-
-impl HealthComponent{
-    pub fn new(max:&i64) -> HealthComponent {
-
-        HealthComponent { cur_health: max.clone(), max_health: max.clone() }
+impl HealthComponent {
+    pub fn new(max: &i64) -> HealthComponent {
+        HealthComponent {
+            cur_health: max.clone(),
+            max_health: max.clone(),
+        }
     }
 }
 

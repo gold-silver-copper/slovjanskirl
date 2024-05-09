@@ -8,7 +8,17 @@ pub enum MeleeWeaponType {
     Kopje,
 }
 
-
+#[derive(Clone, Debug, Display)]
+pub enum RangedWeaponType {
+    Lųk(Bow),
+    Proca(Sling),
+    Prak(Sling),
+    Prašča(Sling),
+    Šlojder(Sling),
+    Kuša(CrossBow),
+    Samostrěl(CrossBow),
+    Arbalet(CrossBow)
+}
 
 #[derive(Clone, Debug, Display)]
 pub enum Material {
@@ -54,7 +64,6 @@ pub enum WoodType {
     Kaštan,
 }
 
-
 #[derive(Clone, Debug, Display)]
 pub enum FurnitureType {
     Stěna,
@@ -66,7 +75,6 @@ pub enum FurnitureType {
     Vaza,
     Škaf,
 }
-
 
 #[derive(Clone, Debug, Display)]
 pub enum PlantType {
@@ -106,6 +114,7 @@ pub enum BirdType {
     Vran,
     Gavran,
     Kos,
+    Gųsę
 }
 
 #[derive(Clone, Debug, Display)]
@@ -129,7 +138,6 @@ pub enum AnimalPartType {
     Bone,
 }
 
-
 #[derive(Clone, Debug, Display)]
 pub enum AmmoType {
     Kulja,
@@ -145,7 +153,6 @@ pub struct AnimalPart {
 #[derive(Clone, Debug)]
 pub struct Animal {
     animal_type: AnimalType,
-   
 }
 
 #[derive(Clone, Debug)]
@@ -155,64 +162,83 @@ pub struct Ammo {
     quantity: i64,
 }
 
-
 #[derive(Clone, Debug)]
 pub struct MeleeWeapon {
-    weapon_type: MeleeWeaponType,
-    material_type: Material,
+    pub weapon_type: MeleeWeaponType,
+    pub material_type: Material,
 }
 
 #[derive(Clone, Debug)]
-pub struct Bow {
-    rame_luka: WoodType,
-    tetiva: Fabric,
-}
-
-#[derive(Clone, Debug)]
-pub struct Sling {
-    material_type: Fabric,
-}
-#[derive(Clone, Debug, Display)]
-pub enum ItemType {
-
-    Melee(MeleeWeapon),
-    Bow(Bow),
-    Sling(Sling),
-    Ammo(Ammo),
-
-}
-
-
-#[derive(Clone, Debug)]
-pub struct Item {
-    item_type: ItemType,
+pub struct RangedWeapon {
+    pub weapon_type: RangedWeaponType,
     
 }
 
 #[derive(Clone, Debug)]
-pub struct MyEntity {
-  pub  position_component: PositionComponent,
-   pub entity_type: EntityType,
+pub struct Bow {
+    pub rame_luka: WoodType,
+    pub tetiva: Fabric,
+}
 
+#[derive(Clone, Debug)]
+pub struct CrossBow {
+    pub luk: Bow,
+    pub telo: Material,
+}
+
+#[derive(Clone, Debug)]
+pub struct Sling {
+    pub material_type: Fabric,
+}
+#[derive(Clone, Debug, Display)]
+pub enum ItemType {
+    Melee(MeleeWeapon),
+    Ranged(RangedWeapon),
+    Ammo(Ammo),
+}
+
+#[derive(Clone, Debug)]
+pub struct Item {
+    pub item_type: ItemType,
+}
+
+impl Item {
+    pub fn to_char(&self) -> String {
+
+        let item_str = match &self.item_type {
+            ItemType::Melee(x) => {format!("{}", &x.weapon_type)},
+            ItemType::Ranged(x) => {format!("{}", &x.weapon_type)},
+            ItemType::Ammo(x) => {format!("{}", &x.ammo_type)},
+
+        };
+
+       // let item_str = format!("{}", self.item_type);
+        let ch = item_str.chars().nth(0).unwrap().to_lowercase().to_string();
+        ch
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct MyEntity {
+    pub position_component: PositionComponent,
+    pub entity_type: EntityType,
 }
 #[derive(Clone, Debug)]
 pub struct Player {
     inventory: InventoryComponent,
-    health: HealthComponent
-
+    health: HealthComponent,
 }
-
 
 impl Default for Player {
     fn default() -> Self {
-        Self{
+        Self {
             inventory: Vec::new(),
             health: HealthComponent::new(&100),
         }
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Display)]
 pub enum EntityType {
     Player(Player),
     Item(Item),
@@ -222,14 +248,13 @@ pub enum EntityType {
 impl EntityType {
     pub fn to_graphictriple(&self) -> GraphicTriple {
         let ent_char = match self {
-            EntityType::Item(_) => "i",
-            EntityType::Monster(_) => "M",
-            EntityType::Player(_) => "@",
+            EntityType::Item(x) => x.to_char(),
+            EntityType::Monster(_) => "M".into(),
+            EntityType::Player(_) => "@".into(),
         };
         (ent_char.into(), Color::Red, Color::Black)
     }
 }
-
 
 #[derive(Clone, Debug)]
 pub struct Furniture {

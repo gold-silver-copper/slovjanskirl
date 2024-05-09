@@ -80,17 +80,17 @@ impl MyWorld {
             point: point.clone(),
         };
 
-        let my_ent = MyEntity{position_component:pc.clone() , entity_type:spawn_type.clone()};
+        let my_ent = MyEntity {
+            position_component: pc.clone(),
+            entity_type: spawn_type.clone(),
+        };
 
-        self.components.entities.insert(eid.clone(),my_ent);
+        self.components.entities.insert(eid.clone(), my_ent);
 
         self.components.positions.insert(pc);
         self.components
             .ent_loc_index
             .insert(eid.clone(), point.clone());
-
-      
-      
 
         //END ADDING COMPONENTS HERE EXTRA INCREMENT CAUSE WHY NOT
         self.components.entity_counter += 1;
@@ -175,7 +175,7 @@ impl MyWorld {
         for ent in ents_at {
             if let Some(entt) = self.components.entities.get(&ent) {
                 match entt.entity_type {
-                    EntityType::Item(_)=> {
+                    EntityType::Item(_) => {
                         return false;
                     }
                     EntityType::Player(_) => {
@@ -333,7 +333,13 @@ impl MyWorld {
                 e_info.push(EntityPacket {
                     entity_pos: pc.point.clone(),
                     entity_id: pc.entity_id.clone(),
-                    entity_type: self.components.entities.get(ent).unwrap().entity_type.clone(),
+                    entity_type: self
+                        .components
+                        .entities
+                        .get(ent)
+                        .unwrap()
+                        .entity_type
+                        .clone(),
                 })
             }
 

@@ -14,7 +14,6 @@ pub type DativeID = EntityID;
 pub type InstrumentalID = EntityID;
 pub type PlayerMessage = String;
 
-
 #[derive(Clone, Debug)]
 pub struct GameDataPacket {
     pub entity_info: Vec<EntityPacket>,
@@ -65,8 +64,6 @@ impl RenderPacket {
         }
     }
 }
-
-
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum LocativeID {
