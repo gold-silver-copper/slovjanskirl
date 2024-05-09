@@ -138,6 +138,16 @@ impl PlantType {
             _ => Color::Rgb(34, 139, 34),
         }
     }
+    pub fn to_char(&self) -> String {
+        match &self {
+            Self::Trava => "'".into(),
+            Self::Kovylj => "\"".into(),
+            Self::Burjan => "/".into(),
+            Self::Kanabis => "⚕".into(),
+            Self::Jasenėc => "⚘".into()
+
+        }
+    }
 }
 
 #[derive(Clone, Debug, Display,PartialEq)]
@@ -418,24 +428,56 @@ pub struct Furniture {
    pub furniture_type: FurnitureType,
     
 }
+#[derive(Clone, Debug, Display,PartialEq)]
+pub enum MebeljType {
+    Stěna,
+    Stol,
+    Stul,
+    Skrinja, //sunduk
+    Dvėrj,
+    Vråta,
+    Vaza,
+    Škaf,
+
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct Mebelj {
+    mebelj_type: MebeljType,
+    material: Material
+
+}
+
+impl Mebelj {
+    pub fn to_char(&self) -> String {
+        match &self.mebelj_type {
+            MebeljType::Stěna => "#".into(),
+            MebeljType::Dvėrj => "+".into(),
+            MebeljType::Vråta => "=".into(),
+            _ => todo!("implement mebelj")
+        
+
+
+        }
+    }
+    pub fn to_color(&self) -> Color {
+        self.material.to_color()
+    }
+}
+
 
 #[derive(Clone, Debug, Display,PartialEq)]
 pub enum FurnitureType {
-    Stěna(Material),
-    Stol(Material),
-    Stul(Material),
-    Skrinja(Material), //sunduk
-    Dvėrj(Material),
-    Vråta(Material),
-    Vaza(Material),
-    Škaf(Material),
+    Mebelj(Mebelj),
     Drěvo(WoodType),
     Råstlina(PlantType),
     Kust(BushType),
-    Statuja(AnimalType),
+    //Statuja(AnimalType),
     Air
 
 }
+
+
 
 impl Furniture {
     pub fn to_char(&self) -> String {
@@ -443,10 +485,8 @@ impl Furniture {
             FurnitureType::Air => " ".into(),
             FurnitureType::Drěvo(x) => "♣".into(),
             FurnitureType::Kust(x) => "*".into(),
-            FurnitureType::Stěna(x)=> "#".into(),
-            FurnitureType::Dvėrj(x)=> "+".into(),
-            FurnitureType::Vråta(x)=> "=".into(),
-            _ => format!("{}", self.furniture_type).chars().nth(0).unwrap().to_string()
+            FurnitureType::Råstlina(x) => x.to_char(),
+            FurnitureType::Mebelj(x) => x.to_char(),
 
 
         }
@@ -456,10 +496,8 @@ impl Furniture {
             FurnitureType::Air => Color::White,
             FurnitureType::Drěvo(x) => x.to_color(),
             FurnitureType::Kust(x) => x.to_color(),
-            FurnitureType::Stěna(x)=> x.to_color(),
-            FurnitureType::Dvėrj(x)=> x.to_color(),
-            FurnitureType::Vråta(x)=> x.to_color(),
-            _ => Color::Blue
+         FurnitureType::Mebelj(x) => x.to_color(),
+         FurnitureType::Råstlina(x) => x.to_color()
         }
     }
 }
