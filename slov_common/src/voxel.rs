@@ -19,10 +19,7 @@ pub enum Floor {
     Dirt,
 }
 
-#[derive(Clone, Debug, PartialEq)]
-pub enum Furniture {
-    Air,
-}
+
 
 //FIX ALL THIS STUFF
 //FIX ALL THIS STUFF

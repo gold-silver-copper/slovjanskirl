@@ -125,7 +125,7 @@ impl MyWorld {
             for y in 0..100 {
                 batchvec.push(Voxel {
                     floor: Floor::Dirt,
-                    furniture: Furniture::Air,
+                    furniture: Furniture{furniture_type: FurnitureType::Air},
                     roof: Roof::Air,
                     voxel_pos: (x, y),
                 });

@@ -45,7 +45,7 @@ impl PointDistance for PositionComponent {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct HealthComponent {
     pub cur_health: Health,
     pub max_health: Health,
