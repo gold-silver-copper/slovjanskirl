@@ -46,10 +46,10 @@ impl Floor {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct MyEntity {
-    pub entity_id : EntityID,
+    
     
     pub entity_type: EntityType,
-    pub entity_pos: MyPoint,
+
 }
 
 impl Voxel {
@@ -82,21 +82,3 @@ impl PointDistance for Voxel {
     }
 }
 
-
-impl RTreeObject for MyEntity {
-    type Envelope = AABB<(i64, i64)>;
-
-    fn envelope(&self) -> Self::Envelope {
-        AABB::from_point((self.entity_pos.0, self.entity_pos.1))
-    }
-}
-
-impl PointDistance for MyEntity {
-    fn distance_2(&self, point: &(i64, i64)) -> i64 {
-        self.entity_pos.distance_2(point)
-    }
-
-    fn contains_point(&self, point: &(i64, i64)) -> bool {
-        self.entity_pos.contains_point(point)
-    }
-}

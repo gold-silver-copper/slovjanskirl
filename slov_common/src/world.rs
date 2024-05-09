@@ -3,7 +3,8 @@ use crate::*;
 #[derive(Clone, Debug)]
 pub struct MyWorld {
     pub voxeltile_grid: RTree<Voxel>,
-    pub entity_tree: RTree<MyEntity>,
+    pub entity_tree: RTree<PositionComponent>,
+    pub entity_map: HashMap<EntityID,MyEntity>,
     pub server_stuff: ServerStuff,
     
     pub world_seed: u32,
@@ -18,6 +19,7 @@ impl Default for MyWorld {
         Self {
             voxeltile_grid: MyWorld::generate_test(rngik),
             entity_tree: RTree::new(),
+            entity_map: HashMap::new(),
             server_stuff: ServerStuff::default(),
    
             world_seed: rngik.clone(),
@@ -83,20 +85,23 @@ impl MyWorld {
         //GET ENTITY ID AND START ADDING COMPONENTS AFTER IT
         let eid = self.entity_counter.clone();
 
+        let pc = PositionComponent {entity_id:eid.clone(), point:point.clone()};
+
       
 
         let my_ent = MyEntity {
-            entity_id: eid.clone(),
+          
             
             entity_type: spawn_type.clone(),
-            entity_pos: point.clone()
+          
         };
 
         self.ent_loc_index.insert(eid.clone(), point.clone());
 
     
 
-      self.entity_tree.insert(my_ent);
+      self.entity_tree.insert(pc);
+      self.entity_map.insert(eid.clone(), my_ent);
 
 
 
@@ -217,10 +222,10 @@ impl MyWorld {
             let h_radius = render_height / 2;
             let same_z = locate_square(e_pos, w_radius as i64, h_radius as i64);
 
-            let local_ents = self.components.positions.locate_in_envelope(&same_z);
-            let local_voxels = self.terrain.voxeltile_grid.locate_in_envelope(&same_z);
+            let local_ents = self.entity_tree.locate_in_envelope(&same_z);
+            let local_voxels = self.voxeltile_grid.locate_in_envelope(&same_z);
 
-            let local_voxel_diffs = self.terrain.voxeltile_diffs.locate_in_envelope(&same_z);
+
 
             let local_actions = self
                 .server_stuff
@@ -237,15 +242,10 @@ impl MyWorld {
             for pc in local_ents {
                 let relative_point_x = pc.point.0 - bottom_left_of_game_screen.0;
                 let relative_point_y = pc.point.1 - bottom_left_of_game_screen.1;
-                if let Some(enttt) = self.components.entities.get(&pc.entity_id) {
-                    let et = enttt.entity_type.clone();
+                let et = self.entity_map.get(&pc.entity_id).unwrap().entity_type.clone();
+                
                     ent_vec.push(((relative_point_x, relative_point_y), et.to_graphictriple()))
-                } else {
-                    ent_vec.push((
-                        (relative_point_x, relative_point_y),
-                        ("?".into(), Color::LightCyan, Color::LightCyan),
-                    ))
-                }
+              
             }
 
             for lv in local_voxels {
@@ -261,18 +261,7 @@ impl MyWorld {
                     voxel_grid[relative_point_y as usize][relative_point_x as usize] = boop;
                 }
             }
-            for vd in local_voxel_diffs {
-                let relative_point_x = vd.voxel_pos.0 - bottom_left_of_game_screen.0;
-                let relative_point_y = vd.voxel_pos.1 - bottom_left_of_game_screen.1;
-                if (0 < relative_point_y)
-                    && (relative_point_y < render_height as i64)
-                    && (0 < relative_point_x)
-                    && (relative_point_x < render_width as i64)
-                {
-                    let boop2 = vd.to_graphic();
-                    voxel_grid[relative_point_y as usize][relative_point_x as usize] = boop2;
-                }
-            }
+       
 
             //merge grids
 
@@ -303,14 +292,13 @@ impl MyWorld {
     }
 
     pub fn create_game_data_packet_for_entity(&self, ent: &EntityID) -> Option<GameDataPacket> {
-        if let Some(e_pos) = self.components.ent_loc_index.get(ent) {
+        if let Some(e_pos) = self.ent_loc_index.get(ent) {
             let local_ents = self
-                .components
-                .positions
+                .entity_tree
                 .locate_within_distance(e_pos.clone(), LOCAL_RANGE * 2);
             let local_voxels = self
-                .terrain
-                .voxeltile_diffs
+                
+                .voxeltile_grid
                 .locate_within_distance(e_pos.clone(), LOCAL_RANGE / 2);
             let local_actions = self
                 .server_stuff
@@ -322,16 +310,11 @@ impl MyWorld {
             let mut actions = Vec::new();
 
             for pc in local_ents {
+                let et = self.entity_map.get(&pc.entity_id).unwrap().entity_type.clone();
                 e_info.push(EntityPacket {
                     entity_pos: pc.point.clone(),
                     entity_id: pc.entity_id.clone(),
-                    entity_type: self
-                        .components
-                        .entities
-                        .get(ent)
-                        .unwrap()
-                        .entity_type
-                        .clone(),
+                    entity_type: et.clone()
                 })
             }
 
@@ -362,16 +345,16 @@ impl MyWorld {
     }
 
     pub fn set_ent_loc(&mut self, ent: &EntityID, destination: &MyPoint) {
-        if let Some(xyz) = self.components.ent_loc_index.get(ent) {
-            self.components.positions.remove(&PositionComponent {
+        if let Some(xyz) = self.ent_loc_index.get(ent) {
+            self.entity_tree.remove(&PositionComponent {
                 entity_id: ent.clone(),
                 point: xyz.clone(),
             });
-            self.components.positions.insert(PositionComponent {
+            self.entity_tree.insert(PositionComponent {
                 entity_id: ent.clone(),
                 point: destination.clone(),
             });
-            self.components
+            self
                 .ent_loc_index
                 .insert(ent.clone(), destination.clone());
         }
@@ -382,7 +365,7 @@ impl MyWorld {
         ent: &EntityID,
         cd: &CardinalDirection,
     ) -> SuccessType {
-        if let Some(xyz) = self.components.ent_loc_index.get(ent) {
+        if let Some(xyz) = self.ent_loc_index.get(ent) {
             println!("GOT ENT LOC INDEX FOR MOVEMENT");
 
             let dir_point = cd.to_xyz();
