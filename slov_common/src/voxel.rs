@@ -24,6 +24,8 @@ pub enum Floor {
     Air,
     Dirt,
     Water,
+    LightGrass,
+    DarkGrass
 }
 
 impl Floor {
@@ -32,6 +34,8 @@ impl Floor {
             Self::Air => Color::Rgb(239, 240, 235),
             Self::Dirt => Color::Rgb(155, 118, 83),
             Self::Water => Color::Rgb(15, 94, 156),
+            Self::LightGrass => Color::Rgb(65,152,1),
+            Self::DarkGrass => Color::Rgb(19,109,21),
         }
     }
 }

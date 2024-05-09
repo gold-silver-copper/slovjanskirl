@@ -125,7 +125,7 @@ impl MyWorld {
 
     pub fn generate_waterdirt(seed: u32) -> RTree<Voxel> {
         
-        let hasher = noise::permutationtable::PermutationTable::new(0);
+        let hasher = noise::permutationtable::PermutationTable::new(seed);
         let boop = noise::utils::PlaneMapBuilder::new_fn(|point| noise::core::open_simplex::open_simplex_2d(point.into(), &hasher))
             .set_size(100, 100)
             .set_x_bounds(-5.0, 5.0)
@@ -136,7 +136,7 @@ impl MyWorld {
         for x in 0..100 {
             for y in 0..100 {
                 let val = boop.get_value(x as usize, y as usize);
-                let floor = if val > 0.01 { Floor::Dirt } else { Floor::Water };
+                let floor = if val > 0.7 { Floor::DarkGrass } else if val > 0.3 { Floor::LightGrass } else if val > -0.3 { Floor::Dirt }  else  { Floor::Water };
 
                 batchvec.push(Voxel {
                     floor: floor,
