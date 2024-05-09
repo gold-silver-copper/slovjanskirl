@@ -39,6 +39,12 @@ impl MyWorld {
         //   println!("inserted");
     }
 
+    pub fn new_test() -> MyWorld {
+        let mut x = MyWorld::default();
+        x.new_entity(&(81,88), &EntityType::Monster(Animal{animal_type:AnimalType::Mammal(MammalType::Jelenj)}));
+        x
+    }
+
     pub fn interpret_and_execute(&mut self) {
         let my_clone = self.server_stuff.input_queue.clone();
         self.server_stuff.input_queue.clear();

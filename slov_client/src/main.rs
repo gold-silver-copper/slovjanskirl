@@ -165,7 +165,7 @@ impl Default for Masterik {
             player_id: 1,
             location: (1, 1),
             messages: Vec::new(),
-            client_world: MyWorld::default(),
+            client_world: MyWorld::new_test(),
             is_logged_in: false,
         }
     }
@@ -176,7 +176,7 @@ fn local_world_process(mut masterok: ResMut<Masterik>) {
     let boop = masterok
         .client_world
         .create_game_data_packet_for_entity(&masterok.player_id);
-    masterok.client_world.new_entity(&(81,88), &EntityType::Monster(Animal{animal_type:AnimalType::Mammal(MammalType::Jelenj)}));
+    
   
     if let Some(meow) = boop {
         //generate text messages from these action packets, then push them to the player message viewer
