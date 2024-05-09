@@ -4,6 +4,7 @@ pub struct Voxel {
     pub roof: Roof,
     pub floor: Floor,
     pub furniture: Furniture,
+    pub entity: Option<MyEntity>,
 
     pub voxel_pos: MyPoint,
 }
@@ -25,7 +26,8 @@ pub enum Floor {
     Dirt,
     Water,
     LightGrass,
-    DarkGrass
+    DarkGrass,
+    Sand
 }
 
 impl Floor {
@@ -36,6 +38,7 @@ impl Floor {
             Self::Water => Color::Rgb(15, 94, 156),
             Self::LightGrass => Color::Rgb(65,152,1),
             Self::DarkGrass => Color::Rgb(19,109,21),
+            Self::Sand => Color::Rgb(242,210,169)
         }
     }
 }
@@ -45,7 +48,11 @@ impl Floor {
 //FIX ALL THIS STUFF
 impl Voxel {
     pub fn to_graphic(&self) -> GraphicTriple {
-        let voxel_character = self.furniture.to_char();
+
+        let voxel_character:String = if self.entity != None {self.entity.clone().unwrap().entity_type.to_char()
+
+        } else {self.furniture.to_char()};
+      
         let voxel_color = self.furniture.to_color();
         let floor_color = self.floor.to_color();
 

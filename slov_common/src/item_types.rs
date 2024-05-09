@@ -141,8 +141,8 @@ impl PlantType {
             Self::Trava => "'".into(),
             Self::Kovylj => "\"".into(),
             Self::Burjan => "/".into(),
-            Self::Kanabis => "⚕".into(),
-            Self::Jasenėc => "⚘".into(),
+            Self::Kanabis => "\"".into(),
+            Self::Jasenėc => "\"".into(),
         }
     }
 }
@@ -379,7 +379,7 @@ impl Item {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct MyEntity {
-    pub position_component: PositionComponent,
+    
     pub entity_type: EntityType,
 }
 #[derive(Clone, Debug, PartialEq)]
@@ -405,17 +405,28 @@ pub enum EntityType {
 }
 
 impl EntityType {
-    pub fn to_graphictriple(&self) -> GraphicTriple {
-        let ent_char = match self {
+
+
+    pub fn to_char(&self) -> String {
+        match self {
             EntityType::Item(x) => x.to_char(),
             EntityType::Monster(x) => x.to_char(),
             EntityType::Player(_) => "@".into(),
-        };
-        let ent_color = match self {
+        }
+
+    }
+
+    pub fn to_color(&self) -> Color { 
+        match self {
             EntityType::Item(x) => x.to_color(),
             EntityType::Monster(x) => x.to_color(),
             EntityType::Player(_) => Color::Red,
-        };
+        }
+    }
+
+    pub fn to_graphictriple(&self) -> GraphicTriple {
+        let ent_char = self.to_char();
+        let ent_color = self.to_color();
         (ent_char, ent_color, Color::Black)
     }
 }

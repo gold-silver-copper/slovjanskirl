@@ -4,8 +4,9 @@ use crate::*;
 pub struct MyWorld {
     pub terrain: Terrain,
     pub server_stuff: ServerStuff,
-    pub components: Components,
+    
     pub world_seed: u32,
+    pub entity_counter: u64,
 }
 
 impl Default for MyWorld {
@@ -15,8 +16,9 @@ impl Default for MyWorld {
         Self {
             terrain: Terrain::new(rngik.clone()),
             server_stuff: ServerStuff::default(),
-            components: Components::default(),
+   
             world_seed: rngik.clone(),
+            entity_counter: 1
         }
     }
 }
@@ -57,23 +59,25 @@ impl MyWorld {
     }
     //z must be above 0 for movement
     pub fn make_account(&mut self) -> (EntityID, MyPoint) {
-        let eid = self.new_entity(&(9, 9), &EntityType::Player(Player::default()));
+
+        let pp = (80, 80);
+        let eid = self.new_entity(&pp, &EntityType::Player(Player::default()));
         self.server_stuff.account_counter += 1;
 
         self.server_stuff
             .entity_accid_map
             .insert(eid.clone(), self.server_stuff.account_counter.clone());
 
-        let my_point = self.components.ent_loc_index.get(&eid).unwrap();
+     
 
-        (eid, my_point.clone())
+        (eid, pp)
     }
 
     pub fn new_entity(&mut self, point: &MyPoint, spawn_type: &EntityType) -> EntityID {
-        self.components.entity_counter += 1;
+        self.entity_counter += 1;
 
         //GET ENTITY ID AND START ADDING COMPONENTS AFTER IT
-        let eid = self.components.entity_counter.clone();
+        let eid = self.entity_counter.clone();
 
         let pc = PositionComponent {
             entity_id: eid.clone(),
@@ -81,19 +85,15 @@ impl MyWorld {
         };
 
         let my_ent = MyEntity {
-            position_component: pc.clone(),
+            
             entity_type: spawn_type.clone(),
         };
 
-        self.components.entities.insert(eid.clone(), my_ent);
+       let boop =  self.terrain.voxeltile_grid.locate_at_point_mut(point);
 
-        self.components.positions.insert(pc);
-        self.components
-            .ent_loc_index
-            .insert(eid.clone(), point.clone());
 
         //END ADDING COMPONENTS HERE EXTRA INCREMENT CAUSE WHY NOT
-        self.components.entity_counter += 1;
+        self.entity_counter += 1;
 
         return eid;
     }
@@ -119,30 +119,32 @@ impl MyWorld {
     }
 
     // World initialization function.
-    pub fn init_world(rngik: u32) -> RTree<Voxel> {
-        MyWorld::generate_waterdirt(rngik)
+    pub fn init_world(&mut self) -> RTree<Voxel> {
+        let rngik = self.world_seed.clone();
+        MyWorld::generate_test(rngik)
     }
 
-    pub fn generate_waterdirt(seed: u32) -> RTree<Voxel> {
+    pub fn generate_test(seed: u32) -> RTree<Voxel> {
         
         let hasher = noise::permutationtable::PermutationTable::new(seed);
         let boop = noise::utils::PlaneMapBuilder::new_fn(|point| noise::core::open_simplex::open_simplex_2d(point.into(), &hasher))
-            .set_size(100, 100)
+            .set_size(300, 300)
             .set_x_bounds(-5.0, 5.0)
             .set_y_bounds(-5.0, 5.0)
             .build();
 
         let mut batchvec = Vec::new();
-        for x in 0..100 {
-            for y in 0..100 {
+        for x in 0..300 {
+            for y in 0..300 {
                 let val = boop.get_value(x as usize, y as usize);
-                let floor = if val > 0.7 { Floor::DarkGrass } else if val > 0.3 { Floor::LightGrass } else if val > -0.3 { Floor::Dirt }  else  { Floor::Water };
-
+                let floor = if val > 0.4 { Floor::DarkGrass } else if val > -0.1 { Floor::LightGrass } else if val > -0.2 { Floor::Dirt } else if val > -0.3 { Floor::Sand }  else  { Floor::Water };
+                let furniture_type = if val > 0.8 {FurnitureType::Air} else if val > 0.5 {FurnitureType::Drěvo(WoodType::Jablanj)} else if val > 0.0 {FurnitureType::Råstlina(PlantType::Kanabis)} else {FurnitureType::Air};
                 batchvec.push(Voxel {
                     floor: floor,
                     furniture: Furniture {
-                        furniture_type: FurnitureType::Air,
+                        furniture_type
                     },
+                    entity:None,
                     roof: Roof::Air,
                     voxel_pos: (x, y),
                 });
