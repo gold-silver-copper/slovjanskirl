@@ -2,22 +2,22 @@ use crate::*;
 
 #[derive(Clone, Debug)]
 pub struct Components {
-    pub entities: HashSet<EntityID>,
+    pub entities: HashMap<EntityID,MyEntity>,
     pub positions: RTree<PositionComponent>,
     pub ent_loc_index: HashMap<EntityID, MyPoint>, //xyz
-    pub healths: HashMap<EntityID, HealthComponent>,
-    pub entity_types: HashMap<EntityID, EntityType>,
+    
+
     pub entity_counter: u64,
 }
 
 impl Default for Components {
     fn default() -> Self {
         Self {
-            entities: HashSet::new(),
+            entities: HashMap::new(),
             positions: RTree::new(),
             ent_loc_index: HashMap::new(),
-            healths: HashMap::new(),
-            entity_types: HashMap::new(),
+          
+           
             entity_counter: 1,
         }
     }

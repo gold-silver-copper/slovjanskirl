@@ -57,7 +57,7 @@ impl MyWorld {
     }
     //z must be above 0 for movement
     pub fn make_account(&mut self) -> (EntityID, MyPoint) {
-        let eid = self.new_entity(&(9, 9), &EntityType::Player);
+        let eid = self.new_entity(&(9, 9), &EntityType::Player(Player::default()));
         self.server_stuff.account_counter += 1;
 
         self.server_stuff
@@ -75,27 +75,22 @@ impl MyWorld {
         //GET ENTITY ID AND START ADDING COMPONENTS AFTER IT
         let eid = self.components.entity_counter.clone();
 
-        self.components.entities.insert(eid.clone());
-
-        self.components.positions.insert(PositionComponent {
+        let pc = PositionComponent {
             entity_id: eid.clone(),
             point: point.clone(),
-        });
+        };
+
+        let my_ent = MyEntity{position_component:pc.clone() , entity_type:spawn_type.clone()};
+
+        self.components.entities.insert(eid.clone(),my_ent);
+
+        self.components.positions.insert(pc);
         self.components
             .ent_loc_index
             .insert(eid.clone(), point.clone());
 
-        self.components
-            .entity_types
-            .insert(eid.clone(), spawn_type.clone());
-
-        self.components.healths.insert(
-            eid.clone(),
-            HealthComponent {
-                cur_health: 100,
-                max_health: 100,
-            },
-        );
+      
+      
 
         //END ADDING COMPONENTS HERE EXTRA INCREMENT CAUSE WHY NOT
         self.components.entity_counter += 1;
@@ -178,12 +173,12 @@ impl MyWorld {
         let ents_at = self.get_ents_at_point(point);
 
         for ent in ents_at {
-            if let Some(etype) = self.components.entity_types.get(&ent) {
-                match etype {
+            if let Some(entt) = self.components.entities.get(&ent) {
+                match entt.entity_type {
                     EntityType::Item(_)=> {
                         return false;
                     }
-                    EntityType::Player => {
+                    EntityType::Player(_) => {
                         return true;
                     }
                     EntityType::Monster(_) => {
@@ -250,8 +245,8 @@ impl MyWorld {
             for pc in local_ents {
                 let relative_point_x = pc.point.0 - bottom_left_of_game_screen.0;
                 let relative_point_y = pc.point.1 - bottom_left_of_game_screen.1;
-                if let Some(ent_type) = self.components.entity_types.get(&pc.entity_id) {
-                    let et = ent_type.clone();
+                if let Some(enttt) = self.components.entities.get(&pc.entity_id) {
+                    let et = enttt.entity_type.clone();
                     ent_vec.push(((relative_point_x, relative_point_y), et.to_graphictriple()))
                 } else {
                     ent_vec.push((
@@ -338,7 +333,7 @@ impl MyWorld {
                 e_info.push(EntityPacket {
                     entity_pos: pc.point.clone(),
                     entity_id: pc.entity_id.clone(),
-                    entity_type: self.components.entity_types.get(ent).unwrap().clone(),
+                    entity_type: self.components.entities.get(ent).unwrap().entity_type.clone(),
                 })
             }
 

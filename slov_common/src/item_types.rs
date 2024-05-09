@@ -189,21 +189,28 @@ pub struct Item {
     
 }
 
-
+#[derive(Clone, Debug)]
 pub struct MyEntity {
-    position_component: PositionComponent,
-    entity_type: EntityType,
+  pub  position_component: PositionComponent,
+   pub entity_type: EntityType,
 
 }
-
+#[derive(Clone, Debug)]
 pub struct Player {
     inventory: Vec<Item>,
-    
+
+}
+impl Default for Player {
+    fn default() -> Self {
+        Self{
+            inventory: Vec::new(),
+        }
+    }
 }
 
 #[derive(Clone, Debug)]
 pub enum EntityType {
-    Player,
+    Player(Player),
     Item(Item),
     Monster(AnimalType),
 }
@@ -213,7 +220,7 @@ impl EntityType {
         let ent_char = match self {
             EntityType::Item(_) => "i",
             EntityType::Monster(_) => "M",
-            EntityType::Player => "@",
+            EntityType::Player(_) => "@",
         };
         (ent_char.into(), Color::Red, Color::Black)
     }
