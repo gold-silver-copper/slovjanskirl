@@ -34,6 +34,7 @@ fn ui_example_system(
     mut contexts: EguiContexts,
     mut termres: ResMut<BevyTerminal<RataguiBackend>>,
     mut masterok: ResMut<Masterik>,
+    ui_status: Res<UIState>,
 ) {
     draw_ascii_game(
         &mut termres.terminal_game,
@@ -42,11 +43,15 @@ fn ui_example_system(
     );
     
     draw_ascii_info(&mut termres.terminal_info, &masterok);
-    draw_take_menu(
-        &mut termres.terminal_info,
-        &mut masterok,
-     
-    );
+
+    if ui_status.menu_open == MenuOpen::Take {
+        draw_take_menu(
+            &mut termres.terminal_menu,
+            &mut masterok,
+         
+        );
+    }
+  
 
     egui::CentralPanel::default()
         .frame(Frame::none())
@@ -60,6 +65,14 @@ fn ui_example_system(
                 .show_inside(ui, |ui| {
                     ui.add(termres.terminal_info.backend_mut());
                 });
+                if ui_status.menu_open == MenuOpen::Take {
+                    egui::SidePanel::right("c")  .min_width(av_width / (4.))
+                    .max_width(av_width / (4.))
+       
+                .show_inside(ui, |ui| {
+                    ui.add(termres.terminal_menu.backend_mut());
+                });
+                }
             egui::TopBottomPanel::top("a")
                 .min_height(av_height)
                 .max_height(av_height)
@@ -67,6 +80,8 @@ fn ui_example_system(
                 .show_inside(ui, |ui| {
                     ui.add(termres.terminal_game.backend_mut());
                 });
+
+               
         });
 }
 
@@ -293,6 +308,7 @@ fn keyboard_input_system(input: Res<ButtonInput<KeyCode>>, mut masterok: ResMut<
     let char_down = input.any_pressed([KeyCode::KeyS]);
     let char_left = input.any_pressed([KeyCode::KeyA]);
     let char_right = input.any_pressed([KeyCode::KeyD]);
+    let char_backspace = input.any_pressed([KeyCode::Backspace , KeyCode::Delete]);
     let char_quit = input.any_pressed([KeyCode::KeyQ]);
 
     let char_take = input.any_pressed([KeyCode::KeyV]);
@@ -328,6 +344,12 @@ fn keyboard_input_system(input: Res<ButtonInput<KeyCode>>, mut masterok: ResMut<
     }
 
     if ui_state.menu_open == MenuOpen::Take {
+        if char_take {
+            ui_state.menu_open = MenuOpen::Take;
+        }
+        if char_backspace {
+            ui_state.menu_open = MenuOpen::None;
+        }
 
 
 
