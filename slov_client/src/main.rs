@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, input::keyboard::Key};
 
 use bevy_egui::{
     egui::{self, Frame},
@@ -8,7 +8,7 @@ use ratatui::{
     layout::Rect,
     prelude::{Line, Stylize, Terminal},
     text::Text,
-    widgets::{Block, Borders, Paragraph, Wrap},
+    widgets::{Block, Borders, Paragraph, Wrap , *},
 };
 use ratframe::RataguiBackend;
 use slov_common::*;
@@ -19,6 +19,7 @@ fn main() {
         .init_resource::<BevyTerminal<RataguiBackend>>()
         //Initialize the ratatui terminal
         .init_resource::<Masterik>()
+        .init_resource::<UIState>()
         .add_plugins(EguiPlugin)
         // Systems that create Egui widgets should be run during the `CoreSet::Update` set,
         // or after the `EguiSet::BeginFrame` system (which belongs to the `CoreSet::PreUpdate` set).
@@ -32,14 +33,20 @@ fn main() {
 fn ui_example_system(
     mut contexts: EguiContexts,
     mut termres: ResMut<BevyTerminal<RataguiBackend>>,
-    masterok: Res<Masterik>,
+    mut masterok: ResMut<Masterik>,
 ) {
     draw_ascii_game(
         &mut termres.terminal_game,
         &masterok.client_world,
         &masterok.player_id,
     );
+    
     draw_ascii_info(&mut termres.terminal_info, &masterok);
+    draw_take_menu(
+        &mut termres.terminal_info,
+        &mut masterok,
+     
+    );
 
     egui::CentralPanel::default()
         .frame(Frame::none())
@@ -126,11 +133,60 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
         .expect("epic fail");
 }
 
+
+fn draw_take_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Masterik) {
+    let ent_loc = masterok.client_world.ent_loc_index.get(&masterok.player_id).unwrap_or(&(0,0));
+   let mut items = masterok.client_world.get_items_at_point(ent_loc);
+   let mut listitemvec = Vec::new();
+
+   for numb in 0..9 {
+
+        let meowmeow = items.pop();
+        let meownyaa: (u64, Item) = meowmeow.unwrap_or((0,Item{item_type:ItemType::None}));
+     
+
+        if meownyaa.1.item_type != ItemType::None {
+            masterok.item_button_map.insert(numb.clone(), meownyaa.0.clone());
+
+            let item_str = format!("{}    {}", numb, &meownyaa.1.to_title()) ;
+            let litem: ListItem = item_str.into();
+            listitemvec.push(litem);
+
+
+
+        }
+
+
+
+
+
+   }
+
+
+
+   
+
+    terminal
+        .draw(|frame| {
+            let area = frame.size();
+
+            //neccesary beccause drawing is from the top
+
+            frame.render_widget(
+                List::new(listitemvec).on_gray()
+                    .block(Block::new().title("press number to choose item to pick up").borders(Borders::ALL)),
+                area,
+            );
+        })
+        .expect("epic fail");
+}
+
 // Create resource to hold the ratatui terminal
 #[derive(Resource)]
 struct BevyTerminal<RataguiBackend: ratatui::backend::Backend> {
     terminal_game: Terminal<RataguiBackend>,
     terminal_info: Terminal<RataguiBackend>,
+    terminal_menu: Terminal<RataguiBackend>,
 }
 
 // Implement default on the resource to initialize it
@@ -143,9 +199,13 @@ impl Default for BevyTerminal<RataguiBackend> {
         let mut backend2 = RataguiBackend::new(20, 20);
         backend2.set_font_size(11);
         let mut terminal2 = Terminal::new(backend2).unwrap();
+        let mut backend3 = RataguiBackend::new(20, 20);
+        backend3.set_font_size(11);
+        let mut terminal3 = Terminal::new(backend3).unwrap();
         BevyTerminal {
             terminal_game: terminal1,
             terminal_info: terminal2,
+            terminal_menu: terminal3
         }
     }
 }
@@ -157,6 +217,7 @@ struct Masterik {
     messages: Vec<String>,
     client_world: MyWorld,
     is_logged_in: bool,
+    item_button_map: HashMap<ItemKey,EntityID>
 }
 
 impl Default for Masterik {
@@ -167,6 +228,30 @@ impl Default for Masterik {
             messages: Vec::new(),
             client_world: MyWorld::new_test(),
             is_logged_in: false,
+            item_button_map: HashMap::new(),
+        }
+    }
+}
+
+
+#[derive(PartialEq)]
+pub enum MenuOpen {
+    None,
+    Take,
+}
+
+
+#[derive(Resource)]
+struct UIState {
+    menu_open: MenuOpen,
+   
+}
+
+impl Default for UIState {
+    fn default() -> Self {
+        Self {
+            menu_open: MenuOpen::None,
+            
         }
     }
 }
@@ -203,34 +288,54 @@ fn create_local_account(mut masterok: ResMut<Masterik>) {
     masterok.location = local_info.1;
 }
 
-fn keyboard_input_system(input: Res<ButtonInput<KeyCode>>, mut masterok: ResMut<Masterik>) {
+fn keyboard_input_system(input: Res<ButtonInput<KeyCode>>, mut masterok: ResMut<Masterik>, mut ui_state: ResMut<UIState>) {
     let char_up = input.any_pressed([KeyCode::KeyW]);
     let char_down = input.any_pressed([KeyCode::KeyS]);
     let char_left = input.any_pressed([KeyCode::KeyA]);
     let char_right = input.any_pressed([KeyCode::KeyD]);
     let char_quit = input.any_pressed([KeyCode::KeyQ]);
 
+    let char_take = input.any_pressed([KeyCode::KeyV]);
+
     let mut client_action = ActionType::Wait;
     let client_id = masterok.player_id.clone();
 
-    if char_up {
-        client_action = ActionType::Go(LocativeID::Cardinal(CardinalDirection::North));
+    if ui_state.menu_open == MenuOpen::None {
+
+        if char_up {
+            client_action = ActionType::Go(LocativeID::Cardinal(CardinalDirection::North));
+        }
+        if char_down {
+            client_action = ActionType::Go(LocativeID::Cardinal(CardinalDirection::South));
+        }
+        if char_left {
+            client_action = ActionType::Go(LocativeID::Cardinal(CardinalDirection::West));
+        }
+        if char_right {
+            client_action = ActionType::Go(LocativeID::Cardinal(CardinalDirection::East));
+        }
+        if char_take {
+            ui_state.menu_open = MenuOpen::Take;
+        }
+       
+    
+        if client_action != ActionType::Wait {
+            masterok.client_world.receive((client_action, client_id));
+            //  println!("{:#?}", masterok.client_world);
+        }
+
+
     }
-    if char_down {
-        client_action = ActionType::Go(LocativeID::Cardinal(CardinalDirection::South));
+
+    if ui_state.menu_open == MenuOpen::Take {
+
+
+
     }
-    if char_left {
-        client_action = ActionType::Go(LocativeID::Cardinal(CardinalDirection::West));
-    }
-    if char_right {
-        client_action = ActionType::Go(LocativeID::Cardinal(CardinalDirection::East));
-    }
+
     if char_quit {
         panic!("BYE");
     }
 
-    if client_action != ActionType::Wait {
-        masterok.client_world.receive((client_action, client_id));
-        //  println!("{:#?}", masterok.client_world);
-    }
+  
 }

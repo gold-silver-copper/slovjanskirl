@@ -42,6 +42,7 @@ impl MyWorld {
     pub fn new_test() -> MyWorld {
         let mut x = MyWorld::default();
         x.new_entity(&(81,88), &EntityType::Monster(Animal{animal_type:AnimalType::Mammal(MammalType::Jelenj)}));
+        x.new_entity(&(81,87), &EntityType::Item(Item { item_type: ItemType::Melee(MeleeWeapon { weapon_type: MeleeWeaponType::Kopje, material_type: Material::Kamenj(StoneType::Kremenj) }) }));
         x
     }
 
@@ -177,6 +178,24 @@ impl MyWorld {
         } else {
             None
         }
+    }
+
+    pub fn get_items_at_point(&self,point: &MyPoint) -> Vec<(EntityID,Item)> {
+        let mut item_vec = Vec::new();
+       let boop = self.entity_tree.locate_all_at_point(point) ;
+           for x in boop {
+            let ent_typ = self.entity_map.get(&x.entity_id);
+            if let Some(meow) = ent_typ {
+                match meow {
+                    EntityType::Item(wut) => item_vec.push((x.entity_id.clone(),wut.clone())),
+                    _ => ()
+                }
+            }
+
+           }
+           item_vec
+        
+
     }
 
     pub fn voxel_blocks_movement_at(&self, point: &MyPoint) -> bool {

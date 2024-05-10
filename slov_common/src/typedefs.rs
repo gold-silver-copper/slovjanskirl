@@ -1,6 +1,7 @@
 use crate::*;
 
 pub type EntityID = u64;
+pub type ItemKey = u16;
 pub type AccountID = u64;
 pub type Health = i64;
 pub type CoordinateUnit = i64;

@@ -343,6 +343,7 @@ pub enum ItemType {
     Melee(MeleeWeapon),
     Ranged(RangedWeapon),
     Ammo(Ammo),
+    None
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -352,17 +353,7 @@ pub struct Item {
 
 impl Item {
     pub fn to_displaychar(&self) -> String {
-        let item_str = match &self.item_type {
-            ItemType::Melee(x) => {
-                format!("{}", &x.weapon_type)
-            }
-            ItemType::Ranged(x) => {
-                format!("{}", &x.weapon_type)
-            }
-            ItemType::Ammo(x) => {
-                format!("{}", &x.ammo_type)
-            }
-        };
+        let item_str =self.to_title();
 
         // let item_str = format!("{}", self.item_type);
         let ch = item_str.chars().nth(0).unwrap().to_lowercase().to_string();
@@ -373,8 +364,26 @@ impl Item {
             ItemType::Melee(x) => x.material_type.to_color(),
             ItemType::Ranged(x) => x.weapon_type.to_color(),
             ItemType::Ammo(x) => x.material_type.to_color(),
+            ItemType::None => Color::LightRed
         }
     }
+    pub fn to_title(&self) -> String {
+        let item_str = match &self.item_type {
+            ItemType::Melee(x) => {
+                format!("{}", &x.weapon_type)
+            }
+            ItemType::Ranged(x) => {
+                format!("{}", &x.weapon_type)
+            }
+            ItemType::Ammo(x) => {
+                format!("{}", &x.ammo_type)
+            }
+            ItemType::None => {"?".into()}
+        };
+
+        item_str
+    }
+
 }
 
 #[derive(Clone, Debug, PartialEq)]
