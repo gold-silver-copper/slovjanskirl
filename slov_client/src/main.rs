@@ -1,4 +1,4 @@
-use bevy::{prelude::*, input::keyboard::Key};
+use bevy::{input::keyboard::Key, prelude::*};
 
 use bevy_egui::{
     egui::{self, Frame},
@@ -8,7 +8,7 @@ use ratatui::{
     layout::Rect,
     prelude::{Line, Stylize, Terminal},
     text::Text,
-    widgets::{Block, Borders, Paragraph, Wrap , *},
+    widgets::{Block, Borders, Paragraph, Wrap, *},
 };
 use ratframe::RataguiBackend;
 use slov_common::*;
@@ -41,17 +41,10 @@ fn ui_example_system(
         &masterok.client_world,
         &masterok.player_id,
     );
-    
+
     draw_ascii_info(&mut termres.terminal_info, &masterok);
 
-    if ui_status.menu_open == MenuOpen::Take {
-        draw_take_menu(
-            &mut termres.terminal_menu,
-            &mut masterok,
-         
-        );
-    }
-  
+   
 
     egui::CentralPanel::default()
         .frame(Frame::none())
@@ -60,42 +53,47 @@ fn ui_example_system(
             let av_width = ui.available_width().clamp(100., 2000.);
 
             egui::SidePanel::right("containeeee")
-            .min_width(av_width / (5.))
-            .max_width(av_width / (5.))
-            .frame(Frame::none())
-            .show_inside(ui, |ui| {
-               
-                if ui_status.menu_open == MenuOpen::Take {
-                    egui::TopBottomPanel::top("c")
-                    .min_height(200.)
-                    .max_height(200.)
-                    .frame(Frame::none())
-       
-                .show_inside(ui, |ui| {
-                    ui.add(termres.terminal_menu.backend_mut());
-                });
-                }
-                egui::TopBottomPanel::bottom("b")
-                .min_height(ui.available_height().clamp(100., 2000.))
-                .max_height(ui.available_height().clamp(100., 2000.))
+                .min_width(av_width / (5.))
+                .max_width(av_width / (5.))
                 .frame(Frame::none())
                 .show_inside(ui, |ui| {
-                    ui.add(termres.terminal_info.backend_mut());
+                    if ui_status.menu_open == MenuOpen::Take {
+                        draw_take_menu(&mut termres.terminal_menu, &mut masterok);
+                        egui::TopBottomPanel::top("take")
+                            .min_height(200.)
+                            .max_height(200.)
+                            .frame(Frame::none())
+                            .show_inside(ui, |ui| {
+                                ui.add(termres.terminal_menu.backend_mut());
+                            });
+                    }
+                    else if ui_status.menu_open == MenuOpen::Drop {
+                        draw_drop_menu(&mut termres.terminal_menu, &mut masterok);
+                        egui::TopBottomPanel::top("drop")
+                            .min_height(200.)
+                            .max_height(200.)
+                            .frame(Frame::none())
+                            .show_inside(ui, |ui| {
+                                ui.add(termres.terminal_menu.backend_mut());
+                            });
+                    }
+                    egui::TopBottomPanel::bottom("info")
+                        .min_height(ui.available_height().clamp(100., 2000.))
+                        .max_height(ui.available_height().clamp(100., 2000.))
+                        .frame(Frame::none())
+                        .show_inside(ui, |ui| {
+                            ui.add(termres.terminal_info.backend_mut());
+                        });
                 });
-            });
 
-          
-
-                let remain_height = ui.available_height().clamp(100., 2000.);
-            egui::TopBottomPanel::top("a")
+            let remain_height = ui.available_height().clamp(100., 2000.);
+            egui::TopBottomPanel::top("game")
                 .min_height(remain_height)
                 .max_height(remain_height)
                 .frame(Frame::none())
                 .show_inside(ui, |ui| {
                     ui.add(termres.terminal_game.backend_mut());
                 });
-
-               
         });
 }
 
@@ -129,7 +127,8 @@ fn draw_ascii_game(
             //neccesary beccause drawing is from the top
             render_lines.reverse();
             frame.render_widget(
-                Paragraph::new(Text::from(render_lines)).on_black()
+                Paragraph::new(Text::from(render_lines))
+                    .on_black()
                     .block(Block::new().title("game").borders(Borders::ALL)),
                 area,
             );
@@ -154,7 +153,8 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
             //neccesary beccause drawing is from the top
 
             frame.render_widget(
-                Paragraph::new(messages_to_show).on_black()
+                Paragraph::new(messages_to_show)
+                    .on_black()
                     .block(Block::new().title("log").borders(Borders::ALL)),
                 area,
             );
@@ -162,38 +162,34 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
         .expect("epic fail");
 }
 
-
 fn draw_take_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Masterik) {
-    let ent_loc = masterok.client_world.ent_loc_index.get(&masterok.player_id).unwrap_or(&(0,0));
-   let mut items = masterok.client_world.get_items_at_point(ent_loc);
-   let mut listitemvec = Vec::new();
+    let ent_loc = masterok
+        .client_world
+        .ent_loc_index
+        .get(&masterok.player_id)
+        .unwrap_or(&(0, 0));
+    let mut items = masterok.client_world.get_items_at_point(ent_loc);
+    let mut listitemvec = Vec::new();
 
-   for numb in 1..9 {
-
+    for numb in 1..9 {
         let meowmeow = items.pop();
-        let meownyaa: (u64, Item) = meowmeow.unwrap_or((0,Item{item_type:ItemType::None}));
-     
+        let meownyaa: (u64, Item) = meowmeow.unwrap_or((
+            0,
+            Item {
+                item_type: ItemType::None,
+            },
+        ));
 
         if meownyaa.1.item_type != ItemType::None {
-            masterok.item_button_map.insert(numb.clone(), meownyaa.0.clone());
+            masterok
+                .button_entityid_map
+                .insert(numb.clone(), meownyaa.0.clone());
 
-            let item_str = format!("{}    {}", numb, &meownyaa.1.to_title()) ;
+            let item_str = format!("{}    {}", numb, &meownyaa.1.to_title());
             let litem: ListItem = item_str.into();
             listitemvec.push(litem);
-
-
-
         }
-
-
-
-
-
-   }
-
-
-
-   
+    }
 
     terminal
         .draw(|frame| {
@@ -202,13 +198,77 @@ fn draw_take_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Master
             //neccesary beccause drawing is from the top
 
             frame.render_widget(
-                List::new(listitemvec).on_gray()
-                    .block(Block::new().title("press number to choose item to pick up").borders(Borders::ALL)),
+                List::new(listitemvec).on_gray().block(
+                    Block::new()
+                        .title("press number to choose item to pick up").blue()
+                        .borders(Borders::ALL),
+                ),
                 area,
             );
         })
         .expect("epic fail");
 }
+
+
+
+
+fn draw_drop_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Masterik) {
+
+    let mut entik = masterok.client_world.entity_map.get(&masterok.player_id).unwrap_or(&EntityType::None);
+    let mut items = Vec::new();
+    let mut listitemvec = Vec::new();
+
+    match entik {
+        EntityType::Player(igrok) => {items = igrok.inventory.clone();},
+        _ => ()
+    }
+
+    for numb in 1..9 {
+
+
+
+        let itimik = items.pop().unwrap_or(Item{item_type:ItemType::None});
+        if itimik.item_type != ItemType::None {
+
+            let item_str = format!("{}    {}", numb, &itimik.to_title());
+            let litem: ListItem = item_str.into();
+            listitemvec.push(litem);
+
+            masterok
+                .button_itemstruct_map
+                .insert(numb.clone(), itimik);
+
+          
+        }
+
+
+    }
+   
+
+
+
+
+    
+
+    terminal
+        .draw(|frame| {
+            let area = frame.size();
+
+            //neccesary beccause drawing is from the top
+
+            frame.render_widget(
+                List::new(listitemvec).on_gray().block(
+                    Block::new()
+                        .title("nozmi nomer vybrati ot czego izbaviti se").blue()
+                        .borders(Borders::ALL),
+                ),
+                area,
+            );
+        })
+        .expect("epic fail");
+}
+
+
 
 // Create resource to hold the ratatui terminal
 #[derive(Resource)]
@@ -234,7 +294,7 @@ impl Default for BevyTerminal<RataguiBackend> {
         BevyTerminal {
             terminal_game: terminal1,
             terminal_info: terminal2,
-            terminal_menu: terminal3
+            terminal_menu: terminal3,
         }
     }
 }
@@ -246,7 +306,8 @@ struct Masterik {
     messages: Vec<String>,
     client_world: MyWorld,
     is_logged_in: bool,
-    item_button_map: HashMap<ItemKey,EntityID>
+    button_entityid_map: HashMap<ItemKey, EntityID>,
+    button_itemstruct_map: HashMap<ItemKey, Item>,
 }
 
 impl Default for Masterik {
@@ -257,30 +318,28 @@ impl Default for Masterik {
             messages: Vec::new(),
             client_world: MyWorld::new_test(),
             is_logged_in: false,
-            item_button_map: HashMap::new(),
+            button_entityid_map: HashMap::new(),
+            button_itemstruct_map: HashMap::new(),
         }
     }
 }
-
 
 #[derive(PartialEq)]
 pub enum MenuOpen {
     None,
     Take,
+    Drop,
 }
-
 
 #[derive(Resource)]
 struct UIState {
     menu_open: MenuOpen,
-   
 }
 
 impl Default for UIState {
     fn default() -> Self {
         Self {
             menu_open: MenuOpen::None,
-            
         }
     }
 }
@@ -290,8 +349,7 @@ fn local_world_process(mut masterok: ResMut<Masterik>) {
     let boop = masterok
         .client_world
         .create_game_data_packet_for_entity(&masterok.player_id);
-    
-  
+
     if let Some(meow) = boop {
         //generate text messages from these action packets, then push them to the player message viewer
         let packet_actions = meow.action_info;
@@ -317,17 +375,22 @@ fn create_local_account(mut masterok: ResMut<Masterik>) {
     masterok.location = local_info.1;
 }
 
-fn keyboard_input_system(input: Res<ButtonInput<KeyCode>>, mut masterok: ResMut<Masterik>, mut ui_state: ResMut<UIState>) {
+fn keyboard_input_system(
+    input: Res<ButtonInput<KeyCode>>,
+    mut masterok: ResMut<Masterik>,
+    mut ui_state: ResMut<UIState>,
+) {
     let char_up = input.any_pressed([KeyCode::KeyW]);
     let char_down = input.any_pressed([KeyCode::KeyS]);
     let char_left = input.any_pressed([KeyCode::KeyA]);
     let char_right = input.any_pressed([KeyCode::KeyD]);
-    let char_backspace = input.any_pressed([KeyCode::Backspace , KeyCode::Delete]);
+    let char_backspace = input.any_pressed([KeyCode::Backspace, KeyCode::Delete]);
     let char_quit = input.any_pressed([KeyCode::KeyQ]);
 
-    let char_take = input.any_pressed([KeyCode::KeyV]);
-
-
+    let char_take = input.any_pressed([KeyCode::KeyJ]); // jęti (jme) / vzeti
+    let char_drop = input.any_pressed([KeyCode::KeyI]); //izbaviti se
+    let char_help = input.any_pressed([KeyCode::KeyP]); //pokazati pomoc ?
+    let char_throw = input.any_pressed([KeyCode::KeyM]); //metnuti  imej target range do ktorogo mozno metati dla praktiki zeby povysati skil be ubijstva
 
     let char_one = input.any_pressed([KeyCode::Digit1]);
     let char_two = input.any_pressed([KeyCode::Digit2]);
@@ -344,7 +407,6 @@ fn keyboard_input_system(input: Res<ButtonInput<KeyCode>>, mut masterok: ResMut<
     let client_id = masterok.player_id.clone();
 
     if ui_state.menu_open == MenuOpen::None {
-
         if char_up {
             client_action = ActionType::Go(LocativeID::Cardinal(CardinalDirection::North));
         }
@@ -360,26 +422,37 @@ fn keyboard_input_system(input: Res<ButtonInput<KeyCode>>, mut masterok: ResMut<
         if char_take {
             ui_state.menu_open = MenuOpen::Take;
         }
-       
-    
-      
+        if char_drop {
+            ui_state.menu_open = MenuOpen::Drop;
+        }
     }
 
     if ui_state.menu_open == MenuOpen::Take {
-        if char_take {
-            ui_state.menu_open = MenuOpen::Take;
-        }
+       
         if char_backspace {
+            masterok.button_entityid_map.drain();
             ui_state.menu_open = MenuOpen::None;
         }
 
         if char_one {
-            client_action = ActionType::Take(masterok.item_button_map.get(&1).unwrap_or(&0).clone());
+            client_action =
+                ActionType::Take(masterok.button_entityid_map.get(&1).unwrap_or(&0).clone());
+        }
+    }
+
+    if ui_state.menu_open == MenuOpen::Drop {
+      
+        if char_backspace {
+            masterok.button_entityid_map.drain();
+            ui_state.menu_open = MenuOpen::None;
         }
 
-
-
+        if char_one {
+            client_action =
+                ActionType::Drop(masterok.button_itemstruct_map.get(&1).unwrap_or(&Item{item_type:ItemType::None}).clone());
+        }
     }
+
 
     if char_quit {
         panic!("BYE");
@@ -388,8 +461,4 @@ fn keyboard_input_system(input: Res<ButtonInput<KeyCode>>, mut masterok: ResMut<
         masterok.client_world.receive((client_action, client_id));
         //  println!("{:#?}", masterok.client_world);
     }
-
-
-
-  
 }

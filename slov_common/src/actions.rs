@@ -4,13 +4,14 @@ use crate::*;
 pub enum ActionType {
     Wait,
     Take(AccusativeID),
+    Drop(Item),
     Give(AccusativeID, DativeID),
     Hit(AccusativeID, InstrumentalID),
     Go(LocativeID),
     Quit,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug , PartialEq)]
 pub enum SuccessType {
     Success,
     Failure,
@@ -96,10 +97,13 @@ impl Action {
        
     }
     pub fn drop(world: &mut MyWorld, subject: &EntityID, item_to_drop: &Item) -> SuccessType {
+        let sub_loc = world.ent_loc_index.get(subject).unwrap_or(&(0,0)).clone();
      
         //does ent contain item
 
         let mut nun = EntityType::None;
+
+        let mut meow = SuccessType::Failure;
 
         let ent_to_check = world.entity_map.get_mut(subject).unwrap_or(&mut nun);
 
@@ -107,9 +111,15 @@ impl Action {
             EntityType::Player(igrok) => {
 
 
+                
               
-                    remove_first_instance(&mut igrok.inventory, item_to_drop);
-                    return SuccessType::Success;
+                     meow = remove_first_instance(&mut igrok.inventory, &item_to_drop.clone()) ;
+                        
+                    
+                     
+                     
+                   
+                  
 
                 
 
@@ -120,9 +130,11 @@ impl Action {
         }
 
        
-
+        if meow == SuccessType::Success {
+            world.new_entity(&sub_loc, &EntityType::Item(item_to_drop.clone()));
+        }
         
-        SuccessType::Failure
+        meow
 
        
     }
