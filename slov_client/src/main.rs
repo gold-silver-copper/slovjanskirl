@@ -59,23 +59,37 @@ fn ui_example_system(
             let av_height = ui.available_height().clamp(100., 2000.);
             let av_width = ui.available_width().clamp(100., 2000.);
 
-            egui::SidePanel::right("b")
-                .min_width(av_width / (4.))
-                .max_width(av_width / (4.))
-                .show_inside(ui, |ui| {
-                    ui.add(termres.terminal_info.backend_mut());
-                });
+            egui::SidePanel::right("containeeee")
+            .min_width(av_width / (5.))
+            .max_width(av_width / (5.))
+            .frame(Frame::none())
+            .show_inside(ui, |ui| {
+               
                 if ui_status.menu_open == MenuOpen::Take {
-                    egui::SidePanel::right("c")  .min_width(av_width / (4.))
-                    .max_width(av_width / (4.))
+                    egui::TopBottomPanel::top("c")
+                    .min_height(200.)
+                    .max_height(200.)
+                    .frame(Frame::none())
        
                 .show_inside(ui, |ui| {
                     ui.add(termres.terminal_menu.backend_mut());
                 });
                 }
+                egui::TopBottomPanel::bottom("b")
+                .min_height(ui.available_height().clamp(100., 2000.))
+                .max_height(ui.available_height().clamp(100., 2000.))
+                .frame(Frame::none())
+                .show_inside(ui, |ui| {
+                    ui.add(termres.terminal_info.backend_mut());
+                });
+            });
+
+          
+
+                let remain_height = ui.available_height().clamp(100., 2000.);
             egui::TopBottomPanel::top("a")
-                .min_height(av_height)
-                .max_height(av_height)
+                .min_height(remain_height)
+                .max_height(remain_height)
                 .frame(Frame::none())
                 .show_inside(ui, |ui| {
                     ui.add(termres.terminal_game.backend_mut());
