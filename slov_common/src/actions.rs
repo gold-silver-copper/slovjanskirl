@@ -59,8 +59,62 @@ impl Action {
         }
     }
     pub fn take(world: &mut MyWorld, subject: &EntityID, object: &EntityID) -> SuccessType {
+
+        //get subj and obj locations
         let sub_loc = world.ent_loc_index.get(subject);
         let obj_loc = world.ent_loc_index.get(object);
+       
+        //if the subj and obj are in the same place
+        if sub_loc == obj_loc {
+            let mut nun = EntityType::None;
+            let mut nun2 = EntityType::None;
+          
+            let mut itik = world.entity_map.get(object).unwrap_or( &mut nun2).clone();
+            let mut boop = world.entity_map.get_mut(subject).unwrap_or( &mut nun);
+            //if the object is an item 
+            match itik {
+                EntityType::Item(itimik) => {
+                    match boop {
+                        //if the subject is a player
+                        EntityType::Player(pla) => {pla.inventory.push(itimik.clone()); world.delete_entity(object); return SuccessType::Success},
+                        _ => ()
+
+                    }
+                    
+                },
+                _ => ()
+            }
+
+
+         
+
+
+
+        }
+        SuccessType::Failure
+
+       
+    }
+    pub fn drop(world: &mut MyWorld, subject: &EntityID, item_to_drop: &Item) -> SuccessType {
+     
+        //does ent contain item
+
+        let ent_to_check = world.entity_map.get(subject).unwrap_or(&EntityType::None);
+
+        match ent_to_check {
+            EntityType::Player(igrok) => {
+
+
+                if igrok.inventory.contains(item_to_drop) {
+                    
+                }
+
+
+            },
+            _ => ()
+
+        }
+
        
 
         if sub_loc == obj_loc {
