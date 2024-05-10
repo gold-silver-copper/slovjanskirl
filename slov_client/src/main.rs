@@ -44,8 +44,6 @@ fn ui_example_system(
 
     draw_ascii_info(&mut termres.terminal_info, &masterok);
 
-   
-
     egui::CentralPanel::default()
         .frame(Frame::none())
         .show(contexts.ctx_mut(), |ui| {
@@ -66,8 +64,7 @@ fn ui_example_system(
                             .show_inside(ui, |ui| {
                                 ui.add(termres.terminal_menu.backend_mut());
                             });
-                    }
-                    else if ui_status.menu_open == MenuOpen::Drop {
+                    } else if ui_status.menu_open == MenuOpen::Drop {
                         draw_drop_menu(&mut termres.terminal_menu, &mut masterok);
                         egui::TopBottomPanel::top("drop")
                             .min_height(200.)
@@ -200,7 +197,8 @@ fn draw_take_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Master
             frame.render_widget(
                 List::new(listitemvec).on_gray().block(
                     Block::new()
-                        .title("press number to choose item to pick up").blue()
+                        .title("press number to choose item to pick up")
+                        .blue()
                         .borders(Borders::ALL),
                 ),
                 area,
@@ -209,46 +207,34 @@ fn draw_take_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Master
         .expect("epic fail");
 }
 
-
-
-
 fn draw_drop_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Masterik) {
-
-    let mut entik = masterok.client_world.entity_map.get(&masterok.player_id).unwrap_or(&EntityType::None);
+    let mut entik = masterok
+        .client_world
+        .entity_map
+        .get(&masterok.player_id)
+        .unwrap_or(&EntityType::None);
     let mut items = Vec::new();
     let mut listitemvec = Vec::new();
 
     match entik {
-        EntityType::Player(igrok) => {items = igrok.inventory.clone();},
-        _ => ()
+        EntityType::Player(igrok) => {
+            items = igrok.inventory.clone();
+        }
+        _ => (),
     }
 
     for numb in 1..9 {
-
-
-
-        let itimik = items.pop().unwrap_or(Item{item_type:ItemType::None});
+        let itimik = items.pop().unwrap_or(Item {
+            item_type: ItemType::None,
+        });
         if itimik.item_type != ItemType::None {
-
             let item_str = format!("{}    {}", numb, &itimik.to_title());
             let litem: ListItem = item_str.into();
             listitemvec.push(litem);
 
-            masterok
-                .button_itemstruct_map
-                .insert(numb.clone(), itimik);
-
-          
+            masterok.button_itemstruct_map.insert(numb.clone(), itimik);
         }
-
-
     }
-   
-
-
-
-
-    
 
     terminal
         .draw(|frame| {
@@ -259,7 +245,8 @@ fn draw_drop_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Master
             frame.render_widget(
                 List::new(listitemvec).on_gray().block(
                     Block::new()
-                        .title("nozmi nomer vybrati ot czego izbaviti se").blue()
+                        .title("nozmi nomer vybrati ot czego izbaviti se")
+                        .blue()
                         .borders(Borders::ALL),
                 ),
                 area,
@@ -267,8 +254,6 @@ fn draw_drop_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Master
         })
         .expect("epic fail");
 }
-
-
 
 // Create resource to hold the ratatui terminal
 #[derive(Resource)]
@@ -428,7 +413,6 @@ fn keyboard_input_system(
     }
 
     if ui_state.menu_open == MenuOpen::Take {
-       
         if char_backspace {
             masterok.button_entityid_map.drain();
             ui_state.menu_open = MenuOpen::None;
@@ -441,18 +425,23 @@ fn keyboard_input_system(
     }
 
     if ui_state.menu_open == MenuOpen::Drop {
-      
         if char_backspace {
             masterok.button_entityid_map.drain();
             ui_state.menu_open = MenuOpen::None;
         }
 
         if char_one {
-            client_action =
-                ActionType::Drop(masterok.button_itemstruct_map.get(&1).unwrap_or(&Item{item_type:ItemType::None}).clone());
+            client_action = ActionType::Drop(
+                masterok
+                    .button_itemstruct_map
+                    .get(&1)
+                    .unwrap_or(&Item {
+                        item_type: ItemType::None,
+                    })
+                    .clone(),
+            );
         }
     }
-
 
     if char_quit {
         panic!("BYE");
