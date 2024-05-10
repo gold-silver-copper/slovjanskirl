@@ -168,7 +168,7 @@ fn draw_take_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Master
    let mut items = masterok.client_world.get_items_at_point(ent_loc);
    let mut listitemvec = Vec::new();
 
-   for numb in 0..9 {
+   for numb in 1..9 {
 
         let meowmeow = items.pop();
         let meownyaa: (u64, Item) = meowmeow.unwrap_or((0,Item{item_type:ItemType::None}));
@@ -327,6 +327,19 @@ fn keyboard_input_system(input: Res<ButtonInput<KeyCode>>, mut masterok: ResMut<
 
     let char_take = input.any_pressed([KeyCode::KeyV]);
 
+
+
+    let char_one = input.any_pressed([KeyCode::Digit1]);
+    let char_two = input.any_pressed([KeyCode::Digit2]);
+    let char_three = input.any_pressed([KeyCode::Digit3]);
+    let char_four = input.any_pressed([KeyCode::Digit4]);
+    let char_five = input.any_pressed([KeyCode::Digit5]);
+    let char_six = input.any_pressed([KeyCode::Digit6]);
+    let char_seven = input.any_pressed([KeyCode::Digit7]);
+    let char_eight = input.any_pressed([KeyCode::Digit8]);
+    let char_nine = input.any_pressed([KeyCode::Digit9]);
+    let char_zero = input.any_pressed([KeyCode::Digit0]);
+
     let mut client_action = ActionType::Wait;
     let client_id = masterok.player_id.clone();
 
@@ -349,12 +362,7 @@ fn keyboard_input_system(input: Res<ButtonInput<KeyCode>>, mut masterok: ResMut<
         }
        
     
-        if client_action != ActionType::Wait {
-            masterok.client_world.receive((client_action, client_id));
-            //  println!("{:#?}", masterok.client_world);
-        }
-
-
+      
     }
 
     if ui_state.menu_open == MenuOpen::Take {
@@ -365,6 +373,10 @@ fn keyboard_input_system(input: Res<ButtonInput<KeyCode>>, mut masterok: ResMut<
             ui_state.menu_open = MenuOpen::None;
         }
 
+        if char_one {
+            client_action = ActionType::Take(masterok.item_button_map.get(&1).unwrap_or(&0).clone());
+        }
+
 
 
     }
@@ -372,6 +384,12 @@ fn keyboard_input_system(input: Res<ButtonInput<KeyCode>>, mut masterok: ResMut<
     if char_quit {
         panic!("BYE");
     }
+    if client_action != ActionType::Wait {
+        masterok.client_world.receive((client_action, client_id));
+        //  println!("{:#?}", masterok.client_world);
+    }
+
+
 
   
 }

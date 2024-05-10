@@ -51,11 +51,45 @@ impl Action {
         match destination {
             LocativeID::Cardinal(cd) => world.move_entity_in_direction(subject, cd), //world.move_entity_in_direction(subject, cd),
             LocativeID::Entity(_) => {
-                panic!("not implemented")
+                panic!("not implemented ent")
             }
             LocativeID::Point(_) => {
-                panic!("not implemented")
+                panic!("not implemented point")
             }
         }
+    }
+    pub fn take(world: &mut MyWorld, subject: &EntityID, object: &EntityID) -> SuccessType {
+        let sub_loc = world.ent_loc_index.get(subject);
+        let obj_loc = world.ent_loc_index.get(object);
+       
+
+        if sub_loc == obj_loc {
+            let mut nun = EntityType::None;
+            let mut nun2 = EntityType::None;
+          
+            let mut itik = world.entity_map.get(object).unwrap_or( &mut nun2).clone();
+            let mut boop = world.entity_map.get_mut(subject).unwrap_or( &mut nun);
+
+            match itik {
+                EntityType::Item(itimik) => {
+                    match boop {
+                        EntityType::Player(pla) => {pla.inventory.push(itimik.clone()); world.delete_entity(object); return SuccessType::Success},
+                        _ => ()
+
+                    }
+                    
+                },
+                _ => ()
+            }
+
+
+         
+
+
+
+        }
+        SuccessType::Failure
+
+       
     }
 }

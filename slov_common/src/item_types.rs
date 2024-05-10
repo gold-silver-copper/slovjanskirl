@@ -388,8 +388,8 @@ impl Item {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Player {
-    inventory: InventoryComponent,
-    health: HealthComponent,
+   pub inventory: InventoryComponent,
+   pub health: HealthComponent,
 }
 
 impl Default for Player {
@@ -406,6 +406,7 @@ pub enum EntityType {
     Player(Player),
     Item(Item),
     Monster(Animal),
+    None
 }
 
 impl EntityType {
@@ -414,6 +415,7 @@ impl EntityType {
             EntityType::Item(x) => x.to_displaychar(),
             EntityType::Monster(x) => x.to_displaychar(),//x.to_displaychar(),
             EntityType::Player(_) => "@".into(),
+            EntityType::None => "?".into()
         }
     }
 
@@ -422,6 +424,7 @@ impl EntityType {
             EntityType::Item(x) => x.to_color(),
             EntityType::Monster(x) => x.to_color(),
             EntityType::Player(_) => Color::Red,
+            EntityType::None => Color::Red,
         }
     }
 

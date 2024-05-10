@@ -57,6 +57,7 @@ impl MyWorld {
 
                 let success_type = match action {
                     ActionType::Go(loc) => Action::go(self, &eid, loc),
+                    ActionType::Take(obj) => Action::take(self, &eid, obj),
                     ActionType::Wait => SuccessType::Success,
 
                     _ => panic!("not implemented"),
@@ -105,6 +106,27 @@ impl MyWorld {
         self.entity_counter += 1;
 
         return eid;
+    }
+
+    pub fn delete_entity(&mut self, eidik: &EntityID) -> SuccessType {
+
+       let ahahaha =  self.ent_loc_index.get(eidik).unwrap_or(&(0,0));
+
+        let pc = PositionComponent {
+            entity_id: eidik.clone(),
+            point: ahahaha.clone(),
+        };
+    
+
+     
+        self.ent_loc_index.remove(eidik);
+
+        self.entity_tree.remove(&pc);
+        self.entity_map.remove(eidik);
+
+       
+
+        return SuccessType::Success;
     }
 
     // World initialization function.
