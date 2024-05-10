@@ -90,3 +90,11 @@ impl CardinalDirection {
         }
     }
 }
+
+
+
+pub fn remove_first_instance<T: PartialEq>(vec: &mut Vec<T>, item: &T) {
+    if let Some(index) = vec.iter().position(|x| x == item) {
+        vec.remove(index);
+    }
+}

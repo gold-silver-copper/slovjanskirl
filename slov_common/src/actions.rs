@@ -99,15 +99,19 @@ impl Action {
      
         //does ent contain item
 
-        let ent_to_check = world.entity_map.get(subject).unwrap_or(&EntityType::None);
+        let mut nun = EntityType::None;
+
+        let ent_to_check = world.entity_map.get_mut(subject).unwrap_or(&mut nun);
 
         match ent_to_check {
             EntityType::Player(igrok) => {
 
 
-                if igrok.inventory.contains(item_to_drop) {
-                    
-                }
+              
+                    remove_first_instance(&mut igrok.inventory, item_to_drop);
+                    return SuccessType::Success;
+
+                
 
 
             },
@@ -117,31 +121,7 @@ impl Action {
 
        
 
-        if sub_loc == obj_loc {
-            let mut nun = EntityType::None;
-            let mut nun2 = EntityType::None;
-          
-            let mut itik = world.entity_map.get(object).unwrap_or( &mut nun2).clone();
-            let mut boop = world.entity_map.get_mut(subject).unwrap_or( &mut nun);
-
-            match itik {
-                EntityType::Item(itimik) => {
-                    match boop {
-                        EntityType::Player(pla) => {pla.inventory.push(itimik.clone()); world.delete_entity(object); return SuccessType::Success},
-                        _ => ()
-
-                    }
-                    
-                },
-                _ => ()
-            }
-
-
-         
-
-
-
-        }
+        
         SuccessType::Failure
 
        
