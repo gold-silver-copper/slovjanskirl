@@ -112,3 +112,36 @@ furnace made out of clay with fan out of wood burns iron ore make metal for dagg
 make pipe to smoke weed
 
 sandy beach with infinite rocks, each rock u pick up is a random mineral
+
+
+combat system:  melee attacks are automatic and affect all within a radius of player/monster . ranged attacks have to be triggered manually
+short sword - 1 tile radius, long sword, 2 tile radius hope i dont hit thru wall idk, 
+
+
+
+
+lokacija- czarovny les
+ime - zlotik
+zdravje - zdravy
+derzhysz - mecz
+dalnoboj - kidajesz nozz
+
+tut na polu :
+sword 10 gold knife body
+
+ty vidisz:
+
+                zver  
+
+
+
+                NW N NE
+                W  @  E
+                SW S SE
+
+
+messagelog : rest of ths tuf
+
+
+
+
