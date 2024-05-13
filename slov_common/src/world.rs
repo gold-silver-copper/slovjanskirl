@@ -224,18 +224,47 @@ impl MyWorld {
         item_vec
     }
 
-    pub fn voxel_blocks_movement_at(&self, point: &MyPoint) -> bool {
-        if let Some(got_point) = self.get_voxel_at(point) {
-            //todo!("implement voxel blocking movements");
-            return false;
-        } else {
-            if point.0 > 0 && point.1 > 0 {
-                return false;
-            } else {
-                return true;
+    pub fn floor_blocks_movement_at (&self, point: &MyPoint) -> bool {
+        if let Some(got_voxel) = self.get_voxel_at(point) {
+
+            match  got_voxel.floor {
+                Floor::Water => return true,
+                _ => return false,
+
             }
+        
+        } else {
+           return true;
         }
+
+
     }
+
+    pub fn move_blocked_to_point(&self, point: &MyPoint) -> bool {
+
+        let ent_blocks = self.entity_blocks_movement_at(point);
+
+        if ent_blocks { return true;}
+        else {
+
+            return self.floor_blocks_movement_at(point);
+
+            
+
+
+
+        }
+
+      
+
+     
+
+
+
+
+    }
+
+    
 
     pub fn entity_blocks_movement_at(&self, point: &MyPoint) -> bool {
 
@@ -433,13 +462,11 @@ impl MyWorld {
             let dir_point = cd.to_xyz();
             let goal = add_two_points(&xyz, &dir_point);
 
-            if !self.voxel_blocks_movement_at(&goal) {
-                if !self.entity_blocks_movement_at(&goal) {
+            if !self.move_blocked_to_point(&goal) {
+               
                     self.set_ent_loc(ent, &goal);
                     return SuccessType::Success;
-                } else {
-                    SuccessType::Failure
-                }
+                
             } else {
                 SuccessType::Failure
             }
