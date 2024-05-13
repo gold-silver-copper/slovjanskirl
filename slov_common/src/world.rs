@@ -240,6 +240,22 @@ impl MyWorld {
 
     }
 
+    pub fn furniture_blocks_movement_at (&self, point: &MyPoint) -> bool {
+        if let Some(got_voxel) = self.get_voxel_at(point) {
+
+            match  got_voxel.furniture.furniture_type {
+                FurnitureType::Drěvo(_) => return true,
+                _ => return false,
+
+            }
+        
+        } else {
+           return true;
+        }
+
+
+    }
+
     pub fn move_blocked_to_point(&self, point: &MyPoint) -> bool {
 
         let ent_blocks = self.entity_blocks_movement_at(point);
@@ -247,7 +263,10 @@ impl MyWorld {
         if ent_blocks { return true;}
         else {
 
-            return self.floor_blocks_movement_at(point);
+            if self.floor_blocks_movement_at(point) {
+                return true;
+            }
+            else {return self.furniture_blocks_movement_at(point);}
 
             
 
