@@ -41,9 +41,6 @@ same with bushes but they provide vines or berries
 have saplings for trees i guess
 
 
-game should probably be built on bevy
-
-but idk about networking...replicon mebe
 
 add a game guide in the game that players can read and find out about things that can be done in the game.
 
@@ -52,8 +49,6 @@ tech stack
 
 common: rstar world
 
-server: ezsocket http server... but which
-alternative client: macroquad-egui , reqwest
 
 bevy_rtc 
 
@@ -70,6 +65,7 @@ You then are spawned randomly in a forest where you can pick berries
 
 
 you can sharpen a weapon to make it sharp , through use it becomes dull and has to be resharpened occasionally
+
 
 
 woodcrafting skill, metalworking, rock knapping
@@ -112,3 +108,7 @@ starting speed for sling is 4 tiles a tick, arrow is 8 tiles a tick, bullet is 4
 no bullets
 
 furnace made out of clay with fan out of wood burns iron ore make metal for dagger stone for mrotar
+
+make pipe to smoke weed
+
+sandy beach with infinite rocks, each rock u pick up is a random mineral
