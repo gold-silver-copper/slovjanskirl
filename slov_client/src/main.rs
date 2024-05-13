@@ -370,23 +370,23 @@ fn keyboard_input_system(
     let char_left = input.any_pressed([KeyCode::KeyA]);
     let char_right = input.any_pressed([KeyCode::KeyD]);
     let char_backspace = input.any_pressed([KeyCode::Backspace, KeyCode::Delete]);
-    let char_quit = input.any_pressed([KeyCode::KeyQ]);
+    let char_quit = input.any_just_pressed([KeyCode::KeyQ]);
 
-    let char_take = input.any_pressed([KeyCode::KeyJ]); // jęti (jme) / vzeti
-    let char_drop = input.any_pressed([KeyCode::KeyI]); //izbaviti se
-    let char_help = input.any_pressed([KeyCode::KeyP]); //pokazati pomoc ?
-    let char_throw = input.any_pressed([KeyCode::KeyM]); //metnuti  imej target range do ktorogo mozno metati dla praktiki zeby povysati skil be ubijstva
+    let char_take = input.any_just_pressed([KeyCode::KeyJ]); // jęti (jme) / vzeti
+    let char_drop = input.any_just_pressed([KeyCode::KeyI]); //izbaviti se
+    let char_help = input.any_just_pressed([KeyCode::KeyP]); //pokazati pomoc ?
+    let char_throw = input.any_just_pressed([KeyCode::KeyM]); //metnuti  imej target range do ktorogo mozno metati dla praktiki zeby povysati skil be ubijstva
 
-    let char_one = input.any_pressed([KeyCode::Digit1]);
-    let char_two = input.any_pressed([KeyCode::Digit2]);
-    let char_three = input.any_pressed([KeyCode::Digit3]);
-    let char_four = input.any_pressed([KeyCode::Digit4]);
-    let char_five = input.any_pressed([KeyCode::Digit5]);
-    let char_six = input.any_pressed([KeyCode::Digit6]);
-    let char_seven = input.any_pressed([KeyCode::Digit7]);
-    let char_eight = input.any_pressed([KeyCode::Digit8]);
-    let char_nine = input.any_pressed([KeyCode::Digit9]);
-    let char_zero = input.any_pressed([KeyCode::Digit0]);
+    let char_one = input.any_just_pressed([KeyCode::Digit1]);
+    let char_two = input.any_just_pressed([KeyCode::Digit2]);
+    let char_three = input.any_just_pressed([KeyCode::Digit3]);
+    let char_four = input.any_just_pressed([KeyCode::Digit4]);
+    let char_five = input.any_just_pressed([KeyCode::Digit5]);
+    let char_six = input.any_just_pressed([KeyCode::Digit6]);
+    let char_seven = input.any_just_pressed([KeyCode::Digit7]);
+    let char_eight = input.any_just_pressed([KeyCode::Digit8]);
+    let char_nine = input.any_just_pressed([KeyCode::Digit9]);
+    let char_zero = input.any_just_pressed([KeyCode::Digit0]);
 
     let mut client_action = ActionType::Wait;
     let client_id = masterok.player_id.clone();
@@ -412,8 +412,8 @@ fn keyboard_input_system(
         }
     }
 
-    if ui_state.menu_open == MenuOpen::Take {
-        if char_backspace {
+   else if ui_state.menu_open == MenuOpen::Take {
+        if char_take {
             masterok.button_entityid_map.drain();
             ui_state.menu_open = MenuOpen::None;
         }
@@ -424,8 +424,8 @@ fn keyboard_input_system(
         }
     }
 
-    if ui_state.menu_open == MenuOpen::Drop {
-        if char_backspace {
+    else if ui_state.menu_open == MenuOpen::Drop {
+        if char_drop {
             masterok.button_entityid_map.drain();
             ui_state.menu_open = MenuOpen::None;
         }
