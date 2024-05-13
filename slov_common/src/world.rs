@@ -10,7 +10,6 @@ pub struct MyWorld {
 
     pub world_seed: u32,
     pub entity_counter: u64,
-  
 }
 
 impl Default for MyWorld {
@@ -18,7 +17,6 @@ impl Default for MyWorld {
         let rngik: u32 = 87243563;
 
         Self {
-           
             entity_tree: RTree::new(),
             entity_map: HashMap::new(),
             server_stuff: ServerStuff::default(),
@@ -41,8 +39,21 @@ impl MyWorld {
 
     pub fn new_test() -> MyWorld {
         let mut x = MyWorld::default();
-        x.new_entity(&(81,88), &EntityType::Monster(Animal{animal_type:AnimalType::Mammal(MammalType::Jelenj)}));
-        x.new_entity(&(81,87), &EntityType::Item(Item { item_type: ItemType::Melee(MeleeWeapon { weapon_type: MeleeWeaponType::Kopje, material_type: Material::Kamenj(StoneType::Kremenj) }) }));
+        x.new_entity(
+            &(81, 88),
+            &EntityType::Monster(Animal {
+                animal_type: AnimalType::Mammal(MammalType::Jelenj),
+            }),
+        );
+        x.new_entity(
+            &(81, 87),
+            &EntityType::Item(Item {
+                item_type: ItemType::Melee(MeleeWeapon {
+                    weapon_type: MeleeWeaponType::Kopje,
+                    material_type: Material::Kamenj(StoneType::Kremenj),
+                }),
+            }),
+        );
         x
     }
 
@@ -110,22 +121,17 @@ impl MyWorld {
     }
 
     pub fn delete_entity(&mut self, eidik: &EntityID) -> SuccessType {
-
-       let ahahaha =  self.ent_loc_index.get(eidik).unwrap_or(&(0,0));
+        let ahahaha = self.ent_loc_index.get(eidik).unwrap_or(&(0, 0));
 
         let pc = PositionComponent {
             entity_id: eidik.clone(),
             point: ahahaha.clone(),
         };
-    
 
-     
         self.ent_loc_index.remove(eidik);
 
         self.entity_tree.remove(&pc);
         self.entity_map.remove(eidik);
-
-       
 
         return SuccessType::Success;
     }
@@ -133,10 +139,10 @@ impl MyWorld {
     // World initialization function.
     pub fn init_world(&mut self) -> RTree<Voxel> {
         let rngik = self.world_seed.clone();
-  
-      let a =  MyWorld::generate_test(rngik);
- 
-      a
+
+        let a = MyWorld::generate_test(rngik);
+
+        a
     }
 
     pub fn generate_test(seed: u32) -> RTree<Voxel> {
@@ -203,22 +209,19 @@ impl MyWorld {
         }
     }
 
-    pub fn get_items_at_point(&self,point: &MyPoint) -> Vec<(EntityID,Item)> {
+    pub fn get_items_at_point(&self, point: &MyPoint) -> Vec<(EntityID, Item)> {
         let mut item_vec = Vec::new();
-       let boop = self.entity_tree.locate_all_at_point(point) ;
-           for x in boop {
+        let boop = self.entity_tree.locate_all_at_point(point);
+        for x in boop {
             let ent_typ = self.entity_map.get(&x.entity_id);
             if let Some(meow) = ent_typ {
                 match meow {
-                    EntityType::Item(wut) => item_vec.push((x.entity_id.clone(),wut.clone())),
-                    _ => ()
+                    EntityType::Item(wut) => item_vec.push((x.entity_id.clone(), wut.clone())),
+                    _ => (),
                 }
             }
-
-           }
-           item_vec
-        
-
+        }
+        item_vec
     }
 
     pub fn voxel_blocks_movement_at(&self, point: &MyPoint) -> bool {
@@ -235,6 +238,24 @@ impl MyWorld {
     }
 
     pub fn entity_blocks_movement_at(&self, point: &MyPoint) -> bool {
+
+        let entsatpoint = self.entity_tree.locate_all_at_point(point);
+
+        for entt in entsatpoint {
+
+            let enttype = self.entity_map.get(&entt.entity_id).unwrap_or(&EntityType::None);
+
+            match enttype {
+
+                EntityType::Player(_) => return true ,
+                EntityType::Monster(_) => return true , 
+                EntityType::Item(_) => (),
+                EntityType::None => ()
+                
+            }
+
+
+        }
         if point.0 > 0 && point.1 > 0 {
             return false;
         } else {

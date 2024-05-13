@@ -264,13 +264,13 @@ pub enum AmmoType {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct AnimalPart {
-   pub animal_type: AnimalType,
-  pub  animal_part: AnimalPartType,
+    pub animal_type: AnimalType,
+    pub animal_part: AnimalPartType,
 }
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Animal {
-   pub animal_type: AnimalType,
+    pub animal_type: AnimalType,
 }
 
 impl Animal {
@@ -343,7 +343,7 @@ pub enum ItemType {
     Melee(MeleeWeapon),
     Ranged(RangedWeapon),
     Ammo(Ammo),
-    None
+    None,
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -353,7 +353,7 @@ pub struct Item {
 
 impl Item {
     pub fn to_displaychar(&self) -> String {
-        let item_str =self.to_title();
+        let item_str = self.to_title();
 
         // let item_str = format!("{}", self.item_type);
         let ch = item_str.chars().nth(0).unwrap().to_lowercase().to_string();
@@ -364,7 +364,7 @@ impl Item {
             ItemType::Melee(x) => x.material_type.to_color(),
             ItemType::Ranged(x) => x.weapon_type.to_color(),
             ItemType::Ammo(x) => x.material_type.to_color(),
-            ItemType::None => Color::LightRed
+            ItemType::None => Color::LightRed,
         }
     }
     pub fn to_title(&self) -> String {
@@ -378,18 +378,17 @@ impl Item {
             ItemType::Ammo(x) => {
                 format!("{}", &x.ammo_type)
             }
-            ItemType::None => {"?".into()}
+            ItemType::None => "?".into(),
         };
 
         item_str
     }
-
 }
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Player {
-   pub inventory: InventoryComponent,
-   pub health: HealthComponent,
+    pub inventory: InventoryComponent,
+    pub health: HealthComponent,
 }
 
 impl Default for Player {
@@ -406,16 +405,16 @@ pub enum EntityType {
     Player(Player),
     Item(Item),
     Monster(Animal),
-    None
+    None,
 }
 
 impl EntityType {
     pub fn to_displaychar(&self) -> String {
         match self {
             EntityType::Item(x) => x.to_displaychar(),
-            EntityType::Monster(x) => x.to_displaychar(),//x.to_displaychar(),
+            EntityType::Monster(x) => x.to_displaychar(), //x.to_displaychar(),
             EntityType::Player(_) => "@".into(),
-            EntityType::None => "?".into()
+            EntityType::None => "?".into(),
         }
     }
 

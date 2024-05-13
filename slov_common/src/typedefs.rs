@@ -91,12 +91,11 @@ impl CardinalDirection {
     }
 }
 
-
-
-pub fn remove_first_instance<T: PartialEq>(vec: &mut Vec<T>, item: &T) ->SuccessType {
+pub fn remove_first_instance<T: PartialEq>(vec: &mut Vec<T>, item: &T) -> SuccessType {
     if let Some(index) = vec.iter().position(|x| x == item) {
         vec.remove(index);
         SuccessType::Success
+    } else {
+        SuccessType::Failure
     }
-    else {SuccessType::Failure}
 }
