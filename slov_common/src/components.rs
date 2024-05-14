@@ -25,18 +25,23 @@ impl PointDistance for PositionComponent {
 }
 
 #[derive(Clone, Debug, PartialEq)]
-pub struct HealthComponent {
-    pub cur_health: Health,
-    pub max_health: Health,
+pub struct StatsComponent {
+    pub health: Health,
 }
 
-impl HealthComponent {
-    pub fn new(max: &i64) -> HealthComponent {
-        HealthComponent {
-            cur_health: max.clone(),
-            max_health: max.clone(),
+impl StatsComponent {
+    pub fn new(max: &i64) -> StatsComponent {
+        StatsComponent {
+            health: max.clone(),
+          
         }
     }
 }
+
+
+
+
+
+
 
 pub type InventoryComponent = Vec<Item>;
