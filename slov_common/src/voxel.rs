@@ -43,7 +43,7 @@ impl Floor {
     pub fn to_displaychar(&self) -> String {
         match &self {
             Self::Air => " ".into(),
-            Self::Dirt => " ".into(),
+            Self::Dirt => "%".into(),
             Self::Water => "~".into(),
             Self::LightGrass => ",".into(),
             Self::DarkGrass => "\"".into(),

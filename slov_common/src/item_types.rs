@@ -6,6 +6,7 @@ pub enum MeleeWeaponType {
     Kyj,
     Meč,
     Kopje,
+   // Nagajka,
 }
 
 #[derive(Clone, Debug, Display, PartialEq)]

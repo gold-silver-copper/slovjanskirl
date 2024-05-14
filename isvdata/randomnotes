@@ -119,6 +119,12 @@ furnitures and some plants like trees should be entities because they will be of
 combat system:  melee attacks are automatic and affect all within a radius of player/monster . ranged attacks have to be triggered manually
 short sword - 1 tile radius, long sword, 2 tile radius hope i dont hit thru wall idk, 
 
+to create an infinite throwing weapon like throwing knives u need three knives of the same type
+
+
+dalekobojno oruzje
+
+blizkobojno oruzje
 
 tulec dla luka s strelami // quiver bow n arrow
 měšek s kamenjami 

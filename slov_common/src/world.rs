@@ -216,21 +216,7 @@ impl MyWorld {
         item_vec
     }
 
-    pub fn floor_blocks_movement_at (&self, point: &MyPoint) -> bool {
-        if let Some(got_voxel) = self.get_voxel_at(point) {
-
-            match  got_voxel.floor {
-                Floor::Water => return true,
-                _ => return false,
-
-            }
-        
-        } else {
-           return true;
-        }
-
-
-    }
+   
 
   
 
