@@ -9,6 +9,9 @@ pub enum MeleeWeaponType {
    // Nagajka,
 }
 
+
+
+
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum RangedWeaponType {
     Lųk,
@@ -20,6 +23,13 @@ pub enum RangedWeaponType {
     Samostrěl,
     Kameni,
  //   Arbalet(CrossBow),
+}
+
+#[derive(Clone, Debug, Display, PartialEq)]
+pub enum ClothingItemType {
+    Sztany,
+    Szapka,
+    Koljco
 }
 
 
@@ -48,6 +58,7 @@ pub enum Fabric {
     Koža(MammalType),
     Tkanina(PlantType),
     Plåtno(BushType),
+    ChainMail(MetalType)
 }
 
 impl Fabric {
@@ -57,6 +68,7 @@ impl Fabric {
             Self::Vlås(x) | Self::Koža(x) => x.to_color(),
             Self::Pulpa(x) => x.to_color(),
             Self::Plåtno(x) => x.to_color(),
+            Self::ChainMail(x) => x.to_color(),
         }
     }
 }
@@ -304,6 +316,14 @@ pub struct MeleeWeapon {
 }
 
 #[derive(Clone, Debug, PartialEq)]
+pub struct ClothingItem {
+    pub clothing_type: ClothingItemType,
+    pub material_type: Fabric,
+}
+
+
+
+#[derive(Clone, Debug, PartialEq)]
 pub struct RangedWeapon {
     pub weapon_type: RangedWeaponType,
     pub tulec_material: Fabric, 
@@ -332,6 +352,7 @@ impl RangedWeapon {
 pub enum ItemType {
     Melee(MeleeWeapon),
     Ranged(RangedWeapon),
+    Clothing(ClothingItem),
     
     None,
 }
@@ -353,6 +374,7 @@ impl Item {
         match &self.item_type {
             ItemType::Melee(x) => x.material_type.to_color(),
             ItemType::Ranged(x) => x.tulec_material.to_color(),
+            ItemType::Clothing(x) => x.material_type.to_color(),
          
             ItemType::None => Color::LightRed,
         }
@@ -361,6 +383,9 @@ impl Item {
         let item_str = match &self.item_type {
             ItemType::Melee(x) => {
                 format!("{}", &x.weapon_type)
+            }
+            ItemType::Clothing(x) => {
+                format!("{}", &x.clothing_type)
             }
             ItemType::Ranged(x) => {
                 format!("{}", &x.weapon_type)

@@ -26,7 +26,15 @@ impl PointDistance for PositionComponent {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct StatsComponent {
-    pub health: StatsUnit,
+    pub health: StatsUnit, //zdravje
+    pub stamina_air: StatsUnit, //vozduh
+    pub strength: StatsUnit, //sila
+    pub agility: StatsUnit, // bystrost
+    pub speed: StatsUnit, //szybkost
+    pub intelligence: StatsUnit, //razum
+  
+   
+    pub milost: StatsUnit, //cuteness
 
 }
 
@@ -34,10 +42,57 @@ impl StatsComponent {
     pub fn new(max: &i64) -> StatsComponent {
         StatsComponent {
             health: max.clone(),
+             stamina_air: max.clone(),
+             strength: max.clone(),
+             agility: max.clone(),
+             speed: max.clone(),
+             intelligence: max.clone(),
+           
+             milost: max.clone(),
           
         }
     }
 }
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct EquipmentComponent {
+    pub melee_weapon: Option<MeleeWeapon>,
+
+    pub ranged_weapon: Option<RangedWeapon>,
+
+    pub head: Option<ClothingItem>,
+    pub shawl: Option<ClothingItem>, //add style option so you can wear shawl in different ways
+    pub body: Option<ClothingItem>,
+    pub legs: Option<ClothingItem>,
+    pub feet: Option<ClothingItem>,
+    pub neck: Option<ClothingItem>, //našijnik ogrlica monisto
+    pub finger: Option<ClothingItem>,
+
+
+   
+
+}
+
+impl EquipmentComponent {
+    pub fn empty(max: &i64) -> EquipmentComponent {
+        EquipmentComponent {
+             melee_weapon: None,
+
+     ranged_weapon: None,
+
+     head: None,
+     shawl: None, //add style option so you can wear shawl in different ways
+     body: None,
+     legs: None,
+     feet: None,
+     neck: None, //našijnik ogrlica monisto
+     finger: None,
+          
+          
+        }
+    }
+}
+
 
 
 
