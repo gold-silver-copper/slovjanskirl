@@ -74,7 +74,7 @@ pub struct EquipmentComponent {
 }
 
 impl EquipmentComponent {
-    pub fn empty(max: &i64) -> EquipmentComponent {
+    pub fn new_empty() -> EquipmentComponent {
         EquipmentComponent {
              melee_weapon: None,
 

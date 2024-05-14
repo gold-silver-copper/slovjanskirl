@@ -401,6 +401,7 @@ impl Item {
 #[derive(Clone, Debug, PartialEq)]
 pub struct Human {
     pub inventory: InventoryComponent,
+    pub equipment: EquipmentComponent,
     pub current_stats: StatsComponent,
     pub max_stats: StatsComponent,
 }
@@ -409,6 +410,7 @@ impl Default for Human {
     fn default() -> Self {
         Self {
             inventory: Vec::new(),
+            equipment: EquipmentComponent::new_empty(),
             current_stats: StatsComponent::new(&100),
             max_stats: StatsComponent::new(&100),
         }
