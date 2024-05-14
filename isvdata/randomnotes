@@ -98,7 +98,7 @@ quit-quit
 the overworld is singleplayer and has random seeds for players
 the dungeons are randomly generated and each linked to its own multiplayer instance
 
-
+ 
 speed of thrown object determines how many tiles it moves
 it also follows direction of thing it is thrown at maybe? or no too op, maybe thats like a spell
 starting speed for sling is 4 tiles a tick, arrow is 8 tiles a tick, bullet is 40 tiles or more  1000 ft pr sec
@@ -118,7 +118,9 @@ combat system:  melee attacks are automatic and affect all within a radius of pl
 short sword - 1 tile radius, long sword, 2 tile radius hope i dont hit thru wall idk, 
 
 
+tulec dla luka so strelami // quiver bow n arrow
 
+sila , srųčnost' , bystrost́ , råzum , 
 
 lokacija- czarovny les
 ime - zlotik
