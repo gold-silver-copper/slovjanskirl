@@ -374,12 +374,12 @@ impl Item {
 }
 
 #[derive(Clone, Debug, PartialEq)]
-pub struct Player {
+pub struct Human {
     pub inventory: InventoryComponent,
     pub health: HealthComponent,
 }
 
-impl Default for Player {
+impl Default for Human {
     fn default() -> Self {
         Self {
             inventory: Vec::new(),
@@ -390,7 +390,7 @@ impl Default for Player {
 
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum EntityType {
-    Player(Player),
+    Human(Human),
     Item(Item), //věć
     Monster(Animal),
     Mebelj(Mebelj),
@@ -408,7 +408,7 @@ impl EntityType {
         match self {
             EntityType::Item(x) => x.to_displaychar(),
             EntityType::Monster(x) => x.to_displaychar(), //x.to_displaychar(),
-            EntityType::Player(_) => "@".into(),
+            EntityType::Human(_) => "@".into(),
             EntityType::None => "?".into(),
             EntityType::Drěvo(x) => "t".into(),
             EntityType::Kust(x) => "*".into(),
@@ -421,7 +421,7 @@ impl EntityType {
         match self {
             EntityType::Item(x) => x.to_color(),
             EntityType::Monster(x) => x.to_color(),
-            EntityType::Player(_) => Color::Red,
+            EntityType::Human(_) => Color::Red,
             EntityType::None => Color::Red,
             EntityType::Drěvo(x) => x.to_color(),
             EntityType::Kust(x) => x.to_color(),

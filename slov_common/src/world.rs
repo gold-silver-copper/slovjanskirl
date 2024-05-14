@@ -32,7 +32,7 @@ impl Default for MyWorld {
 impl MyWorld {
     pub fn receive(&mut self, input_pair: (ActionType, AccountID)) {
 
-        let entity_id_of_account = self.server_stuff.entity_accid_map.get(&input_pair.1).unwrap_or(&0);
+        let entity_id_of_account = self.server_stuff.accid_entid_map.get(&input_pair.1).unwrap_or(&0);
 
         if entity_id_of_account != &(0 as u64) {
             self.server_stuff
@@ -95,15 +95,15 @@ impl MyWorld {
     //z must be above 0 for movement
     pub fn make_account(&mut self) -> (AccountID, EntityID ,  MyPoint) {
         let pp = (80, 80);
-        let eid = self.new_entity(&pp, &EntityType::Player(Player::default()));
+        let eid = self.new_entity(&pp, &EntityType::Human(Human::default()));
 
-        //increment then use value for creating account , send account and entity id to player
+        //increment then use value for creating account , send account and entity id to Human
         self.server_stuff.account_counter += 17;
 
         let aid = self.server_stuff.account_counter.clone();
 
         self.server_stuff
-            .entity_accid_map
+            .accid_entid_map
             .insert(self.server_stuff.account_counter.clone(),eid.clone());
     
 
@@ -246,7 +246,7 @@ impl MyWorld {
 
             match enttype {
 
-                EntityType::Player(_) => return true ,
+                EntityType::Human(_) => return true ,
                 EntityType::Monster(_) => return true , 
                 EntityType::Item(_) => (),
                 _ => ()
@@ -399,13 +399,7 @@ impl MyWorld {
         }
     }
 
-    pub fn voxel_blocks_vision_at(&self, point: &MyPoint) -> bool {
-        if let Some(got_point) = MyWorld::get_voxel_at(&self, point) {
-            return false;
-        } else {
-            return false;
-        }
-    }
+  
 
     pub fn set_ent_loc(&mut self, ent: &EntityID, destination: &MyPoint) {
         if let Some(xyz) = self.ent_loc_index.get(ent) {
