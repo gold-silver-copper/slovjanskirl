@@ -17,7 +17,7 @@ pub enum RangedWeaponType {
   //  Šlojder(Sling),
  //   Kuša(CrossBow),
     Samostrěl,
-  //  Kameni,
+    Kameni,
  //   Arbalet(CrossBow),
 }
 
@@ -306,6 +306,8 @@ pub struct MeleeWeapon {
 pub struct RangedWeapon {
     pub weapon_type: RangedWeaponType,
     pub tulec_material: Fabric, 
+    pub tetiva_material: Fabric, 
+    pub rema_material: Material,
 
     pub ammo_material: Material,
 
@@ -320,6 +322,7 @@ impl RangedWeapon {
                 self.tulec_material.to_color()
             }
             RangedWeaponType::Lųk => self.tulec_material.to_color(),
+            RangedWeaponType::Kameni => self.tulec_material.to_color(),
         }
     }
 }
@@ -387,10 +390,17 @@ impl Default for Player {
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum EntityType {
     Player(Player),
-    Item(Item),
+    Item(Item), //věć
     Monster(Animal),
+    Mebelj(Mebelj),
+    Drěvo(WoodType),
+    Råstlina(PlantType),
+    Kust(BushType),
+    //Statuja(AnimalType),
+    
     None,
 }
+
 
 impl EntityType {
     pub fn to_displaychar(&self) -> String {
@@ -399,6 +409,10 @@ impl EntityType {
             EntityType::Monster(x) => x.to_displaychar(), //x.to_displaychar(),
             EntityType::Player(_) => "@".into(),
             EntityType::None => "?".into(),
+            EntityType::Drěvo(x) => "t".into(),
+            EntityType::Kust(x) => "*".into(),
+            EntityType::Råstlina(x) => x.to_displaychar(),
+            EntityType::Mebelj(x) => x.to_displaychar(),
         }
     }
 
@@ -408,6 +422,10 @@ impl EntityType {
             EntityType::Monster(x) => x.to_color(),
             EntityType::Player(_) => Color::Red,
             EntityType::None => Color::Red,
+            EntityType::Drěvo(x) => x.to_color(),
+            EntityType::Kust(x) => x.to_color(),
+            EntityType::Mebelj(x) => x.to_color(),
+            EntityType::Råstlina(x) => x.to_color(),
         }
     }
 
@@ -418,10 +436,7 @@ impl EntityType {
     }
 }
 
-#[derive(Clone, Debug, PartialEq)]
-pub struct Furniture {
-    pub furniture_type: FurnitureType,
-}
+
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum MebeljType {
     Stěna,
@@ -454,36 +469,9 @@ impl Mebelj {
     }
 }
 
-#[derive(Clone, Debug, Display, PartialEq)]
-pub enum FurnitureType {
-    Mebelj(Mebelj),
-    Drěvo(WoodType),
-    Råstlina(PlantType),
-    Kust(BushType),
-    //Statuja(AnimalType),
-    Air,
-}
 
-impl Furniture {
-    pub fn to_displaychar(&self) -> String {
-        match &self.furniture_type {
-            FurnitureType::Air => " ".into(),
-            FurnitureType::Drěvo(x) => "t".into(),
-            FurnitureType::Kust(x) => "*".into(),
-            FurnitureType::Råstlina(x) => x.to_displaychar(),
-            FurnitureType::Mebelj(x) => x.to_displaychar(),
-        }
-    }
-    pub fn to_color(&self) -> Color {
-        match &self.furniture_type {
-            FurnitureType::Air => Color::White,
-            FurnitureType::Drěvo(x) => x.to_color(),
-            FurnitureType::Kust(x) => x.to_color(),
-            FurnitureType::Mebelj(x) => x.to_color(),
-            FurnitureType::Råstlina(x) => x.to_color(),
-        }
-    }
-}
+
+
 
 
 

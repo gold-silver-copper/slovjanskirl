@@ -3,7 +3,6 @@ use crate::*;
 pub struct Voxel {
     pub roof: Roof,
     pub floor: Floor,
-    pub furniture: Furniture,
 
     pub voxel_pos: MyPoint,
 }
@@ -40,16 +39,39 @@ impl Floor {
             Self::Sand => Color::Rgb(242, 210, 169),
         }
     }
+
+    pub fn to_displaychar(&self) -> String {
+        match &self {
+            Self::Air => " ".into(),
+            Self::Dirt => " ".into(),
+            Self::Water => "~".into(),
+            Self::LightGrass => ",".into(),
+            Self::DarkGrass => "\"".into(),
+            Self::Sand => ".".into(),
+        }
+    }
+   
+    pub fn to_front_color(&self) -> Color {
+        match &self {
+            Self::Air => Color::Rgb(200, 240, 235),
+            Self::Dirt => Color::Rgb(130, 118, 83),
+            Self::Water => Color::Rgb(40, 94, 156),
+            Self::LightGrass => Color::Rgb(40, 152, 1),
+            Self::DarkGrass => Color::Rgb(20, 130, 21),
+            Self::Sand => Color::Rgb(222, 210, 169),
+        }
+    }
 }
 
 impl Voxel {
     pub fn to_graphic(&self) -> GraphicTriple {
-        let voxel_character: String = self.furniture.to_displaychar();
+        let voxel_character: String = self.floor.to_displaychar();
+        let char_color = self.floor.to_front_color();
 
-        let voxel_color = self.furniture.to_color();
+ 
         let floor_color = self.floor.to_color();
 
-        (voxel_character, voxel_color, floor_color)
+        (voxel_character, char_color, floor_color)
     }
 }
 

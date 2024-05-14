@@ -170,18 +170,10 @@ impl MyWorld {
                 } else {
                     Floor::Water
                 };
-                let furniture_type = if val > 0.8 {
-                    FurnitureType::Air
-                } else if val > 0.5 {
-                    FurnitureType::Drěvo(WoodType::Jablanj)
-                } else if val > 0.0 {
-                    FurnitureType::Råstlina(PlantType::Kanabis)
-                } else {
-                    FurnitureType::Air
-                };
+               
                 batchvec.push(Voxel {
                     floor: floor,
-                    furniture: Furniture { furniture_type },
+              
 
                     roof: Roof::Air,
                     voxel_pos: (x, y),
@@ -240,48 +232,9 @@ impl MyWorld {
 
     }
 
-    pub fn furniture_blocks_movement_at (&self, point: &MyPoint) -> bool {
-        if let Some(got_voxel) = self.get_voxel_at(point) {
+  
 
-            match  got_voxel.furniture.furniture_type {
-                FurnitureType::Drěvo(_) => return true,
-                _ => return false,
-
-            }
-        
-        } else {
-           return true;
-        }
-
-
-    }
-
-    pub fn move_blocked_to_point(&self, point: &MyPoint) -> bool {
-
-        let ent_blocks = self.entity_blocks_movement_at(point);
-
-        if ent_blocks { return true;}
-        else {
-
-            if self.floor_blocks_movement_at(point) {
-                return true;
-            }
-            else {return self.furniture_blocks_movement_at(point);}
-
-            
-
-
-
-        }
-
-      
-
-     
-
-
-
-
-    }
+ 
 
     
 
@@ -298,7 +251,7 @@ impl MyWorld {
                 EntityType::Player(_) => return true ,
                 EntityType::Monster(_) => return true , 
                 EntityType::Item(_) => (),
-                EntityType::None => ()
+                _ => ()
                 
             }
 
@@ -481,7 +434,7 @@ impl MyWorld {
             let dir_point = cd.to_xyz();
             let goal = add_two_points(&xyz, &dir_point);
 
-            if !self.move_blocked_to_point(&goal) {
+            if !self.entity_blocks_movement_at(&goal) {
                
                     self.set_ent_loc(ent, &goal);
                     return SuccessType::Success;
