@@ -25,12 +25,6 @@ pub enum RangedWeaponType {
  //   Arbalet(CrossBow),
 }
 
-#[derive(Clone, Debug, Display, PartialEq)]
-pub enum ClothingItemType {
-    Sztany,
-    Szapka,
-    Koljco
-}
 
 
 
@@ -343,6 +337,11 @@ impl RangedWeapon {
     }
 }
 
+#[derive(Clone, Debug, PartialEq)]
+pub struct Item {
+    pub item_type: ItemType,
+}
+
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum ItemType {
     Melee(MeleeWeapon),
@@ -352,17 +351,81 @@ pub enum ItemType {
     None,
 }
 
-
 #[derive(Clone, Debug, PartialEq)]
 pub struct ClothingItem {
     pub clothing_type: ClothingItemType,
-    pub material_type: Fabric,
+    pub fabric_type: Fabric,
 }
 
-#[derive(Clone, Debug, PartialEq)]
-pub struct Item {
-    pub item_type: ItemType,
+/*
+
+    pub head: Option<ClothingItem>,
+    pub shawl: Option<ClothingItem>, //add style option so you can wear shawl in different ways
+    pub body: Option<ClothingItem>,
+    pub legs: Option<ClothingItem>,
+    pub feet: Option<ClothingItem>,
+    pub neck: Option<ClothingItem>, //našijnik ogrlica monisto
+    pub finger: Option<ClothingItem>,
+
+
+*/
+
+
+
+#[derive(Clone, Debug, Display, PartialEq)]
+pub enum ClothingItemType {
+    Pantalony, // Pants
+    Hlače,     // Trousers
+    Suknja,    // Skirt
+
+  
+    Šarovary,  // Baggy pants
+    Spodnjice, // Underpants
+ 
+    Košula,   // Shirt
+    Tunika,   // Tunic
+    Halja,    // Dress
+    Bluza,    // Blouse
+    Majica,   // T-shirt
+    Kofta,    // Sweater/Cardigan
+    
+    Kabanica, // Raincoat
+    Kožuh,    // Fur coat
+    Vesta,    // Vest
+    Šal,
+    
+    Šarf,
+    Kosynka,
+    Platok,
+    Hvusta,
+    
+    Šátek,
+    Pléť,
+    Ruta,
+    Ogrinjalo,
+    Marama,
+    Voalj, 
+    Závoj,
+    Karpa,
+    Palantin,
+
+    Šapka,
+    Šljem,
+    Kapela,
+    Kapuc,
+    Beretka,
+    Koĺčuga,
+    Bandana,
+    Vual,
+    Klobuk,
+    Šešir,
 }
+
+
+
+
+
+
 
 impl Item {
     pub fn to_displaychar(&self) -> String {
@@ -376,7 +439,7 @@ impl Item {
         match &self.item_type {
             ItemType::Melee(x) => x.material_type.to_color(),
             ItemType::Ranged(x) => x.tulec_material.to_color(),
-            ItemType::Clothing(x) => x.material_type.to_color(),
+            ItemType::Clothing(x) => x.fabric_type.to_color(),
          
             ItemType::None => Color::LightRed,
         }

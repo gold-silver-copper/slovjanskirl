@@ -60,13 +60,7 @@ pub struct EquipmentComponent {
 
     pub ranged_weapon: Option<RangedWeapon>,
 
-    pub head: Option<ClothingItem>,
-    pub shawl: Option<ClothingItem>, //add style option so you can wear shawl in different ways
-    pub body: Option<ClothingItem>,
-    pub legs: Option<ClothingItem>,
-    pub feet: Option<ClothingItem>,
-    pub neck: Option<ClothingItem>, //našijnik ogrlica monisto
-    pub finger: Option<ClothingItem>,
+    pub worn_clothing: Vec<ClothingItem>,
 
 
    
@@ -80,13 +74,7 @@ impl EquipmentComponent {
 
      ranged_weapon: None,
 
-     head: None,
-     shawl: None, //add style option so you can wear shawl in different ways
-     body: None,
-     legs: None,
-     feet: None,
-     neck: None, //našijnik ogrlica monisto
-     finger: None,
+     worn_clothing: Vec::new(),
           
           
         }
