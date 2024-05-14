@@ -26,7 +26,8 @@ impl PointDistance for PositionComponent {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct StatsComponent {
-    pub health: Health,
+    pub health: StatsUnit,
+
 }
 
 impl StatsComponent {

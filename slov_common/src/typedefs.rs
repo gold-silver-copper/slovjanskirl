@@ -3,7 +3,7 @@ use crate::*;
 pub type EntityID = u64;
 pub type ItemKey = u16;
 pub type AccountID = u64;
-pub type Health = i64;
+pub type StatsUnit = i64;
 pub type CoordinateUnit = i64;
 pub const LOCAL_RANGE: i64 = 2000;
 pub type MyPoint = (CoordinateUnit, CoordinateUnit);

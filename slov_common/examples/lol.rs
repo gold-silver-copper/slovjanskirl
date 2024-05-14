@@ -2,7 +2,10 @@ use noise::{NoiseFn, Perlin, Seedable};
 use slov_common::*;
 
 fn main() {
-    let boop: MyPoint = (5, 5);
+
+    /*
+    
+      let boop: MyPoint = (5, 5);
     let nw = MyWorld::default();
     let swordik = MeleeWeaponType::Sěkyra;
     let myitem = Item {
@@ -23,4 +26,7 @@ fn main() {
     let val = perlin.get([41111.0, 379999.7]);
     println!("val is {}", val);
     //  println!("typik is {}", typik);
+    
+     */
+  
 }
