@@ -122,6 +122,10 @@ short sword - 1 tile radius, long sword, 2 tile radius hope i dont hit thru wall
 to create an infinite throwing weapon like throwing knives u need three knives of the same type
 
 
+combat - press M , cursor is automatically set to nearest non friendly living entity, then player can press TAB key to switch to next nearest entity.
+or player can start using VI keys to move cursor around and manually choose area to throw to or attack. player can press ENTER to melee or 
+
+
 dalekobojno oruzje
 
 blizkobojno oruzje
