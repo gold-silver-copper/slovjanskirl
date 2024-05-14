@@ -315,11 +315,6 @@ pub struct MeleeWeapon {
     pub material_type: Material,
 }
 
-#[derive(Clone, Debug, PartialEq)]
-pub struct ClothingItem {
-    pub clothing_type: ClothingItemType,
-    pub material_type: Fabric,
-}
 
 
 
@@ -355,6 +350,13 @@ pub enum ItemType {
     Clothing(ClothingItem),
     
     None,
+}
+
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct ClothingItem {
+    pub clothing_type: ClothingItemType,
+    pub material_type: Fabric,
 }
 
 #[derive(Clone, Debug, PartialEq)]
