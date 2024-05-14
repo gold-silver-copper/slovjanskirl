@@ -394,19 +394,21 @@ fn keyboard_input_system(
     let mut client_action = ActionType::Wait;
     let client_id = masterok.player_account_id.clone();
 
+    if char_up {
+        client_action = ActionType::Go(LocativeID::Cardinal(CardinalDirection::North));
+    }
+    if char_down {
+        client_action = ActionType::Go(LocativeID::Cardinal(CardinalDirection::South));
+    }
+    if char_left {
+        client_action = ActionType::Go(LocativeID::Cardinal(CardinalDirection::West));
+    }
+    if char_right {
+        client_action = ActionType::Go(LocativeID::Cardinal(CardinalDirection::East));
+    }
+
     if ui_state.menu_open == MenuOpen::None {
-        if char_up {
-            client_action = ActionType::Go(LocativeID::Cardinal(CardinalDirection::North));
-        }
-        if char_down {
-            client_action = ActionType::Go(LocativeID::Cardinal(CardinalDirection::South));
-        }
-        if char_left {
-            client_action = ActionType::Go(LocativeID::Cardinal(CardinalDirection::West));
-        }
-        if char_right {
-            client_action = ActionType::Go(LocativeID::Cardinal(CardinalDirection::East));
-        }
+      
         if char_take {
             ui_state.menu_open = MenuOpen::Take;
         }
