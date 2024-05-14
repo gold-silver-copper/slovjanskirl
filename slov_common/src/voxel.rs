@@ -50,7 +50,7 @@ impl Floor {
             Self::Sand => ".".into(),
         }
     }
-   
+
     pub fn to_front_color(&self) -> Color {
         match &self {
             Self::Air => Color::Rgb(200, 240, 235),
@@ -68,7 +68,6 @@ impl Voxel {
         let voxel_character: String = self.floor.to_displaychar();
         let char_color = self.floor.to_front_color();
 
- 
         let floor_color = self.floor.to_color();
 
         (voxel_character, char_color, floor_color)

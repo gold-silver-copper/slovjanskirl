@@ -170,14 +170,13 @@ fn draw_take_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Master
 
     for numb in 1..9 {
         let meowmeow = items.pop();
-        let meownyaa: (u64, Item) = meowmeow.unwrap_or((
+        let meownyaa: (u64, ItemType) = meowmeow.unwrap_or((
             0,
-            Item {
-                item_type: ItemType::None,
-            },
+            ItemType::None
+            ,
         ));
 
-        if meownyaa.1.item_type != ItemType::None {
+        if meownyaa.1 != ItemType::None {
             masterok
                 .button_entityid_map
                 .insert(numb.clone(), meownyaa.0.clone());
@@ -224,10 +223,9 @@ fn draw_drop_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Master
     }
 
     for numb in 1..9 {
-        let itimik = items.pop().unwrap_or(Item {
-            item_type: ItemType::None,
-        });
-        if itimik.item_type != ItemType::None {
+        let itimik = items.pop().unwrap_or( ItemType::None
+        );
+        if itimik != ItemType::None {
             let item_str = format!("{}    {}", numb, &itimik.to_title());
             let litem: ListItem = item_str.into();
             listitemvec.push(litem);
@@ -293,7 +291,7 @@ struct Masterik {
     client_world: MyWorld,
     is_logged_in: bool,
     button_entityid_map: HashMap<ItemKey, EntityID>,
-    button_itemstruct_map: HashMap<ItemKey, Item>,
+    button_itemstruct_map: HashMap<ItemKey, ItemType>,
 }
 
 impl Default for Masterik {
@@ -408,16 +406,13 @@ fn keyboard_input_system(
     }
 
     if ui_state.menu_open == MenuOpen::None {
-      
         if char_take {
             ui_state.menu_open = MenuOpen::Take;
         }
         if char_drop {
             ui_state.menu_open = MenuOpen::Drop;
         }
-    }
-
-   else if ui_state.menu_open == MenuOpen::Take {
+    } else if ui_state.menu_open == MenuOpen::Take {
         if char_take {
             masterok.button_entityid_map.drain();
             ui_state.menu_open = MenuOpen::None;
@@ -427,9 +422,7 @@ fn keyboard_input_system(
             client_action =
                 ActionType::Take(masterok.button_entityid_map.get(&1).unwrap_or(&0).clone());
         }
-    }
-
-    else if ui_state.menu_open == MenuOpen::Drop {
+    } else if ui_state.menu_open == MenuOpen::Drop {
         if char_drop {
             masterok.button_entityid_map.drain();
             ui_state.menu_open = MenuOpen::None;
@@ -440,9 +433,8 @@ fn keyboard_input_system(
                 masterok
                     .button_itemstruct_map
                     .get(&1)
-                    .unwrap_or(&Item {
-                        item_type: ItemType::None,
-                    })
+                    .unwrap_or(&ItemType::None
+                    )
                     .clone(),
             );
         }

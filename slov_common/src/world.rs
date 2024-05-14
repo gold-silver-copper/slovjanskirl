@@ -31,16 +31,18 @@ impl Default for MyWorld {
 
 impl MyWorld {
     pub fn receive(&mut self, input_pair: (ActionType, AccountID)) {
-
-        let entity_id_of_account = self.server_stuff.accid_entid_map.get(&input_pair.1).unwrap_or(&0);
+        let entity_id_of_account = self
+            .server_stuff
+            .accid_entid_map
+            .get(&input_pair.1)
+            .unwrap_or(&0);
 
         if entity_id_of_account != &(0 as u64) {
             self.server_stuff
-            .input_queue
-            .insert(entity_id_of_account.clone(), input_pair.0);
-
+                .input_queue
+                .insert(entity_id_of_account.clone(), input_pair.0);
         }
-     
+
         //   println!("inserted");
     }
 
@@ -54,12 +56,10 @@ impl MyWorld {
         );
         x.new_entity(
             &(81, 87),
-            &EntityType::Item(Item {
-                item_type: ItemType::Melee(MeleeWeapon {
-                    weapon_type: MeleeWeaponType::Kopje,
-                    material_type: Material::Kamenj(StoneType::Kremenj),
-                }),
-            }),
+            &EntityType::Item(ItemType::Melee(MeleeWeapon {
+                weapon_type: MeleeWeaponType::Kopje,
+                material_type: Material::Kamenj(StoneType::Kremenj),
+            })),
         );
         x
     }
@@ -93,7 +93,7 @@ impl MyWorld {
         // Extend with actual game logic
     }
     //z must be above 0 for movement
-    pub fn make_account(&mut self) -> (AccountID, EntityID ,  MyPoint) {
+    pub fn make_account(&mut self) -> (AccountID, EntityID, MyPoint) {
         let pp = (80, 80);
         let eid = self.new_entity(&pp, &EntityType::Human(Human::default()));
 
@@ -104,10 +104,9 @@ impl MyWorld {
 
         self.server_stuff
             .accid_entid_map
-            .insert(self.server_stuff.account_counter.clone(),eid.clone());
-    
+            .insert(self.server_stuff.account_counter.clone(), eid.clone());
 
-        (aid,eid, pp)
+        (aid, eid, pp)
     }
 
     pub fn new_entity(&mut self, point: &MyPoint, spawn_type: &EntityType) -> EntityID {
@@ -182,10 +181,9 @@ impl MyWorld {
                 } else {
                     Floor::Water
                 };
-               
+
                 batchvec.push(Voxel {
                     floor: floor,
-              
 
                     roof: Roof::Air,
                     voxel_pos: (x, y),
@@ -213,7 +211,7 @@ impl MyWorld {
         }
     }
 
-    pub fn get_items_at_point(&self, point: &MyPoint) -> Vec<(EntityID, Item)> {
+    pub fn get_items_at_point(&self, point: &MyPoint) -> Vec<(EntityID, ItemType)> {
         let mut item_vec = Vec::new();
         let boop = self.entity_tree.locate_all_at_point(point);
         for x in boop {
@@ -228,32 +226,21 @@ impl MyWorld {
         item_vec
     }
 
-   
-
-  
-
- 
-
-    
-
     pub fn entity_blocks_movement_at(&self, point: &MyPoint) -> bool {
-
         let entsatpoint = self.entity_tree.locate_all_at_point(point);
 
         for entt in entsatpoint {
-
-            let enttype = self.entity_map.get(&entt.entity_id).unwrap_or(&EntityType::None);
+            let enttype = self
+                .entity_map
+                .get(&entt.entity_id)
+                .unwrap_or(&EntityType::None);
 
             match enttype {
-
-                EntityType::Human(_) => return true ,
-                EntityType::Monster(_) => return true , 
+                EntityType::Human(_) => return true,
+                EntityType::Monster(_) => return true,
                 EntityType::Item(_) => (),
-                _ => ()
-                
+                _ => (),
             }
-
-
         }
         if point.0 > 0 && point.1 > 0 {
             return false;
@@ -399,8 +386,6 @@ impl MyWorld {
         }
     }
 
-  
-
     pub fn set_ent_loc(&mut self, ent: &EntityID, destination: &MyPoint) {
         if let Some(xyz) = self.ent_loc_index.get(ent) {
             self.entity_tree.remove(&PositionComponent {
@@ -427,10 +412,8 @@ impl MyWorld {
             let goal = add_two_points(&xyz, &dir_point);
 
             if !self.entity_blocks_movement_at(&goal) {
-               
-                    self.set_ent_loc(ent, &goal);
-                    return SuccessType::Success;
-                
+                self.set_ent_loc(ent, &goal);
+                return SuccessType::Success;
             } else {
                 SuccessType::Failure
             }

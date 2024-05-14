@@ -4,7 +4,7 @@ use crate::*;
 pub enum ActionType {
     Wait,
     Take(AccusativeID),
-    Drop(Item),
+    Drop(ItemType),
     Give(AccusativeID, DativeID),
     Hit(AccusativeID, InstrumentalID),
     Go(LocativeID),
@@ -59,7 +59,7 @@ impl Action {
             }
         }
     }
-   /*
+    /*
     pub fn attack(world: &mut MyWorld, subject: &EntityID, destination: &LocativeID) -> SuccessType {
         println!("WAIT WHATTT");
 
@@ -73,7 +73,7 @@ impl Action {
             }
         }
     }
-   
+
     */
     pub fn take(world: &mut MyWorld, subject: &EntityID, object: &EntityID) -> SuccessType {
         //get subj and obj locations
@@ -105,7 +105,7 @@ impl Action {
         }
         SuccessType::Failure
     }
-    pub fn drop(world: &mut MyWorld, subject: &EntityID, item_to_drop: &Item) -> SuccessType {
+    pub fn drop(world: &mut MyWorld, subject: &EntityID, item_to_drop: &ItemType) -> SuccessType {
         let sub_loc = world.ent_loc_index.get(subject).unwrap_or(&(0, 0)).clone();
 
         //does ent contain item

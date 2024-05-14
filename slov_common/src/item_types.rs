@@ -6,27 +6,21 @@ pub enum MeleeWeaponType {
     Kyj,
     Meč,
     Kopje,
-   // Nagajka,
+    // Nagajka,
 }
-
-
-
 
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum RangedWeaponType {
     Lųk,
-  //  Proca(Sling),
-   // Prak(Sling),
+    //  Proca(Sling),
+    // Prak(Sling),
     Prašča,
-  //  Šlojder(Sling),
- //   Kuša(CrossBow),
+    //  Šlojder(Sling),
+    //   Kuša(CrossBow),
     Samostrěl,
     Kameni,
- //   Arbalet(CrossBow),
+    //   Arbalet(CrossBow),
 }
-
-
-
 
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum Material {
@@ -52,7 +46,7 @@ pub enum Fabric {
     Koža(MammalType),
     Tkanina(PlantType),
     Plåtno(BushType),
-    ChainMail(MetalType)
+    ChainMail(MetalType),
 }
 
 impl Fabric {
@@ -302,44 +296,31 @@ impl Animal {
     }
 }
 
-
 #[derive(Clone, Debug, PartialEq)]
 pub struct MeleeWeapon {
     pub weapon_type: MeleeWeaponType,
     pub material_type: Material,
 }
 
-
-
-
 #[derive(Clone, Debug, PartialEq)]
 pub struct RangedWeapon {
     pub weapon_type: RangedWeaponType,
-    pub tulec_material: Fabric, 
-    pub tetiva_material: Fabric, 
+    pub tulec_material: Fabric,
+    pub tetiva_material: Fabric,
     pub rema_material: Material,
 
     pub ammo_material: Material,
-
-
 }
 
 impl RangedWeapon {
     pub fn to_color(&self) -> Color {
         match &self.weapon_type {
             RangedWeaponType::Samostrěl => self.tulec_material.to_color(),
-            RangedWeaponType::Prašča => {
-                self.tulec_material.to_color()
-            }
+            RangedWeaponType::Prašča => self.tulec_material.to_color(),
             RangedWeaponType::Lųk => self.tulec_material.to_color(),
             RangedWeaponType::Kameni => self.tulec_material.to_color(),
         }
     }
-}
-
-#[derive(Clone, Debug, PartialEq)]
-pub struct Item {
-    pub item_type: ItemType,
 }
 
 #[derive(Clone, Debug, Display, PartialEq)]
@@ -347,7 +328,7 @@ pub enum ItemType {
     Melee(MeleeWeapon),
     Ranged(RangedWeapon),
     Clothing(ClothingItem),
-    
+
     None,
 }
 
@@ -370,41 +351,38 @@ pub struct ClothingItem {
 
 */
 
-
-
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum ClothingItemType {
     Pantalony, // Pants
     Hlače,     // Trousers
     Suknja,    // Skirt
 
-  
     Šarovary,  // Baggy pants
     Spodnjice, // Underpants
- 
-    Košula,   // Shirt
-    Tunika,   // Tunic
-    Halja,    // Dress
-    Bluza,    // Blouse
-    Majica,   // T-shirt
-    Kofta,    // Sweater/Cardigan
-    
+
+    Košula, // Shirt
+    Tunika, // Tunic
+    Halja,  // Dress
+    Bluza,  // Blouse
+    Majica, // T-shirt
+    Kofta,  // Sweater/Cardigan
+
     Kabanica, // Raincoat
     Kožuh,    // Fur coat
     Vesta,    // Vest
     Šal,
-    
+
     Šarf,
     Kosynka,
     Platok,
     Hvusta,
-    
+
     Šátek,
     Pléť,
     Ruta,
     Ogrinjalo,
     Marama,
-    Voalj, 
+    Voalj,
     Závoj,
     Karpa,
     Palantin,
@@ -421,13 +399,7 @@ pub enum ClothingItemType {
     Šešir,
 }
 
-
-
-
-
-
-
-impl Item {
+impl ItemType {
     pub fn to_displaychar(&self) -> String {
         let item_str = self.to_title();
 
@@ -436,16 +408,16 @@ impl Item {
         ch
     }
     pub fn to_color(&self) -> Color {
-        match &self.item_type {
+        match &self {
             ItemType::Melee(x) => x.material_type.to_color(),
             ItemType::Ranged(x) => x.tulec_material.to_color(),
             ItemType::Clothing(x) => x.fabric_type.to_color(),
-         
+
             ItemType::None => Color::LightRed,
         }
     }
     pub fn to_title(&self) -> String {
-        let item_str = match &self.item_type {
+        let item_str = match &self {
             ItemType::Melee(x) => {
                 format!("{}", &x.weapon_type)
             }
@@ -455,7 +427,7 @@ impl Item {
             ItemType::Ranged(x) => {
                 format!("{}", &x.weapon_type)
             }
-         
+
             ItemType::None => "?".into(),
         };
 
@@ -485,17 +457,15 @@ impl Default for Human {
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum EntityType {
     Human(Human),
-    Item(Item), //věć
+    Item(ItemType), //věć
     Monster(Animal),
     Mebelj(Mebelj),
     Drěvo(WoodType),
     Råstlina(PlantType),
     Kust(BushType),
     //Statuja(AnimalType),
-    
     None,
 }
-
 
 impl EntityType {
     pub fn to_displaychar(&self) -> String {
@@ -531,7 +501,6 @@ impl EntityType {
     }
 }
 
-
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum MebeljType {
     Stěna,
@@ -563,13 +532,6 @@ impl Mebelj {
         self.material.to_color()
     }
 }
-
-
-
-
-
-
-
 
 /*
 #[derive(Clone, Debug, PartialEq)]

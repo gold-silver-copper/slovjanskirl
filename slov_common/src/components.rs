@@ -26,30 +26,27 @@ impl PointDistance for PositionComponent {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct StatsComponent {
-    pub health: StatsUnit, //zdravje
-    pub stamina_air: StatsUnit, //vozduh
-    pub strength: StatsUnit, //sila
-    pub agility: StatsUnit, // bystrost
-    pub speed: StatsUnit, //szybkost
+    pub health: StatsUnit,       //zdravje
+    pub stamina_air: StatsUnit,  //vozduh
+    pub strength: StatsUnit,     //sila
+    pub agility: StatsUnit,      // bystrost
+    pub speed: StatsUnit,        //szybkost
     pub intelligence: StatsUnit, //razum
-  
-   
-    pub milost: StatsUnit, //cuteness
 
+    pub milost: StatsUnit, //cuteness
 }
 
 impl StatsComponent {
     pub fn new(max: &i64) -> StatsComponent {
         StatsComponent {
             health: max.clone(),
-             stamina_air: max.clone(),
-             strength: max.clone(),
-             agility: max.clone(),
-             speed: max.clone(),
-             intelligence: max.clone(),
-           
-             milost: max.clone(),
-          
+            stamina_air: max.clone(),
+            strength: max.clone(),
+            agility: max.clone(),
+            speed: max.clone(),
+            intelligence: max.clone(),
+
+            milost: max.clone(),
         }
     }
 }
@@ -61,31 +58,18 @@ pub struct EquipmentComponent {
     pub ranged_weapon: Option<RangedWeapon>,
 
     pub worn_clothing: Vec<ClothingItem>,
-
-
-   
-
 }
 
 impl EquipmentComponent {
     pub fn new_empty() -> EquipmentComponent {
         EquipmentComponent {
-             melee_weapon: None,
+            melee_weapon: None,
 
-     ranged_weapon: None,
+            ranged_weapon: None,
 
-     worn_clothing: Vec::new(),
-          
-          
+            worn_clothing: Vec::new(),
         }
     }
 }
 
-
-
-
-
-
-
-
-pub type InventoryComponent = Vec<Item>;
+pub type InventoryComponent = Vec<ItemType>;
