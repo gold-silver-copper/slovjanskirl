@@ -92,7 +92,7 @@ impl Action {
                 EntityType::Item(itimik) => {
                     match boop {
                         //if the subject is a player
-                        EntityType::Player(pla) => {
+                        EntityType::Human(pla) => {
                             pla.inventory.push(itimik.clone());
                             world.delete_entity(object);
                             return SuccessType::Success;
@@ -117,7 +117,7 @@ impl Action {
         let ent_to_check = world.entity_map.get_mut(subject).unwrap_or(&mut nun);
 
         match ent_to_check {
-            EntityType::Player(igrok) => {
+            EntityType::Human(igrok) => {
                 meow = remove_first_instance(&mut igrok.inventory, &item_to_drop.clone());
             }
             _ => (),

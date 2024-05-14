@@ -217,7 +217,7 @@ fn draw_drop_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Master
     let mut listitemvec = Vec::new();
 
     match entik {
-        EntityType::Player(igrok) => {
+        EntityType::Human(igrok) => {
             items = igrok.inventory.clone();
         }
         _ => (),

@@ -421,7 +421,7 @@ impl EntityType {
         match self {
             EntityType::Item(x) => x.to_color(),
             EntityType::Monster(x) => x.to_color(),
-            EntityType::Human(_) => Color::Red,
+            EntityType::Human(_) => Color::White,
             EntityType::None => Color::Red,
             EntityType::Drěvo(x) => x.to_color(),
             EntityType::Kust(x) => x.to_color(),
