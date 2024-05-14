@@ -23,13 +23,13 @@ pub enum RangedWeaponType {
 }
 
 #[derive(Clone, Debug, Display, PartialEq)]
-pub enum Material {
+pub enum SolidMaterial {
     Drěvo(WoodType),
     Metal(MetalType),
     Kamenj(StoneType),
 }
 
-impl Material {
+impl SolidMaterial {
     pub fn to_color(&self) -> Color {
         match &self {
             Self::Metal(x) => x.to_color(),
@@ -40,7 +40,7 @@ impl Material {
 }
 
 #[derive(Clone, Debug, Display, PartialEq)]
-pub enum Fabric {
+pub enum FabricMaterial {
     Pulpa(WoodType),
     Vlås(MammalType),
     Koža(MammalType),
@@ -49,7 +49,7 @@ pub enum Fabric {
     ChainMail(MetalType),
 }
 
-impl Fabric {
+impl FabricMaterial {
     pub fn to_color(&self) -> Color {
         match &self {
             Self::Tkanina(x) => x.to_color(),
@@ -299,17 +299,17 @@ impl Animal {
 #[derive(Clone, Debug, PartialEq)]
 pub struct MeleeWeapon {
     pub weapon_type: MeleeWeaponType,
-    pub material_type: Material,
+    pub material_type: SolidMaterial,
 }
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct RangedWeapon {
     pub weapon_type: RangedWeaponType,
-    pub tulec_material: Fabric,
-    pub tetiva_material: Fabric,
-    pub rema_material: Material,
+    pub tulec_material: FabricMaterial,
+    pub tetiva_material: FabricMaterial,
+    pub rema_material: SolidMaterial,
 
-    pub ammo_material: Material,
+    pub ammo_material: SolidMaterial,
 }
 
 impl RangedWeapon {
@@ -335,7 +335,7 @@ pub enum ItemType {
 #[derive(Clone, Debug, PartialEq)]
 pub struct ClothingItem {
     pub clothing_type: ClothingItemType,
-    pub fabric_type: Fabric,
+    pub fabric_type: FabricMaterial,
 }
 
 /*
@@ -516,7 +516,7 @@ pub enum MebeljType {
 #[derive(Clone, Debug, PartialEq)]
 pub struct Mebelj {
     mebelj_type: MebeljType,
-    material: Material,
+    material: SolidMaterial,
 }
 
 impl Mebelj {
@@ -537,16 +537,16 @@ impl Mebelj {
 #[derive(Clone, Debug, PartialEq)]
 pub struct Bow {
     pub rame_luka: WoodType,
-    pub tetiva: Fabric,
+    pub tetiva: FabricMaterial,
 }
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct CrossBow {
     pub luk: Bow,
-    pub telo: Material,
+    pub telo: SolidMaterial,
 }
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Sling {
-    pub material_type: Fabric,
+    pub material_type: FabricMaterial,
 } */

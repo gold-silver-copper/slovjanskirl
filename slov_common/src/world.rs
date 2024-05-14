@@ -58,7 +58,7 @@ impl MyWorld {
             &(81, 87),
             &EntityType::Item(ItemType::Melee(MeleeWeapon {
                 weapon_type: MeleeWeaponType::Kopje,
-                material_type: Material::Kamenj(StoneType::Kremenj),
+                material_type: SolidMaterial::Kamenj(StoneType::Kremenj),
             })),
         );
         x
