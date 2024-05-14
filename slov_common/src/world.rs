@@ -30,10 +30,17 @@ impl Default for MyWorld {
 }
 
 impl MyWorld {
-    pub fn receive(&mut self, input_pair: (ActionType, EntityID)) {
-        self.server_stuff
+    pub fn receive(&mut self, input_pair: (ActionType, AccountID)) {
+
+        let entity_id_of_account = self.server_stuff.entity_accid_map.get(&input_pair.1).unwrap_or(&0);
+
+        if entity_id_of_account != &(0 as u64) {
+            self.server_stuff
             .input_queue
-            .insert(input_pair.1, input_pair.0);
+            .insert(entity_id_of_account.clone(), input_pair.0);
+
+        }
+     
         //   println!("inserted");
     }
 
@@ -86,16 +93,21 @@ impl MyWorld {
         // Extend with actual game logic
     }
     //z must be above 0 for movement
-    pub fn make_account(&mut self) -> (EntityID, MyPoint) {
+    pub fn make_account(&mut self) -> (AccountID, EntityID ,  MyPoint) {
         let pp = (80, 80);
         let eid = self.new_entity(&pp, &EntityType::Player(Player::default()));
-        self.server_stuff.account_counter += 1;
+
+        //increment then use value for creating account , send account and entity id to player
+        self.server_stuff.account_counter += 17;
+
+        let aid = self.server_stuff.account_counter.clone();
 
         self.server_stuff
             .entity_accid_map
-            .insert(eid.clone(), self.server_stuff.account_counter.clone());
+            .insert(self.server_stuff.account_counter.clone(),eid.clone());
+    
 
-        (eid, pp)
+        (aid,eid, pp)
     }
 
     pub fn new_entity(&mut self, point: &MyPoint, spawn_type: &EntityType) -> EntityID {

@@ -39,7 +39,7 @@ fn ui_example_system(
     draw_ascii_game(
         &mut termres.terminal_game,
         &masterok.client_world,
-        &masterok.player_id,
+        &masterok.player_entity_id,
     );
 
     draw_ascii_info(&mut termres.terminal_info, &masterok);
@@ -163,7 +163,7 @@ fn draw_take_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Master
     let ent_loc = masterok
         .client_world
         .ent_loc_index
-        .get(&masterok.player_id)
+        .get(&masterok.player_entity_id)
         .unwrap_or(&(0, 0));
     let mut items = masterok.client_world.get_items_at_point(ent_loc);
     let mut listitemvec = Vec::new();
@@ -211,7 +211,7 @@ fn draw_drop_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Master
     let mut entik = masterok
         .client_world
         .entity_map
-        .get(&masterok.player_id)
+        .get(&masterok.player_entity_id)
         .unwrap_or(&EntityType::None);
     let mut items = Vec::new();
     let mut listitemvec = Vec::new();
@@ -286,7 +286,8 @@ impl Default for BevyTerminal<RataguiBackend> {
 
 #[derive(Resource)]
 struct Masterik {
-    player_id: EntityID,
+    player_entity_id: EntityID,
+    player_account_id: AccountID,
     location: MyPoint,
     messages: Vec<String>,
     client_world: MyWorld,
@@ -298,7 +299,8 @@ struct Masterik {
 impl Default for Masterik {
     fn default() -> Self {
         Self {
-            player_id: 1,
+            player_entity_id: 0,
+            player_account_id: 0,
             location: (1, 1),
             messages: Vec::new(),
             client_world: MyWorld::new_test(),
@@ -333,7 +335,7 @@ fn local_world_process(mut masterok: ResMut<Masterik>) {
     masterok.client_world.interpret_and_execute();
     let boop = masterok
         .client_world
-        .create_game_data_packet_for_entity(&masterok.player_id);
+        .create_game_data_packet_for_entity(&masterok.player_entity_id);
 
     if let Some(meow) = boop {
         //generate text messages from these action packets, then push them to the player message viewer
@@ -343,7 +345,7 @@ fn local_world_process(mut masterok: ResMut<Masterik>) {
         for act in packet_actions {
             let zzz = masterok
                 .client_world
-                .generate_isv_message(&act, &masterok.player_id);
+                .generate_isv_message(&act, &masterok.player_entity_id);
             masterok.messages.push(zzz);
         }
 
@@ -356,8 +358,9 @@ fn local_world_process(mut masterok: ResMut<Masterik>) {
 
 fn create_local_account(mut masterok: ResMut<Masterik>) {
     let local_info = masterok.client_world.make_account();
-    masterok.player_id = local_info.0;
-    masterok.location = local_info.1;
+    masterok.player_account_id = local_info.0;
+    masterok.player_entity_id = local_info.1;
+    masterok.location = local_info.2;
 }
 
 fn keyboard_input_system(
@@ -389,7 +392,7 @@ fn keyboard_input_system(
     let char_zero = input.any_just_pressed([KeyCode::Digit0]);
 
     let mut client_action = ActionType::Wait;
-    let client_id = masterok.player_id.clone();
+    let client_id = masterok.player_account_id.clone();
 
     if ui_state.menu_open == MenuOpen::None {
         if char_up {

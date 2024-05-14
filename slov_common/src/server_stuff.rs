@@ -6,7 +6,7 @@ pub struct ServerStuff {
     pub output_queue: RTree<ActionPacket>,
     pub account_counter: u64,
 
-    pub entity_accid_map: HashMap<EntityID, AccountID>,
+    pub entity_accid_map: HashMap<AccountID, EntityID>,
 }
 
 impl Default for ServerStuff {
