@@ -10,27 +10,18 @@ pub enum MeleeWeaponType {
 
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum RangedWeaponType {
-    Lųk(Bow),
-    Proca(Sling),
-    Prak(Sling),
-    Prašča(Sling),
-    Šlojder(Sling),
-    Kuša(CrossBow),
-    Samostrěl(CrossBow),
-    Arbalet(CrossBow),
+    Lųk,
+  //  Proca(Sling),
+   // Prak(Sling),
+    Prašča,
+  //  Šlojder(Sling),
+ //   Kuša(CrossBow),
+    Samostrěl,
+  //  Kameni,
+ //   Arbalet(CrossBow),
 }
 
-impl RangedWeaponType {
-    pub fn to_color(&self) -> Color {
-        match &self {
-            Self::Arbalet(x) | Self::Kuša(x) | Self::Samostrěl(x) => x.telo.to_color(),
-            Self::Šlojder(x) | Self::Prak(x) | Self::Prašča(x) | Self::Proca(x) => {
-                x.material_type.to_color()
-            }
-            Self::Lųk(x) => x.rame_luka.to_color(),
-        }
-    }
-}
+
 
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum Material {
@@ -304,12 +295,6 @@ impl Animal {
     }
 }
 
-#[derive(Clone, Debug, PartialEq)]
-pub struct Ammo {
-    ammo_type: AmmoType,
-    material_type: Material,
-    quantity: i64,
-}
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct MeleeWeapon {
@@ -320,29 +305,30 @@ pub struct MeleeWeapon {
 #[derive(Clone, Debug, PartialEq)]
 pub struct RangedWeapon {
     pub weapon_type: RangedWeaponType,
+    pub tulec_material: Fabric, 
+
+    pub ammo_material: Material,
+
+
 }
 
-#[derive(Clone, Debug, PartialEq)]
-pub struct Bow {
-    pub rame_luka: WoodType,
-    pub tetiva: Fabric,
+impl RangedWeapon {
+    pub fn to_color(&self) -> Color {
+        match &self.weapon_type {
+            RangedWeaponType::Samostrěl => self.tulec_material.to_color(),
+            RangedWeaponType::Prašča => {
+                self.tulec_material.to_color()
+            }
+            RangedWeaponType::Lųk => self.tulec_material.to_color(),
+        }
+    }
 }
 
-#[derive(Clone, Debug, PartialEq)]
-pub struct CrossBow {
-    pub luk: Bow,
-    pub telo: Material,
-}
-
-#[derive(Clone, Debug, PartialEq)]
-pub struct Sling {
-    pub material_type: Fabric,
-}
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum ItemType {
     Melee(MeleeWeapon),
     Ranged(RangedWeapon),
-    Ammo(Ammo),
+    
     None,
 }
 
@@ -362,8 +348,8 @@ impl Item {
     pub fn to_color(&self) -> Color {
         match &self.item_type {
             ItemType::Melee(x) => x.material_type.to_color(),
-            ItemType::Ranged(x) => x.weapon_type.to_color(),
-            ItemType::Ammo(x) => x.material_type.to_color(),
+            ItemType::Ranged(x) => x.tulec_material.to_color(),
+         
             ItemType::None => Color::LightRed,
         }
     }
@@ -375,9 +361,7 @@ impl Item {
             ItemType::Ranged(x) => {
                 format!("{}", &x.weapon_type)
             }
-            ItemType::Ammo(x) => {
-                format!("{}", &x.ammo_type)
-            }
+         
             ItemType::None => "?".into(),
         };
 
@@ -500,3 +484,24 @@ impl Furniture {
         }
     }
 }
+
+
+
+
+/*
+#[derive(Clone, Debug, PartialEq)]
+pub struct Bow {
+    pub rame_luka: WoodType,
+    pub tetiva: Fabric,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct CrossBow {
+    pub luk: Bow,
+    pub telo: Material,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct Sling {
+    pub material_type: Fabric,
+} */
