@@ -12,11 +12,22 @@ pub enum SolidMaterial {
 
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum FabricMaterial {
-    Vlåkno(WoodType),
+
+    //vlakno vivsa tkanina plet'
+    
     Koža(MammalType),
     Tkanina(PlantType),
-    Vivša(BushType),
+ 
     Lancuh(MetalType),
+}
+
+#[derive(Clone, Debug, Display, PartialEq)]
+pub enum PlantType {
+    Drěvo(WoodType),
+    Trava(GrassType),
+    Kust(BushType),
+
+    
 }
 
 #[derive(Clone, Debug, Display, PartialEq)]
@@ -66,9 +77,19 @@ pub enum ItemType {
     None,
 }
 
+#[derive(Clone, Debug, Display, PartialEq)]
+pub enum ClothingType {
+    Head(HeadClothingType),
+    Shoulder(ShoulderClothingType),
+    Torso(TorsoClothingType),
+    Legs(LegsClothingType),
+
+    
+}
+
 #[derive(Clone, Debug, PartialEq)]
 pub struct ClothingItem {
-    pub clothing_type: ClothingItemType,
+    pub clothing_type: ClothingType,
     pub fabric_type: FabricMaterial,
 }
 
@@ -88,10 +109,9 @@ pub enum EntityType {
     Item(ItemType), //věć
     Monster(AnimalType),
     Mebelj(Mebelj),
-    Drěvo(WoodType),
+
     Råstlina(PlantType),
-    Kust(BushType),
-    //Statuja(AnimalType),
+  
     None,
 }
 

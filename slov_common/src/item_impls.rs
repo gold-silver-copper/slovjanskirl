@@ -17,8 +17,7 @@ impl FabricMaterial {
         match &self {
             Self::Tkanina(x) => x.to_color(),
            Self::Koža(x) => x.to_color(),
-            Self::Vlåkno(x) => x.to_color(),
-            Self::Vivša(x) => x.to_color(),
+           
             Self::Lancuh(x) => x.to_color(),
         }
     }
@@ -50,7 +49,7 @@ impl StoneType {
 }
 
 
-impl PlantType {
+impl GrassType {
     pub fn to_color(&self) -> Color {
         match &self {
             _ => Color::Rgb(34, 139, 34),
@@ -207,6 +206,30 @@ impl Default for Human {
     }
 }
 
+impl PlantType {
+    pub fn to_displaychar(&self) -> String {
+        match self {
+         
+            PlantType::Drěvo(x) => "t".into(),
+            PlantType::Kust(x) => "*".into(),
+            PlantType::Trava(x) => x.to_displaychar(),
+           
+        }
+    }
+
+    pub fn to_color(&self) -> Color {
+        match self {
+      
+            PlantType::Drěvo(x) => x.to_color(),
+            PlantType::Kust(x) => x.to_color(),
+            
+            PlantType::Trava(x) => x.to_color(),
+        }
+    }
+
+  
+}
+
 
 impl EntityType {
     pub fn to_displaychar(&self) -> String {
@@ -215,8 +238,7 @@ impl EntityType {
             EntityType::Monster(x) => x.to_displaychar(), //x.to_displaychar(),
             EntityType::Human(_) => "@".into(),
             EntityType::None => "?".into(),
-            EntityType::Drěvo(x) => "t".into(),
-            EntityType::Kust(x) => "*".into(),
+            
             EntityType::Råstlina(x) => x.to_displaychar(),
             EntityType::Mebelj(x) => x.to_displaychar(),
         }
@@ -228,8 +250,7 @@ impl EntityType {
             EntityType::Monster(x) => x.to_color(),
             EntityType::Human(_) => Color::White,
             EntityType::None => Color::Red,
-            EntityType::Drěvo(x) => x.to_color(),
-            EntityType::Kust(x) => x.to_color(),
+ 
             EntityType::Mebelj(x) => x.to_color(),
             EntityType::Råstlina(x) => x.to_color(),
         }

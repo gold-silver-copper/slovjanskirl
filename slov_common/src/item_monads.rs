@@ -55,7 +55,7 @@ pub enum WoodType {
 }
 
 #[derive(Clone, Debug, Display, PartialEq)]
-pub enum PlantType {
+pub enum GrassType {
     Trava,
     Kovylj, //needle grass
     Burjan, // high grass
@@ -124,17 +124,50 @@ pub enum AnimalPartType {
     Bone,
 }
 
+#[derive(Clone, Debug, Display, PartialEq)]
+pub enum ShoulderClothingType {
+    Šal,
 
+    Šarf,
+    Šátek,
+    Pléť, //big piece of cloth
+   
+    Ruta, //scarf shawl
+    Palantin, //scarf
+    Ogrinjalo, //cape
+}
 
 #[derive(Clone, Debug, Display, PartialEq)]
-pub enum ClothingItemType {
-    Pantalony, // Pants
-    Hlače,     // Trousers
-    Suknja,    // Skirt
+pub enum HeadClothingType {
 
-    Šarovary,  // Baggy pants
-    Spodnjice, // Underpants
+   
+    Kosynka, //headscarf
+    Platok, //headscarf
+    
 
+   
+   
+    
+   
+    Marama, //headscarf
+    Voalj, //veil
+    Závoj,  //veil
+   
+   
+
+    Šapka,
+    Šljem,
+    Kapela,
+    Kapuc, //kapushon hood
+    Beretka,
+    Bandana,
+    Vual,
+    Klobuk,
+    Šešir, //wide brim hat
+}
+
+#[derive(Clone, Debug, Display, PartialEq)]
+pub enum TorsoClothingType {
     Košula, // Shirt
     Tunika, // Tunic
     Halja,  // Dress
@@ -145,34 +178,23 @@ pub enum ClothingItemType {
     Kabanica, // Raincoat
     Kožuh,    // Fur coat
     Vesta,    // Vest
-    Šal,
-
-    Šarf,
-    Kosynka, //headscarf
-    Platok, //headscarf
     
-
-    Šátek,
-    Pléť, //big piece of cloth
-    Ruta, //headscarf
-    Ogrinjalo, //headscarf
-    Marama, //headscarf
-    Voalj, //veil
-    Závoj,  //veil
-    Karpa,
-    Palantin,
-
-    Šapka,
-    Šljem,
-    Kapela,
-    Kapuc, //kapushon hood
-    Beretka,
     Koĺčuga,
-    Bandana,
-    Vual,
-    Klobuk,
-    Šešir,
 }
+
+#[derive(Clone, Debug, Display, PartialEq)]
+pub enum LegsClothingType {
+    Pantalony, // Pants
+    Hlače,     // Trousers
+    Suknja,    // Skirt
+
+    Šarovary,  // Baggy pants
+    Spodnjice, // Underpants
+
+}
+
+
+
 
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum MebeljType {

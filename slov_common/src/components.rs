@@ -28,12 +28,11 @@ impl PointDistance for PositionComponent {
 pub struct StatsComponent {
     pub health: StatsUnit,       //zdravje
     pub stamina_air: StatsUnit,  //vozduh
-    pub strength: StatsUnit,     //sila
-    pub agility: StatsUnit,      // bystrost
-    pub speed: StatsUnit,        //szybkost
-    pub intelligence: StatsUnit, //razum
+    pub sila: StatsUnit,     //sila
+    pub bystrost: StatsUnit,      // bystrost
+    pub razum: StatsUnit, //razum
 
-    pub milost: StatsUnit, //cuteness
+   
 }
 
 impl StatsComponent {
@@ -41,12 +40,10 @@ impl StatsComponent {
         StatsComponent {
             health: max.clone(),
             stamina_air: max.clone(),
-            strength: max.clone(),
-            agility: max.clone(),
-            speed: max.clone(),
-            intelligence: max.clone(),
-
-            milost: max.clone(),
+            sila: max.clone(),
+            bystrost: max.clone(),
+            razum: max.clone(),
+            
         }
     }
 }
@@ -57,7 +54,10 @@ pub struct EquipmentComponent {
 
     pub ranged_weapon: Option<RangedWeapon>,
 
-    pub worn_clothing: Vec<ClothingItem>,
+    pub head: Option<ClothingItem>,
+    pub shoulders: Option<ClothingItem>,
+    pub torso: Option<ClothingItem>,
+    pub legs: Option<ClothingItem>,
 }
 
 impl EquipmentComponent {
@@ -67,7 +67,11 @@ impl EquipmentComponent {
 
             ranged_weapon: None,
 
-            worn_clothing: Vec::new(),
+            head: None,
+            shoulders: None,
+            torso: None,
+            legs: None,
+
         }
     }
 }
