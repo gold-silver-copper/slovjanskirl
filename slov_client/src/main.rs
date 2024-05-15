@@ -51,8 +51,8 @@ fn ui_example_system(
             let av_width = ui.available_width().clamp(100., 2000.);
 
             egui::SidePanel::right("containeeee")
-                .min_width(av_width / (5.))
-                .max_width(av_width / (5.))
+                .min_width(260.)
+                .max_width(260.)
                 .frame(Frame::none())
                 .show_inside(ui, |ui| {
                     if ui_status.menu_open == MenuOpen::Take {
