@@ -134,19 +134,24 @@ fn draw_ascii_game(
 }
 
 fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik) {
-    let player_data_copy = masterok.client_world.entity_map.get(&masterok.player_entity_id).unwrap_or(&EntityType::None);
+    let player_data_copy = masterok.client_world.entity_map.get(&masterok.player_entity_id).unwrap_or(&EntityType::None).clone();
     if let EntityType::Human(player_data_into) = player_data_copy  {
+
+        let local_player_loc = masterok.client_world.ent_loc_index.get(&masterok.player_entity_id).unwrap_or(&(0,0));
+
+        
+
 
         let statiki = &player_data_into.current_stats;
         let veci = &player_data_into.equipment;
 
-       
 
 
         let name_string = format!{"{}",statiki.name};
         let health_string = format!{"Zdråvje: {}  Dyhańje {}",statiki.health , statiki.stamina_air };
         let stats_string = format!{"Sila: {}  Bystrost́ {}  Råzum: {} ",statiki.sila , statiki.bystrost , statiki.razum };
         let mut wep_string = String::new();
+        let mut local_items = String::new();
 
         if let Some(mel_wep)= &veci.melee_weapon {
 
@@ -162,6 +167,14 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
             wep_string.push_str(&ran_str);
 
 
+        }
+
+        if let Some(current_voxel) = masterok.client_world.get_voxel_at(&local_player_loc) {
+
+            let funny_string = format!{"Pod tobojų {}",&current_voxel.floor};
+            local_items.push_str(&funny_string);
+
+            
         }
         
         
@@ -179,6 +192,7 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
         messages_to_show.push(Line::from( health_string));
         messages_to_show.push(Line::from( stats_string));
         messages_to_show.push(Line::from( wep_string));
+        messages_to_show.push(Line::from( local_items));
 
         messages_to_show.push(Line::from( ""));
     
@@ -333,7 +347,7 @@ impl Default for BevyTerminal<RataguiBackend> {
 struct Masterik {
     player_entity_id: EntityID,
     player_account_id: AccountID,
-    location: MyPoint,
+  
     messages: Vec<String>,
     client_world: MyWorld,
     is_logged_in: bool,
@@ -346,7 +360,7 @@ impl Default for Masterik {
         Self {
             player_entity_id: 0,
             player_account_id: 0,
-            location: (1, 1),
+  
             messages: Vec::new(),
             client_world: MyWorld::new_test(),
             is_logged_in: false,
@@ -390,7 +404,7 @@ fn local_world_process(mut masterok: ResMut<Masterik>) {
     if let Some(meow) = boop {
         //generate text messages from these action packets, then push them to the player message viewer
         let packet_actions = meow.action_info;
-        let player_loc = masterok.location.clone();
+       
 
         for act in packet_actions {
             let zzz = masterok
@@ -410,7 +424,7 @@ fn create_local_account(mut masterok: ResMut<Masterik>) {
     let local_info = masterok.client_world.make_account();
     masterok.player_account_id = local_info.0;
     masterok.player_entity_id = local_info.1;
-    masterok.location = local_info.2;
+   
 }
 
 fn keyboard_input_system(

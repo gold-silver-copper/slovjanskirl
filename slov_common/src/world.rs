@@ -184,7 +184,7 @@ impl MyWorld {
                 batchvec.push(Voxel {
                     floor: floor,
 
-                    roof: Roof::Air,
+                    roof: Roof::Sky,
                     voxel_pos: (x, y),
                 });
             }

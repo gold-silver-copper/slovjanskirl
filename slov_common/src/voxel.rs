@@ -9,16 +9,16 @@ pub struct Voxel {
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum Roof {
-    Air,
+    Sky,
 }
 impl Roof {
     pub fn to_color(&self) -> Color {
         match &self {
-            Self::Air => Color::Rgb(239, 240, 235),
+            Self::Sky => Color::Rgb(239, 240, 235),
         }
     }
 }
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq)]
 pub enum Floor {
     Air,
     Dirt,
