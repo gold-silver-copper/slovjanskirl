@@ -134,29 +134,36 @@ fn draw_ascii_game(
 }
 
 fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik) {
-    let mut messages_clone = masterok.messages.clone();
-    messages_clone.reverse();
+    let player_data_copy = masterok.client_world.entity_map.get(&masterok.player_entity_id).unwrap_or(&EntityType::None);
+    if player_data_copy != &EntityType::None {
 
-    let mut messages_to_show = Vec::new();
+        let mut messages_clone = masterok.messages.clone();
+        messages_clone.reverse();
+    
+        let mut messages_to_show = Vec::new();
+    
+        for massage in messages_clone {
+            messages_to_show.push(Line::from(massage));
+        }
+    
+        terminal
+            .draw(|frame| {
+                let area = frame.size();
+    
+                //neccesary beccause drawing is from the top
+    
+                frame.render_widget(
+                    Paragraph::new(messages_to_show)
+                        .on_black()
+                        .block(Block::new().title("log").borders(Borders::ALL)),
+                    area,
+                );
+            })
+            .expect("epic fail");
 
-    for massage in messages_clone {
-        messages_to_show.push(Line::from(massage));
+
     }
-
-    terminal
-        .draw(|frame| {
-            let area = frame.size();
-
-            //neccesary beccause drawing is from the top
-
-            frame.render_widget(
-                Paragraph::new(messages_to_show)
-                    .on_black()
-                    .block(Block::new().title("log").borders(Borders::ALL)),
-                area,
-            );
-        })
-        .expect("epic fail");
+   
 }
 
 fn draw_take_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Masterik) {

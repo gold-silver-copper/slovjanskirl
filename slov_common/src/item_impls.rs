@@ -200,8 +200,8 @@ impl Default for Human {
         Self {
             inventory: Vec::new(),
             equipment: EquipmentComponent::new_empty(),
-            current_stats: StatsComponent::new(&100),
-            max_stats: StatsComponent::new(&100),
+            current_stats: StatsComponent::new_default(),
+            max_stats: StatsComponent::new_default(),
         }
     }
 }

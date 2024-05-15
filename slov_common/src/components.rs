@@ -37,14 +37,14 @@ pub struct StatsComponent {
 }
 
 impl StatsComponent {
-    pub fn new(max: &i64) -> StatsComponent {
+    pub fn new_default() -> StatsComponent {
         StatsComponent {
-            name: String::new(),
-            health: max.clone(),
-            stamina_air: max.clone(),
-            sila: max.clone(),
-            bystrost: max.clone(),
-            razum: max.clone(),
+            name: String::from("zlotik"),
+            health: 100,
+            stamina_air: 100,
+            sila: 100,
+            bystrost: 100,
+            razum: 100,
             
         }
     }
