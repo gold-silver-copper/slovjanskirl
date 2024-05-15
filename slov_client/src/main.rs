@@ -135,12 +135,18 @@ fn draw_ascii_game(
 
 fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik) {
     let player_data_copy = masterok.client_world.entity_map.get(&masterok.player_entity_id).unwrap_or(&EntityType::None);
-    if player_data_copy != &EntityType::None {
+    if let EntityType::Human(player_data_into) = player_data_copy  {
+
+        let statiki = &player_data_into.current_stats;
+
+        let name_string = format!{"{}",statiki.name};
+        let stats_string = format!{"Zdråvje: {} , Dyhańje {}",statiki.health , statiki.stamina_air };
 
         let mut messages_clone = masterok.messages.clone();
         messages_clone.reverse();
     
         let mut messages_to_show = Vec::new();
+        messages_to_show.push(Line::from( stats_string));
     
         for massage in messages_clone {
             messages_to_show.push(Line::from(massage));
@@ -155,7 +161,7 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
                 frame.render_widget(
                     Paragraph::new(messages_to_show)
                         .on_black()
-                        .block(Block::new().title("log").borders(Borders::ALL)),
+                        .block(Block::new().title(name_string).borders(Borders::ALL)),
                     area,
                 );
             })
