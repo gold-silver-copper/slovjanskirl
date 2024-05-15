@@ -1,3 +1,5 @@
+use std::fmt::format;
+
 use crate::*;
 
 
@@ -56,10 +58,11 @@ pub struct MeleeWeapon {
     pub material_type: SolidMaterial,
 }
 
+
 #[derive(Clone, Debug, PartialEq)]
 pub struct RangedWeapon {
     pub weapon_type: RangedWeaponType,
-    pub tulec_material: FabricMaterial,
+   
     pub tetiva_material: FabricMaterial,
     pub rema_material: WoodType,
 

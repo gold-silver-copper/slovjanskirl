@@ -76,6 +76,19 @@ impl EquipmentComponent {
 
         }
     }
+    pub fn new_hunter() -> EquipmentComponent {
+        EquipmentComponent {
+            melee_weapon: Some(MeleeWeapon { weapon_type: MeleeWeaponType::Nož, material_type: SolidMaterial::Metal(MetalType::Bronza) }),
+
+            ranged_weapon: Some(RangedWeapon { weapon_type: RangedWeaponType::Lųk , tetiva_material: FabricMaterial::Koža(MammalType::Jelenj), rema_material: WoodType::Jasenj, ammo_material: SolidMaterial::Metal(MetalType::Bronza) }),
+
+            head: Some(ClothingItem { clothing_type: ClothingType::Head(HeadClothingType::Kapuc), fabric_type: FabricMaterial::Tkanina(PlantType::Trava(GrassType::Jasenėc)) }),
+            shoulders: None,
+            torso: None,
+            legs: None,
+
+        }
+    }
 }
 
 pub type InventoryComponent = Vec<ItemType>;

@@ -147,12 +147,30 @@ impl AnimalType {
     }
 }
 
+
+
+impl MeleeWeapon {
+
+    pub fn minimal_string(&self) -> String {
+
+        format!{"{}",self.weapon_type}
+
+    }
+}
+
 impl RangedWeapon {
+
     pub fn to_color(&self) -> Color {
         match &self.weapon_type {
             _ => self.tetiva_material.to_color(),
           
         }
+    }
+
+    pub fn minimal_string(&self) -> String {
+
+        format!{"{}",self.weapon_type}
+
     }
 }
 
@@ -199,7 +217,7 @@ impl Default for Human {
     fn default() -> Self {
         Self {
             inventory: Vec::new(),
-            equipment: EquipmentComponent::new_empty(),
+            equipment: EquipmentComponent::new_hunter(),
             current_stats: StatsComponent::new_default(),
             max_stats: StatsComponent::new_default(),
         }

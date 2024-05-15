@@ -138,15 +138,49 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
     if let EntityType::Human(player_data_into) = player_data_copy  {
 
         let statiki = &player_data_into.current_stats;
+        let veci = &player_data_into.equipment;
+
+       
+
 
         let name_string = format!{"{}",statiki.name};
-        let stats_string = format!{"Zdråvje: {} , Dyhańje {}",statiki.health , statiki.stamina_air };
+        let health_string = format!{"Zdråvje: {}  Dyhańje {}",statiki.health , statiki.stamina_air };
+        let stats_string = format!{"Sila: {}  Bystrost́ {}  Råzum: {} ",statiki.sila , statiki.bystrost , statiki.razum };
+        let mut wep_string = String::new();
+
+        if let Some(mel_wep)= &veci.melee_weapon {
+
+            let mel_str = format!{"V rųkah {}", mel_wep.minimal_string().to_ascii_lowercase() };
+            wep_string.push_str(&mel_str);
+
+
+        } else {wep_string.push_str("V rųkah ničto");}
+
+        if let Some(ran_wep)= &veci.ranged_weapon {
+
+            let ran_str = format!{" , za daleky boj je {}", ran_wep.minimal_string().to_ascii_lowercase() };
+            wep_string.push_str(&ran_str);
+
+
+        }
+        
+        
+           
+   
+      //  let stats_string = format!{"Sila: {}  Bystrost́ {}  Råzum: {} ",veci.melee_weapon , veci.ranged_weapon};
+        //ty vidisz
+        //pod toboj
+        //u tebja jest v rukah nozz . Dla daljnogo boja imajesz luk derevny s zlotymi strelami.  Nedavno osnovany objekty je 
 
         let mut messages_clone = masterok.messages.clone();
         messages_clone.reverse();
     
         let mut messages_to_show = Vec::new();
+        messages_to_show.push(Line::from( health_string));
         messages_to_show.push(Line::from( stats_string));
+        messages_to_show.push(Line::from( wep_string));
+
+        messages_to_show.push(Line::from( ""));
     
         for massage in messages_clone {
             messages_to_show.push(Line::from(massage));
@@ -282,7 +316,7 @@ impl Default for BevyTerminal<RataguiBackend> {
         let mut terminal1 = Terminal::new(backend1).unwrap();
 
         let mut backend2 = RataguiBackend::new(20, 20);
-        backend2.set_font_size(11);
+        backend2.set_font_size(10);
         let mut terminal2 = Terminal::new(backend2).unwrap();
         let mut backend3 = RataguiBackend::new(20, 20);
         backend3.set_font_size(11);
