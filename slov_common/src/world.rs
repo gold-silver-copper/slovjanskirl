@@ -50,9 +50,8 @@ impl MyWorld {
         let mut x = MyWorld::default();
         x.new_entity(
             &(81, 88),
-            &EntityType::Monster(Animal {
-                animal_type: AnimalType::Mammal(MammalType::Jelenj),
-            }),
+            &EntityType::Monster(AnimalType::Mammal(MammalType::Jelenj),
+            ),
         );
         x.new_entity(
             &(81, 87),

@@ -37,10 +37,7 @@ pub struct AnimalPart {
     pub animal_part: AnimalPartType,
 }
 
-#[derive(Clone, Debug, PartialEq)]
-pub struct Animal {
-    pub animal_type: AnimalType,
-}
+
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct MeleeWeapon {
@@ -89,7 +86,7 @@ pub struct Human {
 pub enum EntityType {
     Human(Human),
     Item(ItemType), //věć
-    Monster(Animal),
+    Monster(AnimalType),
     Mebelj(Mebelj),
     Drěvo(WoodType),
     Råstlina(PlantType),

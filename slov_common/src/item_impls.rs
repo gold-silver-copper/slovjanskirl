@@ -117,9 +117,9 @@ impl LizardType {
 
 
 
-impl Animal {
+impl AnimalType {
     pub fn to_displaychar(&self) -> String {
-        let item_str = match &self.animal_type {
+        let item_str = match &self {
             AnimalType::Bird(x) => {
                 format!("{}", &x)
             }
@@ -139,7 +139,7 @@ impl Animal {
         ch
     }
     pub fn to_color(&self) -> Color {
-        match &self.animal_type {
+        match &self {
             AnimalType::Bird(x) => x.to_color(),
             AnimalType::Mammal(x) => x.to_color(),
             AnimalType::Lizard(x) => x.to_color(),
