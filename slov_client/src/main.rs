@@ -314,6 +314,11 @@ pub enum MenuOpen {
     None,
     Take,
     Drop,
+    Inventory,
+    Stats,
+    CursorInteract,
+    PlayerLocationInteract,
+    Attack,
 }
 
 #[derive(Resource)]

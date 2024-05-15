@@ -26,6 +26,7 @@ impl PointDistance for PositionComponent {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct StatsComponent {
+    pub name: String,
     pub health: StatsUnit,       //zdravje
     pub stamina_air: StatsUnit,  //vozduh
     pub sila: StatsUnit,     //sila
@@ -38,6 +39,7 @@ pub struct StatsComponent {
 impl StatsComponent {
     pub fn new(max: &i64) -> StatsComponent {
         StatsComponent {
+            name: String::new(),
             health: max.clone(),
             stamina_air: max.clone(),
             sila: max.clone(),
