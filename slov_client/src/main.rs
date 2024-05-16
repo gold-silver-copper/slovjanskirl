@@ -134,120 +134,133 @@ fn draw_ascii_game(
 }
 
 fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik) {
-    let player_data_copy = masterok.client_world.entity_map.get(&masterok.player_entity_id).unwrap_or(&EntityType::None).clone();
-    if let EntityType::Human(player_data_into) = player_data_copy  {
+    let player_data_copy = masterok
+        .client_world
+        .entity_map
+        .get(&masterok.player_entity_id)
+        .unwrap_or(&EntityType::None)
+        .clone();
+    if let EntityType::Human(player_data_into) = player_data_copy {
+        let local_player_loc = masterok
+            .client_world
+            .ent_loc_index
+            .get(&masterok.player_entity_id)
+            .unwrap_or(&(0, 0));
 
-        let local_player_loc = masterok.client_world.ent_loc_index.get(&masterok.player_entity_id).unwrap_or(&(0,0));
-
-        let visible_ents = masterok.client_world.get_visible_ents_from_ent(&masterok.player_entity_id);
-
-      
-
-        
-
-       
-
-        
-
+        let visible_ents = masterok
+            .client_world
+            .get_visible_ents_from_ent(&masterok.player_entity_id);
 
         let statiki = &player_data_into.current_stats;
         let veci = &player_data_into.equipment;
+        let mut player_inv = player_data_into.inventory.clone();
 
-
-
-        let name_string = format!{"{}",statiki.name};
-        let health_string = format!{"Zdråvje: {}  Dyhańje {}",statiki.health , statiki.stamina_air };
-        let stats_string = format!{"Sila: {}  Bystrost́ {}  Råzum: {} ",statiki.sila , statiki.bystrost , statiki.razum };
+        let name_string = format! {"{}",statiki.name};
+        let health_string =
+            format! {"Zdråvje: {}  Dyhańje {}",statiki.health , statiki.stamina_air };
+        let stats_string = format! {"Sila: {}  Bystrost́ {}  Råzum: {} ",statiki.sila , statiki.bystrost , statiki.razum };
         let mut wep_string = String::new();
         let mut local_items = String::new();
+        let mut inventory_string = String::new();
 
-        if let Some(mel_wep)= &veci.melee_weapon {
+        for funnumb in 1..9 {
+            let ctotik = player_inv.pop().unwrap_or(ItemType::None);
+            let ctotik_string = format! {" {},",ctotik.minimal_string().to_ascii_lowercase()};
 
-            let mel_str = format!{"V rųkah {}", mel_wep.minimal_string().to_ascii_lowercase() };
-            wep_string.push_str(&mel_str);
-
-
-        } else {wep_string.push_str("V rųkah ničto");}
-
-        if let Some(ran_wep)= &veci.ranged_weapon {
-
-            let ran_str = format!{" , za daleky boj je {}", ran_wep.minimal_string().to_ascii_lowercase() };
-            wep_string.push_str(&ran_str);
+            if (ctotik == ItemType::None) && (funnumb==1) {
+                inventory_string.push_str(" ničto...");
+            }
 
 
+
+            if ctotik != ItemType::None {
+                inventory_string.push_str(&ctotik_string);
+            }
         }
 
+        if let Some(mel_wep) = &veci.melee_weapon {
+            let mel_str = format! {"V rųkah {}", mel_wep.minimal_string().to_ascii_lowercase() };
+            wep_string.push_str(&mel_str);
+        } else {
+            wep_string.push_str("V rųkah ničto");
+        }
+
+        if let Some(ran_wep) = &veci.ranged_weapon {
+            let ran_str =
+                format! {", za daleky boj je {}", ran_wep.minimal_string().to_ascii_lowercase() };
+            wep_string.push_str(&ran_str);
+        }
 
         if let Some(current_voxel) = masterok.client_world.get_voxel_at(&local_player_loc) {
+            let floor_string = format! {"{}",&current_voxel.floor};
 
-            let floor_string = format!{"{}",&current_voxel.floor};
-            
-    let  items = masterok.client_world.get_items_at_point(&local_player_loc);
+            let items = masterok.client_world.get_items_at_point(&local_player_loc);
 
-            let funny_string = format!{" {},",floor_string.to_ascii_lowercase()};
+            let funny_string = format! {" {},",floor_string.to_ascii_lowercase()};
             local_items.push_str(&funny_string);
 
             for itemik in items {
-                local_items.push_str(&format!(" {},",itemik.1.minimal_string().to_ascii_lowercase()));
-
+                local_items.push_str(&format!(
+                    " {},",
+                    itemik.1.minimal_string().to_ascii_lowercase()
+                ));
             }
-           
-
-            
         }
 
         let mut visibility_string = String::from("");
 
-        if visible_ents.len() >0 {
-
+        if visible_ents.len() > 0 {
             for eid in visible_ents {
-                let etik = masterok.client_world.entity_map.get(&eid).unwrap_or(&EntityType::None);
+                let etik = masterok
+                    .client_world
+                    .entity_map
+                    .get(&eid)
+                    .unwrap_or(&EntityType::None);
                 if etik != &EntityType::None {
-    
-                    let stringik = format!{" {},", etik.minimal_string().to_ascii_lowercase()};
+                    let stringik = format! {" {},", etik.minimal_string().to_ascii_lowercase()};
                     visibility_string.push_str(&stringik);
                 }
-               
-    
             }
+        } else {
+            visibility_string.push_str(" ničego...");
+        }
 
-
-        } else { visibility_string.push_str("ničego...");}
-        
-        
-           
-   
-      //  let stats_string = format!{"Sila: {}  Bystrost́ {}  Råzum: {} ",veci.melee_weapon , veci.ranged_weapon};
+        //  let stats_string = format!{"Sila: {}  Bystrost́ {}  Råzum: {} ",veci.melee_weapon , veci.ranged_weapon};
         //ty vidisz
         //pod toboj
-        //u tebja jest v rukah nozz . Dla daljnogo boja imajesz luk derevny s zlotymi strelami.  Nedavno osnovany objekty je 
+        //u tebja jest v rukah nozz . Dla daljnogo boja imajesz luk derevny s zlotymi strelami.  Nedavno osnovany objekty je
 
         let mut messages_clone = masterok.messages.clone();
         messages_clone.reverse();
-    
-        let mut messages_to_show = Vec::new();
-        messages_to_show.push(Line::from( health_string));
-        messages_to_show.push(Line::from( stats_string));
-        messages_to_show.push(Line::from( wep_string));
-        
-        messages_to_show.push(Line::from( "Pod tobojų... "));
-        messages_to_show.push(Line::from( local_items));
-        messages_to_show.push(Line::from(  "Ty vidiš... "));
-       
-        messages_to_show.push(Line::from( visibility_string));
 
-        messages_to_show.push(Line::from( ""));
-    
+        let mut messages_to_show = Vec::new();
+        messages_to_show.push(Line::from(health_string));
+        messages_to_show.push(Line::from(stats_string));
+        messages_to_show.push(Line::from(""));
+        messages_to_show.push(Line::from(wep_string));
+        messages_to_show.push(Line::from("Věči...."));
+
+        messages_to_show.push(Line::from(inventory_string));
+
+        messages_to_show.push(Line::from("Pod tobojų... "));
+        messages_to_show.push(Line::from(local_items));
+        messages_to_show.push(Line::from("Ty vidiš.... "));
+
+        messages_to_show.push(Line::from(visibility_string));
+       
+
+        messages_to_show.push(Line::from(""));
+
         for massage in messages_clone {
             messages_to_show.push(Line::from(massage));
         }
-    
+
         terminal
             .draw(|frame| {
                 let area = frame.size();
-    
+
                 //neccesary beccause drawing is from the top
-    
+
                 frame.render_widget(
                     Paragraph::new(messages_to_show)
                         .on_black()
@@ -256,10 +269,7 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
                 );
             })
             .expect("epic fail");
-
-
     }
-   
 }
 
 fn draw_take_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Masterik) {
@@ -273,11 +283,7 @@ fn draw_take_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Master
 
     for numb in 1..9 {
         let meowmeow = items.pop();
-        let meownyaa: (u64, ItemType) = meowmeow.unwrap_or((
-            0,
-            ItemType::None
-            ,
-        ));
+        let meownyaa: (u64, ItemType) = meowmeow.unwrap_or((0, ItemType::None));
 
         if meownyaa.1 != ItemType::None {
             masterok
@@ -326,8 +332,7 @@ fn draw_drop_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Master
     }
 
     for numb in 1..9 {
-        let itimik = items.pop().unwrap_or( ItemType::None
-        );
+        let itimik = items.pop().unwrap_or(ItemType::None);
         if itimik != ItemType::None {
             let item_str = format!("{}    {}", numb, &itimik.minimal_string());
             let litem: ListItem = item_str.into();
@@ -389,7 +394,7 @@ impl Default for BevyTerminal<RataguiBackend> {
 struct Masterik {
     player_entity_id: EntityID,
     player_account_id: AccountID,
-  
+
     messages: Vec<String>,
     client_world: MyWorld,
     is_logged_in: bool,
@@ -402,7 +407,7 @@ impl Default for Masterik {
         Self {
             player_entity_id: 0,
             player_account_id: 0,
-  
+
             messages: Vec::new(),
             client_world: MyWorld::new_test(),
             is_logged_in: false,
@@ -446,7 +451,6 @@ fn local_world_process(mut masterok: ResMut<Masterik>) {
     if let Some(meow) = boop {
         //generate text messages from these action packets, then push them to the player message viewer
         let packet_actions = meow.action_info;
-       
 
         for act in packet_actions {
             let zzz = masterok
@@ -466,7 +470,6 @@ fn create_local_account(mut masterok: ResMut<Masterik>) {
     let local_info = masterok.client_world.make_account();
     masterok.player_account_id = local_info.0;
     masterok.player_entity_id = local_info.1;
-   
 }
 
 fn keyboard_input_system(
@@ -541,8 +544,7 @@ fn keyboard_input_system(
                 masterok
                     .button_itemstruct_map
                     .get(&1)
-                    .unwrap_or(&ItemType::None
-                    )
+                    .unwrap_or(&ItemType::None)
                     .clone(),
             );
         }
