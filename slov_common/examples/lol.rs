@@ -3,6 +3,16 @@ use slov_common::*;
 
 fn main() {
 
+    let kost = "kost";
+    let dom = "dom";
+    let kostik = "kost́";
+
+    println!(" kost is {:#?}", ISV::guess_gender(kost));
+    println!(" dom is {:#?}", ISV::guess_gender(dom));
+    println!(" kostik is {:#?}", ISV::guess_gender(kostik));
+
+
+
     /*
 
       let boop: MyPoint = (5, 5);

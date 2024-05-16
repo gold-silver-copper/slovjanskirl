@@ -147,6 +147,29 @@ pub fn last_n_chars(word: &str, n: usize) -> String {
     }
 }
 
+pub fn guess_gender(word: &str) -> Gender {
+
+    let last_one = ISV::last_n_chars(word, 1);
+
+    let last_three = ISV::last_n_chars(word, 3);
+    let last_five = ISV::last_n_chars(word, 5);
+    println!("last three for {} are {}", word, last_three);
+    println!("last five for {} are {}", word, last_five);
+
+    if  (last_five == String::from("ost́")) || (last_one == "a")  {
+
+        return Gender::Feminine;
+    }
+    else if (last_one == "o") || (last_one == "e") {
+        return Gender::Neuter;
+    }
+    else {return Gender::Masculine;}
+
+
+
+
+}
+
 
     
 
