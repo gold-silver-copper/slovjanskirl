@@ -118,6 +118,22 @@ pub enum EntityType {
     None,
 }
 
+impl EntityType {
+
+    pub fn minimal_string(&self) -> String {
+        match self {
+            EntityType::Human(x) => {x.current_stats.name.clone()}
+            EntityType::Item(x) => {x.minimal_string()}
+            EntityType::Monster(x) => {x.minimal_string()}
+            EntityType::Mebelj(x) => {x.minimal_string()}
+            EntityType::Råstlina(x) => {x.minimal_string()}
+            EntityType::None => String::new()
+        }
+
+
+    }
+}
+
 #[derive(Clone, Debug, PartialEq)]
 pub struct Mebelj {
    pub mebelj_type: MebeljType,

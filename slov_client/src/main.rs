@@ -151,7 +151,7 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
                 let etik = masterok.client_world.entity_map.get(&eid).unwrap_or(&EntityType::None);
                 if etik != &EntityType::None {
     
-                    let stringik = format!{"{} ", etik};
+                    let stringik = format!{"{}, ", etik.minimal_string().to_ascii_lowercase()};
                     visibility_string.push_str(&stringik);
                 }
                
@@ -269,7 +269,7 @@ fn draw_take_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Master
                 .button_entityid_map
                 .insert(numb.clone(), meownyaa.0.clone());
 
-            let item_str = format!("{}    {}", numb, &meownyaa.1.to_title());
+            let item_str = format!("{}    {}", numb, &meownyaa.1.minimal_string());
             let litem: ListItem = item_str.into();
             listitemvec.push(litem);
         }
@@ -314,7 +314,7 @@ fn draw_drop_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Master
         let itimik = items.pop().unwrap_or( ItemType::None
         );
         if itimik != ItemType::None {
-            let item_str = format!("{}    {}", numb, &itimik.to_title());
+            let item_str = format!("{}    {}", numb, &itimik.minimal_string());
             let litem: ListItem = item_str.into();
             listitemvec.push(litem);
 

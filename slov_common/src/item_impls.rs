@@ -117,8 +117,9 @@ impl LizardType {
 
 
 impl AnimalType {
-    pub fn to_displaychar(&self) -> String {
-        let item_str = match &self {
+
+    pub fn minimal_string(&self) -> String {
+        match &self {
             AnimalType::Bird(x) => {
                 format!("{}", &x)
             }
@@ -131,7 +132,12 @@ impl AnimalType {
             AnimalType::Fish(x) => {
                 format!("{}", &x)
             }
-        };
+        }
+    }
+
+
+    pub fn to_displaychar(&self) -> String {
+        let item_str = self.minimal_string();
 
         // let item_str = format!("{}", self.item_type);
         let ch = item_str.chars().nth(0).unwrap().to_string();
@@ -178,7 +184,7 @@ impl RangedWeapon {
 
 impl ItemType {
     pub fn to_displaychar(&self) -> String {
-        let item_str = self.to_title();
+        let item_str = self.minimal_string();
 
         // let item_str = format!("{}", self.item_type);
         let ch = item_str.chars().nth(0).unwrap().to_lowercase().to_string();
@@ -193,7 +199,7 @@ impl ItemType {
             ItemType::None => Color::LightRed,
         }
     }
-    pub fn to_title(&self) -> String {
+    pub fn minimal_string(&self) -> String {
         let item_str = match &self {
             ItemType::Melee(x) => {
                 format!("{}", &x.weapon_type)
@@ -231,6 +237,15 @@ impl PlantType {
             PlantType::Drěvo(x) => "t".into(),
             PlantType::Kust(x) => "*".into(),
             PlantType::Trava(x) => x.to_displaychar(),
+           
+        }
+    }
+    pub fn minimal_string(&self) -> String {
+        match self {
+         
+            PlantType::Drěvo(x) => {format!{"{}",x}},
+            PlantType::Kust(x) => {format!{"{}",x}},
+            PlantType::Trava(x) => {format!{"{}",x}},
            
         }
     }
@@ -282,6 +297,10 @@ impl EntityType {
 }
 
 impl Mebelj {
+    pub fn minimal_string(&self) -> String {
+        format!("{}",self.mebelj_type)
+    }
+    
     pub fn to_displaychar(&self) -> String {
         match &self.mebelj_type {
             MebeljType::Stěna => "#".into(),

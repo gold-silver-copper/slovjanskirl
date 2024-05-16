@@ -361,8 +361,11 @@ impl MyWorld {
                     && (0 < ent_relative.0)
                     && (ent_relative.0 < render_width as i64)
                 {
-                    voxel_grid[ent_relative.1 as usize][ent_relative.0 as usize].0 = ent_graphic.0;
-                    voxel_grid[ent_relative.1 as usize][ent_relative.0 as usize].1 = ent_graphic.1;
+                    if voxel_grid[ent_relative.1 as usize][ent_relative.0 as usize].0 != String::from("@") {
+                        voxel_grid[ent_relative.1 as usize][ent_relative.0 as usize].0 = ent_graphic.0;
+                        voxel_grid[ent_relative.1 as usize][ent_relative.0 as usize].1 = ent_graphic.1;
+                    }
+                  
                 }
             }
 
