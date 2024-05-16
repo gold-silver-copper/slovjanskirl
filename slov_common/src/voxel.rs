@@ -20,45 +20,66 @@ impl Roof {
 }
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum Floor {
-    Air,
-    Dirt,
-    Water,
-    LightGrass,
-    DarkGrass,
-    Sand,
+    Vȯzduh, //air
+    Zemja, //earth
+    Voda, //water
+    Trava, // grass
+    Burjan, //grass type
+    Kovylj, //grass type
+    Pěsȯk, //sand
+    Mělj, //sandbank
+    Il, //clay
+    Glina, //clay
+    Blåto, //bog
+
 }
 
 impl Floor {
     pub fn to_color(&self) -> Color {
         match &self {
-            Self::Air => Color::Rgb(239, 240, 235),
-            Self::Dirt => Color::Rgb(155, 118, 83),
-            Self::Water => Color::Rgb(15, 94, 156),
-            Self::LightGrass => Color::Rgb(65, 152, 1),
-            Self::DarkGrass => Color::Rgb(19, 109, 21),
-            Self::Sand => Color::Rgb(242, 210, 169),
+            Self::Vȯzduh => Color::Rgb(239, 240, 235),
+            Self::Zemja => Color::Rgb(155, 118, 83),
+            Self::Voda => Color::Rgb(15, 94, 156),
+            Self::Trava => Color::Rgb(65, 152, 1),
+            Self::Burjan => Color::Rgb(19, 109, 21),
+            Self::Kovylj => Color::Rgb(30, 115, 40),
+            Self::Pěsȯk => Color::Rgb(242, 210, 169),
+            Self::Mělj => Color::Rgb(232, 200, 159),
+            Self::Il => Color::Rgb(135,133,131),
+            Self::Glina => Color::Rgb(145,143,141),
+            Self::Blåto => Color::Rgb(155,153,161),
         }
     }
 
     pub fn to_displaychar(&self) -> String {
         match &self {
-            Self::Air => " ".into(),
-            Self::Dirt => "%".into(),
-            Self::Water => "~".into(),
-            Self::LightGrass => ",".into(),
-            Self::DarkGrass => "\"".into(),
-            Self::Sand => ".".into(),
+            Self::Vȯzduh => " ".into(),
+            Self::Zemja => "%".into(),
+            Self::Voda => "~".into(),
+            Self::Trava => ",".into(),
+            Self::Burjan => ";".into(),
+            Self::Kovylj => ":".into(),
+            Self::Pěsȯk => ".".into(),
+            Self::Mělj => ".".into(),
+            Self::Il => ".".into(),
+            Self::Glina => ".".into(),
+            Self::Blåto => ".".into(),
         }
     }
 
     pub fn to_front_color(&self) -> Color {
         match &self {
-            Self::Air => Color::Rgb(200, 240, 235),
-            Self::Dirt => Color::Rgb(130, 118, 83),
-            Self::Water => Color::Rgb(40, 94, 156),
-            Self::LightGrass => Color::Rgb(40, 152, 1),
-            Self::DarkGrass => Color::Rgb(20, 130, 21),
-            Self::Sand => Color::Rgb(222, 210, 169),
+            Self::Vȯzduh => Color::Rgb(229, 240, 235),
+            Self::Zemja => Color::Rgb(145, 118, 83),
+            Self::Voda => Color::Rgb(10, 84, 146),
+            Self::Trava => Color::Rgb(65, 142, 1),
+            Self::Burjan => Color::Rgb(19, 99, 21),
+            Self::Kovylj => Color::Rgb(30, 105, 40),
+            Self::Pěsȯk => Color::Rgb(242, 200, 169),
+            Self::Mělj => Color::Rgb(232, 190, 159),
+            Self::Il => Color::Rgb(135,123,131),
+            Self::Glina => Color::Rgb(145,133,141),
+            Self::Blåto => Color::Rgb(155,143,161),
         }
     }
 }

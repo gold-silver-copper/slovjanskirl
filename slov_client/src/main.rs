@@ -171,7 +171,9 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
 
         if let Some(current_voxel) = masterok.client_world.get_voxel_at(&local_player_loc) {
 
-            let funny_string = format!{"Pod tobojų {}",&current_voxel.floor};
+            let floor_string = format!{"{}",&current_voxel.floor};
+
+            let funny_string = format!{"Pod tobojų {}",floor_string.to_ascii_lowercase()};
             local_items.push_str(&funny_string);
 
             

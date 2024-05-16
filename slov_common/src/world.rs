@@ -170,15 +170,15 @@ impl MyWorld {
             for y in 0..300 {
                 let val = boop.get_value(x as usize, y as usize);
                 let floor = if val > 0.4 {
-                    Floor::DarkGrass
+                    Floor::Burjan
                 } else if val > -0.1 {
-                    Floor::LightGrass
+                    Floor::Trava
                 } else if val > -0.2 {
-                    Floor::Dirt
+                    Floor::Zemja
                 } else if val > -0.3 {
-                    Floor::Sand
+                    Floor::Pěsȯk
                 } else {
-                    Floor::Water
+                    Floor::Voda
                 };
 
                 batchvec.push(Voxel {
