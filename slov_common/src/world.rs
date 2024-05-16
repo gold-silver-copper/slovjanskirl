@@ -260,8 +260,24 @@ impl MyWorld {
                 Person::Third
             };
         */
-        let abc = format!("HELLOᐂᐂᐂ𓀀𓀀𓀀 {:#?}", &act_packet.action_location);
-        abc
+        let mut subject_pronoun = String::from("Ty");
+        if local_player_id != &act_packet.action_subject {
+            let nomik = self.entity_map.get(&act_packet.action_subject).unwrap_or(&EntityType::None);
+
+           subject_pronoun  = nomik.minimal_string();
+
+        }
+        let meowik = match &act_packet.action {
+            ActionType::Drop(x) => format!(" brosajesz {}",x.minimal_string().to_lowercase()),
+            ActionType::Go(x) => format!(" idesz {}",""),
+            _ => format!(" jhhas {}",""),
+
+        };
+        subject_pronoun.push_str(&meowik);
+        
+        let abc = format!(" {:#?}", &act_packet.action_location);
+        subject_pronoun.push_str(&abc);
+        subject_pronoun
     }
 
     pub fn get_visible_ents_from_ent(  &self,
