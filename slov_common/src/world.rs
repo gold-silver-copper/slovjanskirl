@@ -267,7 +267,7 @@ impl MyWorld {
     pub fn get_visible_ents_from_ent(  &self,
         ent: &EntityID,) -> Vec<EntityID>{
 
-            if let Some(e_pos) = self.ent_loc_index.get(ent) {
+            if let Some(e_pos) = self.ent_loc_index.get(&ent) {
 
                 let render_width = 100;
                 let render_height = 100;
@@ -280,7 +280,11 @@ impl MyWorld {
                 let local_ents = self.entity_tree.locate_in_envelope(&same_z);
 
                 for entt in local_ents {
-                    bop.push(entt.clone());
+                    if &entt.entity_id != ent {
+                        bop.push(entt.clone());
+
+                    }
+                 
                 }
 
                 bop.sort_by(|a, b| a.distance_2(e_pos).cmp(&b.distance_2(e_pos)));
