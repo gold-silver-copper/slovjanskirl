@@ -143,23 +143,7 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
 
       
 
-        let mut visibility_string = String::from("Ty vidiš... ");
-
-        if visible_ents.len() >0 {
-
-            for eid in visible_ents {
-                let etik = masterok.client_world.entity_map.get(&eid).unwrap_or(&EntityType::None);
-                if etik != &EntityType::None {
-    
-                    let stringik = format!{"{}, ", etik.minimal_string().to_ascii_lowercase()};
-                    visibility_string.push_str(&stringik);
-                }
-               
-    
-            }
-
-
-        } else { visibility_string.push_str("ničego...");}
+        
 
        
 
@@ -193,15 +177,42 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
 
         }
 
+
         if let Some(current_voxel) = masterok.client_world.get_voxel_at(&local_player_loc) {
 
             let floor_string = format!{"{}",&current_voxel.floor};
+            
+    let  items = masterok.client_world.get_items_at_point(&local_player_loc);
 
-            let funny_string = format!{"Pod tobojų {}",floor_string.to_ascii_lowercase()};
+            let funny_string = format!{" {},",floor_string.to_ascii_lowercase()};
             local_items.push_str(&funny_string);
+
+            for itemik in items {
+                local_items.push_str(&format!(" {},",itemik.1.minimal_string().to_ascii_lowercase()));
+
+            }
+           
 
             
         }
+
+        let mut visibility_string = String::from("");
+
+        if visible_ents.len() >0 {
+
+            for eid in visible_ents {
+                let etik = masterok.client_world.entity_map.get(&eid).unwrap_or(&EntityType::None);
+                if etik != &EntityType::None {
+    
+                    let stringik = format!{" {},", etik.minimal_string().to_ascii_lowercase()};
+                    visibility_string.push_str(&stringik);
+                }
+               
+    
+            }
+
+
+        } else { visibility_string.push_str("ničego...");}
         
         
            
@@ -218,7 +229,11 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
         messages_to_show.push(Line::from( health_string));
         messages_to_show.push(Line::from( stats_string));
         messages_to_show.push(Line::from( wep_string));
+        
+        messages_to_show.push(Line::from( "Pod tobojų... "));
         messages_to_show.push(Line::from( local_items));
+        messages_to_show.push(Line::from(  "Ty vidiš... "));
+       
         messages_to_show.push(Line::from( visibility_string));
 
         messages_to_show.push(Line::from( ""));
