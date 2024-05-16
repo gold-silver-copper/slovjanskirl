@@ -1,4 +1,4 @@
-use bevy::{input::keyboard::Key, prelude::*};
+use bevy::{input::keyboard::Key, prelude::*, render::view::visibility};
 
 use bevy_egui::{
     egui::{self, Frame},
@@ -126,7 +126,7 @@ fn draw_ascii_game(
             frame.render_widget(
                 Paragraph::new(Text::from(render_lines))
                     .on_black()
-                    .block(Block::new().title("game").borders(Borders::ALL)),
+                    .block(Block::new().title("Igra").borders(Borders::ALL)),
                 area,
             );
         })
@@ -138,6 +138,30 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
     if let EntityType::Human(player_data_into) = player_data_copy  {
 
         let local_player_loc = masterok.client_world.ent_loc_index.get(&masterok.player_entity_id).unwrap_or(&(0,0));
+
+        let visible_ents = masterok.client_world.get_visible_ents_from_ent(&masterok.player_entity_id);
+
+      
+
+        let mut visibility_string = String::from("Ty vidiš... ");
+
+        if visible_ents.len() >0 {
+
+            for eid in visible_ents {
+                let etik = masterok.client_world.entity_map.get(&eid).unwrap_or(&EntityType::None);
+                if etik != &EntityType::None {
+    
+                    let stringik = format!{"{} ", etik};
+                    visibility_string.push_str(&stringik);
+                }
+               
+    
+            }
+
+
+        } else { visibility_string.push_str("ničego...");}
+
+       
 
         
 
@@ -195,6 +219,7 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
         messages_to_show.push(Line::from( stats_string));
         messages_to_show.push(Line::from( wep_string));
         messages_to_show.push(Line::from( local_items));
+        messages_to_show.push(Line::from( visibility_string));
 
         messages_to_show.push(Line::from( ""));
     

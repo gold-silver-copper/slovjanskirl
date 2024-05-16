@@ -264,6 +264,42 @@ impl MyWorld {
         abc
     }
 
+    pub fn get_visible_ents_from_ent(  &self,
+        ent: &EntityID,) -> Vec<EntityID>{
+
+            if let Some(e_pos) = self.ent_loc_index.get(ent) {
+
+                let render_width = 100;
+                let render_height = 100;
+                let w_radius = render_width / 2;
+                let h_radius = render_height / 2;
+                let same_z = locate_square(e_pos, w_radius as i64, h_radius as i64);
+
+                let mut bop = Vec::new();
+    
+                let local_ents = self.entity_tree.locate_in_envelope(&same_z);
+
+                for entt in local_ents {
+                    bop.push(entt.clone());
+                }
+
+                bop.sort_by(|a, b| a.distance_2(e_pos).cmp(&b.distance_2(e_pos)));
+
+                let meo = bop.iter().map(|x| x.entity_id).collect();
+
+                
+
+                return meo;
+
+            }
+
+            else {return Vec::new();}
+
+
+
+
+        }
+
     pub fn create_client_render_packet_for_entity(
         &self,
         ent: &EntityID,
