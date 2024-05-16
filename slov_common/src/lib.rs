@@ -23,6 +23,9 @@ pub use actions::*;
 mod item_types;
 pub use item_types::*;
 
+mod interslavic;
+pub use interslavic::*;
+
 mod item_monads;
 pub use item_monads::*;
 mod item_impls;
