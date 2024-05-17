@@ -109,6 +109,7 @@ pub enum LizardType {
     Jaščer,
     Iguana,
     Vųž,
+    Žȯlv,
 }
 
 #[derive(Clone, Debug, Display, PartialEq)]

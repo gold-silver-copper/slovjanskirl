@@ -151,10 +151,10 @@ impl ISV {
         let last_one = ISV::last_n_chars(word, 1);
 
         let last_three = ISV::last_n_chars(word, 3);
-        let last_four = ISV::last_n_chars(word, 4);
+       
         assert_eq!("ost́", ISV::last_n_chars("kost́", 4));
 
-        if (last_four == String::from("ost́")) || (last_one == "a") || (last_one == "i") {
+        if  ISV::is_ost_class(word) || (last_one == "a") || (last_one == "i") {
             return Gender::Feminine;
         } else if (last_one == "o") || (last_one == "e") {
             return Gender::Neuter;
@@ -165,6 +165,12 @@ impl ISV {
 
     pub fn stem_of_word_is_soft(word: &str) -> bool {
         ISV::ends_with_soft_consonant(&ISV::get_stem(word))
+    }
+
+    pub fn is_ost_class(word: &str) -> bool {
+        let last_four = ISV::last_n_chars(word, 4);
+        last_four == String::from("ost́")
+
     }
 
     pub fn get_stem(word: &str) -> String {
@@ -201,6 +207,50 @@ impl ISV {
                 } else {
                     return format!("{}{}", word_stem, "o");
                 }
+            }
+        }
+    }
+    pub fn gen_sg(word: &str) -> String {
+        let word_gender = ISV::guess_gender(word);
+        let word_is_animate = ISV::noun_is_animate(word);
+        let word_stem_is_soft = ISV::stem_of_word_is_soft(word);
+        let word_stem = ISV::get_stem(word);
+
+        match word_gender {
+            Gender::Masculine => {
+                return format!("{}{}", word_stem, "a");
+            }
+            Gender::Feminine => {
+                if word_stem_is_soft {
+                    return format!("{}{}", word_stem, "e");
+                } else {
+                    return format!("{}{}", word_stem, "y");
+                }
+            }
+            Gender::Neuter => {
+                return format!("{}{}", word_stem, "a");
+            }
+        }
+    }
+    pub fn dat_sg(word: &str) -> String {
+        let word_gender = ISV::guess_gender(word);
+        let word_is_animate = ISV::noun_is_animate(word);
+        let word_stem_is_soft = ISV::stem_of_word_is_soft(word);
+        let word_stem = ISV::get_stem(word);
+
+        match word_gender {
+            Gender::Masculine => {
+                return format!("{}{}", word_stem, "u");
+            }
+            Gender::Feminine => {
+                if word_stem_is_soft {
+                    return format!("{}{}", word_stem, "ě");
+                } else {
+                    return format!("{}{}", word_stem, "i");
+                }
+            }
+            Gender::Neuter => {
+                return format!("{}{}", word_stem, "a");
             }
         }
     }
