@@ -23,12 +23,14 @@ fn main() {
 
     println!("{}", ISV::dat_sg("dom"));
     println!("{}", ISV::dat_sg("deva"));
+    println!("{}", ISV::dat_sg("pivo"));
     println!("{}", ISV::dat_sg("masina"));
     
     println!("{}", ISV::dat_sg("jelenj"));
 
     println!("{}", ISV::ins_sg("dom"));
     println!("{}", ISV::ins_sg("deva"));
+    println!("{}", ISV::ins_sg("pivo"));
     println!("{}", ISV::ins_sg("masina"));
     
     println!("{}", ISV::ins_sg("jelenj"));
