@@ -175,6 +175,36 @@ impl ISV {
         }
     }
 
+    pub fn nom_sg(word: &str) -> String {
+        word.into()
+    }
+    pub fn acc_sg(word: &str) -> String {
+        let word_gender = ISV::guess_gender(word);
+        let word_is_animate = ISV::noun_is_animate(word);
+        let word_stem_is_soft = ISV::stem_of_word_is_soft(word);
+        let word_stem = ISV::get_stem(word);
+
+        match word_gender {
+            Gender::Masculine => {
+                if word_is_animate {
+                    return format!("{}{}", word_stem, "a");
+                } else {
+                    return format!("{}{}", word_stem, "");
+                }
+            }
+            Gender::Feminine => {
+                return format!("{}{}", word_stem, "u");
+            }
+            Gender::Neuter => {
+                if word_stem_is_soft {
+                    return format!("{}{}", word_stem, "e");
+                } else {
+                    return format!("{}{}", word_stem, "o");
+                }
+            }
+        }
+    }
+
     pub fn noun_is_animate(word: &str) -> bool {
         // It's simple to iterate over the variants of an enum.
         for animal in MammalType::iter() {

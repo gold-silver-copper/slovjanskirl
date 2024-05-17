@@ -15,7 +15,11 @@ fn main() {
         "jablanj is animate? - {:#?}",
         ISV::noun_is_animate("jablanj")
     );
-    ISV::noun_is_animate(kost);
+    println!("{}", ISV::acc_sg("dom"));
+    println!("{}", ISV::acc_sg("deva"));
+    println!("{}", ISV::acc_sg("masina"));
+    
+    println!("{}", ISV::acc_sg("jelenj"));
 
     /*
 
