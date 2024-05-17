@@ -199,7 +199,9 @@ impl ISV {
                 }
             }
             Gender::Feminine => {
-                return format!("{}{}", word_stem, "u");
+                if ISV::is_ost_class(word) {return format!("{}{}", word_stem, "");}
+                else {return format!("{}{}", word_stem, "u");}
+                
             }
             Gender::Neuter => {
                 if word_stem_is_soft {
@@ -221,6 +223,7 @@ impl ISV {
                 return format!("{}{}", word_stem, "a");
             }
             Gender::Feminine => {
+                if ISV::is_ost_class(word) {return format!("{}{}", word_stem, "i");}
                 if word_stem_is_soft {
                     return format!("{}{}", word_stem, "e");
                 } else {
@@ -243,14 +246,65 @@ impl ISV {
                 return format!("{}{}", word_stem, "u");
             }
             Gender::Feminine => {
+                if ISV::is_ost_class(word) {return format!("{}{}", word_stem, "i");}
                 if word_stem_is_soft {
-                    return format!("{}{}", word_stem, "ě");
-                } else {
                     return format!("{}{}", word_stem, "i");
+                } else {
+                    return format!("{}{}", word_stem, "ě");
                 }
             }
             Gender::Neuter => {
-                return format!("{}{}", word_stem, "a");
+                return format!("{}{}", word_stem, "u");
+            }
+        }
+    }
+    pub fn ins_sg(word: &str) -> String {
+        let word_gender = ISV::guess_gender(word);
+        let word_is_animate = ISV::noun_is_animate(word);
+        let word_stem_is_soft = ISV::stem_of_word_is_soft(word);
+        let word_stem = ISV::get_stem(word);
+
+        match word_gender {
+            Gender::Masculine => {
+                if word_stem_is_soft {return format!("{}{}", word_stem, "em");}
+                else{return format!("{}{}", word_stem, "om");}
+                
+            }
+            Gender::Feminine => {
+                if ISV::is_ost_class(word) {return format!("{}{}", word_stem, "ju");}
+                if word_stem_is_soft {
+                    return format!("{}{}", word_stem, "eju");
+                } else {
+                    return format!("{}{}", word_stem, "oju");
+                }
+            }
+            Gender::Neuter => {
+                if word_stem_is_soft {return format!("{}{}", word_stem, "em");}
+                else{return format!("{}{}", word_stem, "om");}
+            }
+        }
+    }
+    pub fn loc_sg(word: &str) -> String {
+        let word_gender = ISV::guess_gender(word);
+        let word_is_animate = ISV::noun_is_animate(word);
+        let word_stem_is_soft = ISV::stem_of_word_is_soft(word);
+        let word_stem = ISV::get_stem(word);
+
+        match word_gender {
+            Gender::Masculine => {
+                return format!("{}{}", word_stem, "u");
+                
+            }
+            Gender::Feminine => {
+                if ISV::is_ost_class(word) {return format!("{}{}", word_stem, "i");}
+                if word_stem_is_soft {
+                    return format!("{}{}", word_stem, "i");
+                } else {
+                    return format!("{}{}", word_stem, "ě");
+                }
+            }
+            Gender::Neuter => {
+                return format!("{}{}", word_stem, "u");
             }
         }
     }

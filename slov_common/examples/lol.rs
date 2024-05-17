@@ -21,6 +21,18 @@ fn main() {
     
     println!("{}", ISV::acc_sg("jelenj"));
 
+    println!("{}", ISV::dat_sg("dom"));
+    println!("{}", ISV::dat_sg("deva"));
+    println!("{}", ISV::dat_sg("masina"));
+    
+    println!("{}", ISV::dat_sg("jelenj"));
+
+    println!("{}", ISV::ins_sg("dom"));
+    println!("{}", ISV::ins_sg("deva"));
+    println!("{}", ISV::ins_sg("masina"));
+    
+    println!("{}", ISV::ins_sg("jelenj"));
+
     /*
 
       let boop: MyPoint = (5, 5);

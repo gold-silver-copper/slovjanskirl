@@ -217,7 +217,7 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
                     .get(&eid)
                     .unwrap_or(&EntityType::None);
                 if etik != &EntityType::None {
-                    let stringik = format! {" {},", etik.minimal_string().to_lowercase()};
+                    let stringik = format! {" {},", ISV::acc_sg( &etik.minimal_string().to_lowercase()) };
                     visibility_string.push_str(&stringik);
                 }
             }
