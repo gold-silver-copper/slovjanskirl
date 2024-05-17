@@ -140,10 +140,24 @@ pub fn iotation_merge(root: &str, suffix: &str) -> String {
     }
 }
 pub fn last_n_chars(word: &str, n: usize) -> String {
+
+    let mut word_copy = String::from(word.clone());
+
+
     if n <= word.len() {
-        word[word.len() - n..].to_string()
+
+        let mut meowstring = String::new(); 
+        
+        for meow in 0..n {
+
+            meowstring.push(word_copy.pop().unwrap_or(' '));
+
+
+        }
+        let meowka: String = meowstring.chars().rev().collect();
+        meowka
     } else {
-        word.to_string()
+        word_copy
     }
 }
 
@@ -152,11 +166,12 @@ pub fn guess_gender(word: &str) -> Gender {
     let last_one = ISV::last_n_chars(word, 1);
 
     let last_three = ISV::last_n_chars(word, 3);
-    let last_five = ISV::last_n_chars(word, 5);
+    let last_four = ISV::last_n_chars(word, 4);
+    assert_eq!("ost́",ISV::last_n_chars("kost́", 4));
     println!("last three for {} are {}", word, last_three);
-    println!("last five for {} are {}", word, last_five);
+    println!("last five for {} are {}", word, last_four);
 
-    if  (last_five == String::from("ost́")) || (last_one == "a")  {
+    if  (last_four == String::from("ost́")) || (last_one == "a")  {
 
         return Gender::Feminine;
     }
@@ -170,6 +185,28 @@ pub fn guess_gender(word: &str) -> Gender {
 
 }
 
+pub fn stem_of_word_is_soft(word: &str) -> bool {
+    
+
+    ISV::ends_with_soft_consonant(&ISV::get_stem(word))
+
+
+}
+
+
+pub fn get_stem(word: &str) -> String {
+
+    
+
+    if ISV::is_vowel( ISV::last_in_slice(word)) {
+
+        return String::from(ISV::slice_without_last(word));
+
+
+    } 
+    else {return String::from(word);}
+
+}
 
     
 
