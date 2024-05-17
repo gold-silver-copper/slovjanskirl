@@ -165,7 +165,7 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
 
         for funnumb in 1..9 {
             let ctotik = player_inv.pop().unwrap_or(ItemType::None);
-            let ctotik_string = format! {" {},",ctotik.minimal_string().to_ascii_lowercase()};
+            let ctotik_string = format! {" {},",ctotik.minimal_string().to_lowercase()};
 
             if (ctotik == ItemType::None) && (funnumb==1) {
                 inventory_string.push_str(" ničto...");
@@ -179,7 +179,7 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
         }
 
         if let Some(mel_wep) = &veci.melee_weapon {
-            let mel_str = format! {"V rųkah {}", mel_wep.minimal_string().to_ascii_lowercase() };
+            let mel_str = format! {"V rųkah {}", mel_wep.minimal_string().to_lowercase() };
             wep_string.push_str(&mel_str);
         } else {
             wep_string.push_str("V rųkah ničto");
@@ -187,7 +187,7 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
 
         if let Some(ran_wep) = &veci.ranged_weapon {
             let ran_str =
-                format! {", za daleky boj je {}", ran_wep.minimal_string().to_ascii_lowercase() };
+                format! {", za daleky boj je {}", ran_wep.minimal_string().to_lowercase() };
             wep_string.push_str(&ran_str);
         }
 
@@ -196,13 +196,13 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
 
             let items = masterok.client_world.get_items_at_point(&local_player_loc);
 
-            let funny_string = format! {" {},",floor_string.to_ascii_lowercase()};
+            let funny_string = format! {" {},",floor_string.to_lowercase()};
             local_items.push_str(&funny_string);
 
             for itemik in items {
                 local_items.push_str(&format!(
                     " {},",
-                    itemik.1.minimal_string().to_ascii_lowercase()
+                    itemik.1.minimal_string().to_lowercase()
                 ));
             }
         }
@@ -217,7 +217,7 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
                     .get(&eid)
                     .unwrap_or(&EntityType::None);
                 if etik != &EntityType::None {
-                    let stringik = format! {" {},", etik.minimal_string().to_ascii_lowercase()};
+                    let stringik = format! {" {},", etik.minimal_string().to_lowercase()};
                     visibility_string.push_str(&stringik);
                 }
             }

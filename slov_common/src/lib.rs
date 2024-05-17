@@ -42,3 +42,5 @@ pub use rstar::{Envelope, PointDistance, RTree, RTreeObject, SelectionFunction, 
 pub use std::collections::HashMap;
 pub use std::collections::HashSet;
 pub use strum::Display;
+use strum::EnumIter;
+use strum::IntoEnumIterator;

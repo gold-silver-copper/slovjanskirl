@@ -10,19 +10,16 @@ impl SolidMaterial {
     }
 }
 
-
-
 impl FabricMaterial {
     pub fn to_color(&self) -> Color {
         match &self {
             Self::Tkanina(x) => x.to_color(),
-           Self::Koža(x) => x.to_color(),
-           
+            Self::Koža(x) => x.to_color(),
+
             Self::Lancuh(x) => x.to_color(),
         }
     }
 }
-
 
 impl WoodType {
     pub fn to_color(&self) -> Color {
@@ -48,7 +45,6 @@ impl StoneType {
     }
 }
 
-
 impl GrassType {
     pub fn to_color(&self) -> Color {
         match &self {
@@ -66,7 +62,6 @@ impl GrassType {
     }
 }
 
-
 impl BushType {
     pub fn to_color(&self) -> Color {
         match &self {
@@ -74,8 +69,6 @@ impl BushType {
         }
     }
 }
-
-
 
 impl MammalType {
     pub fn to_color(&self) -> Color {
@@ -85,7 +78,6 @@ impl MammalType {
     }
 }
 
-
 impl FishType {
     pub fn to_color(&self) -> Color {
         match &self {
@@ -93,8 +85,6 @@ impl FishType {
         }
     }
 }
-
-
 
 impl BirdType {
     pub fn to_color(&self) -> Color {
@@ -104,7 +94,6 @@ impl BirdType {
     }
 }
 
-
 impl LizardType {
     pub fn to_color(&self) -> Color {
         match &self {
@@ -113,11 +102,7 @@ impl LizardType {
     }
 }
 
-
-
-
 impl AnimalType {
-
     pub fn minimal_string(&self) -> String {
         match &self {
             AnimalType::Bird(x) => {
@@ -134,7 +119,6 @@ impl AnimalType {
             }
         }
     }
-
 
     pub fn to_displaychar(&self) -> String {
         let item_str = self.minimal_string();
@@ -153,34 +137,23 @@ impl AnimalType {
     }
 }
 
-
-
 impl MeleeWeapon {
-
     pub fn minimal_string(&self) -> String {
-
-        format!{"{}",self.weapon_type}
-
+        format! {"{}",self.weapon_type}
     }
 }
 
 impl RangedWeapon {
-
     pub fn to_color(&self) -> Color {
         match &self.weapon_type {
             _ => self.tetiva_material.to_color(),
-          
         }
     }
 
     pub fn minimal_string(&self) -> String {
-
-        format!{"{}",self.weapon_type}
-
+        format! {"{}",self.weapon_type}
     }
 }
-
-
 
 impl ItemType {
     pub fn to_displaychar(&self) -> String {
@@ -218,7 +191,6 @@ impl ItemType {
     }
 }
 
-
 impl Default for Human {
     fn default() -> Self {
         Self {
@@ -233,36 +205,34 @@ impl Default for Human {
 impl PlantType {
     pub fn to_displaychar(&self) -> String {
         match self {
-         
             PlantType::Drěvo(x) => "t".into(),
             PlantType::Kust(x) => "*".into(),
             PlantType::Trava(x) => x.to_displaychar(),
-           
         }
     }
     pub fn minimal_string(&self) -> String {
         match self {
-         
-            PlantType::Drěvo(x) => {format!{"{}",x}},
-            PlantType::Kust(x) => {format!{"{}",x}},
-            PlantType::Trava(x) => {format!{"{}",x}},
-           
+            PlantType::Drěvo(x) => {
+                format! {"{}",x}
+            }
+            PlantType::Kust(x) => {
+                format! {"{}",x}
+            }
+            PlantType::Trava(x) => {
+                format! {"{}",x}
+            }
         }
     }
 
     pub fn to_color(&self) -> Color {
         match self {
-      
             PlantType::Drěvo(x) => x.to_color(),
             PlantType::Kust(x) => x.to_color(),
-            
+
             PlantType::Trava(x) => x.to_color(),
         }
     }
-
-  
 }
-
 
 impl EntityType {
     pub fn to_displaychar(&self) -> String {
@@ -271,7 +241,7 @@ impl EntityType {
             EntityType::Monster(x) => x.to_displaychar(), //x.to_displaychar(),
             EntityType::Human(_) => "@".into(),
             EntityType::None => "?".into(),
-            
+
             EntityType::Råstlina(x) => x.to_displaychar(),
             EntityType::Mebelj(x) => x.to_displaychar(),
         }
@@ -283,7 +253,7 @@ impl EntityType {
             EntityType::Monster(x) => x.to_color(),
             EntityType::Human(_) => Color::White,
             EntityType::None => Color::Red,
- 
+
             EntityType::Mebelj(x) => x.to_color(),
             EntityType::Råstlina(x) => x.to_color(),
         }
@@ -298,9 +268,9 @@ impl EntityType {
 
 impl Mebelj {
     pub fn minimal_string(&self) -> String {
-        format!("{}",self.mebelj_type)
+        format!("{}", self.mebelj_type)
     }
-    
+
     pub fn to_displaychar(&self) -> String {
         match &self.mebelj_type {
             MebeljType::Stěna => "#".into(),
@@ -313,4 +283,3 @@ impl Mebelj {
         self.material.to_color()
     }
 }
-

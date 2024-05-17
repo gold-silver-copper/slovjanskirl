@@ -2,16 +2,20 @@ use noise::{NoiseFn, Perlin, Seedable};
 use slov_common::*;
 
 fn main() {
-
     let kost = "kost";
     let dom = "dom";
     let kostik = "kost́";
 
     println!(" kost is {:#?}", ISV::guess_gender(kost));
     println!(" dom is {:#?}", ISV::guess_gender(dom));
-    println!(" kostik is {:#?}", ISV::guess_gender(kostik));
-
-
+    println!(" kost́ is {:#?}", ISV::guess_gender(kostik));
+    println!("{}", "Žuravina".to_lowercase());
+    println!("los is animate? - {:#?}", ISV::noun_is_animate("los"));
+    println!(
+        "jablanj is animate? - {:#?}",
+        ISV::noun_is_animate("jablanj")
+    );
+    ISV::noun_is_animate(kost);
 
     /*
 

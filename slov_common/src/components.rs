@@ -27,13 +27,11 @@ impl PointDistance for PositionComponent {
 #[derive(Clone, Debug, PartialEq)]
 pub struct StatsComponent {
     pub name: String,
-    pub health: StatsUnit,       //zdravje
-    pub stamina_air: StatsUnit,  //vozduh
-    pub sila: StatsUnit,     //sila
-    pub bystrost: StatsUnit,      // bystrost
-    pub razum: StatsUnit, //razum
-
-   
+    pub health: StatsUnit,      //zdravje
+    pub stamina_air: StatsUnit, //vozduh
+    pub sila: StatsUnit,        //sila
+    pub bystrost: StatsUnit,    // bystrost
+    pub razum: StatsUnit,       //razum
 }
 
 impl StatsComponent {
@@ -45,7 +43,6 @@ impl StatsComponent {
             sila: 100,
             bystrost: 100,
             razum: 100,
-            
         }
     }
 }
@@ -73,20 +70,29 @@ impl EquipmentComponent {
             shoulders: None,
             torso: None,
             legs: None,
-
         }
     }
     pub fn new_hunter() -> EquipmentComponent {
         EquipmentComponent {
-            melee_weapon: Some(MeleeWeapon { weapon_type: MeleeWeaponType::Nož, material_type: SolidMaterial::Metal(MetalType::Bronza) }),
+            melee_weapon: Some(MeleeWeapon {
+                weapon_type: MeleeWeaponType::Nož,
+                material_type: SolidMaterial::Metal(MetalType::Bronza),
+            }),
 
-            ranged_weapon: Some(RangedWeapon { weapon_type: RangedWeaponType::Lųk , tetiva_material: FabricMaterial::Koža(MammalType::Jelenj), rema_material: WoodType::Jasenj, ammo_material: SolidMaterial::Metal(MetalType::Bronza) }),
+            ranged_weapon: Some(RangedWeapon {
+                weapon_type: RangedWeaponType::Lųk,
+                tetiva_material: FabricMaterial::Koža(MammalType::Jelenj),
+                rema_material: WoodType::Jasenj,
+                ammo_material: SolidMaterial::Metal(MetalType::Bronza),
+            }),
 
-            head: Some(ClothingItem { clothing_type: ClothingType::Head(HeadClothingType::Kapuc), fabric_type: FabricMaterial::Tkanina(PlantType::Trava(GrassType::Jasenėc)) }),
+            head: Some(ClothingItem {
+                clothing_type: ClothingType::Head(HeadClothingType::Kapuc),
+                fabric_type: FabricMaterial::Tkanina(PlantType::Trava(GrassType::Jasenėc)),
+            }),
             shoulders: None,
             torso: None,
             legs: None,
-
         }
     }
 }

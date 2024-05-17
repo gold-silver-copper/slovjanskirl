@@ -8,22 +8,21 @@ pub enum MeleeWeaponType {
     Kopje,
     Cepj,
 
-     Nagajka,
+    Nagajka,
 }
 
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum RangedWeaponType {
     Lųk,
-   Proca,
-   Prak,
+    Proca,
+    Prak,
     Prašča,
-      Šlojder,
-      Kuša,
+    Šlojder,
+    Kuša,
     Samostrěl,
     Kameni,
-   Arbalet,
+    Arbalet,
 }
-
 
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum StoneType {
@@ -78,7 +77,7 @@ pub enum BushType {
     Bȯzina,
 }
 
-#[derive(Clone, Debug, Display, PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq, EnumIter)]
 pub enum MammalType {
     Los,
     Jelenj,
@@ -87,16 +86,14 @@ pub enum MammalType {
     Tigr,
 }
 
-
-#[derive(Clone, Debug, Display, PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq, EnumIter)]
 pub enum FishType {
     Losos,
     Tunec,
     Karas,
 }
 
-
-#[derive(Clone, Debug, Display, PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq, EnumIter)]
 pub enum BirdType {
     Sova,
     Vrabec,
@@ -106,7 +103,7 @@ pub enum BirdType {
     Gųsę,
 }
 
-#[derive(Clone, Debug, Display, PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq, EnumIter)]
 pub enum LizardType {
     Gad,
     Jaščer,
@@ -116,7 +113,6 @@ pub enum LizardType {
 
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum AnimalPartType {
-  
     Meat,
     Feather,
     Skin,
@@ -131,29 +127,20 @@ pub enum ShoulderClothingType {
     Šarf,
     Šátek,
     Pléť, //big piece of cloth
-   
-    Ruta, //scarf shawl
-    Palantin, //scarf
+
+    Ruta,      //scarf shawl
+    Palantin,  //scarf
     Ogrinjalo, //cape
 }
 
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum HeadClothingType {
-
-   
     Kosynka, //headscarf
-    Platok, //headscarf
-    
+    Platok,  //headscarf
 
-   
-   
-    
-   
     Marama, //headscarf
-    Voalj, //veil
+    Voalj,  //veil
     Závoj,  //veil
-   
-   
 
     Šapka,
     Šljem,
@@ -178,7 +165,7 @@ pub enum TorsoClothingType {
     Kabanica, // Raincoat
     Kožuh,    // Fur coat
     Vesta,    // Vest
-    
+
     Koĺčuga,
 }
 
@@ -190,11 +177,7 @@ pub enum LegsClothingType {
 
     Šarovary,  // Baggy pants
     Spodnjice, // Underpants
-
 }
-
-
-
 
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum MebeljType {

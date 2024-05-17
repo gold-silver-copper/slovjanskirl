@@ -2,8 +2,6 @@ use std::fmt::format;
 
 use crate::*;
 
-
-
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum SolidMaterial {
     Drěvo(WoodType),
@@ -11,15 +9,12 @@ pub enum SolidMaterial {
     Kamenj(StoneType),
 }
 
-
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum FabricMaterial {
-
     //vlakno vivsa tkanina plet'
-    
     Koža(MammalType),
     Tkanina(PlantType),
- 
+
     Lancuh(MetalType),
 }
 
@@ -28,8 +23,6 @@ pub enum PlantType {
     Drěvo(WoodType),
     Trava(GrassType),
     Kust(BushType),
-
-    
 }
 
 #[derive(Clone, Debug, Display, PartialEq)]
@@ -40,17 +33,11 @@ pub enum AnimalType {
     Lizard(LizardType),
 }
 
-
-
-
-
 #[derive(Clone, Debug, PartialEq)]
 pub struct AnimalPart {
     pub animal_type: AnimalType,
     pub animal_part: AnimalPartType,
 }
-
-
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct MeleeWeapon {
@@ -58,18 +45,15 @@ pub struct MeleeWeapon {
     pub material_type: SolidMaterial,
 }
 
-
 #[derive(Clone, Debug, PartialEq)]
 pub struct RangedWeapon {
     pub weapon_type: RangedWeaponType,
-   
+
     pub tetiva_material: FabricMaterial,
     pub rema_material: WoodType,
 
     pub ammo_material: SolidMaterial,
 }
-
-
 
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum ItemType {
@@ -86,8 +70,6 @@ pub enum ClothingType {
     Shoulder(ShoulderClothingType),
     Torso(TorsoClothingType),
     Legs(LegsClothingType),
-
-    
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -95,7 +77,6 @@ pub struct ClothingItem {
     pub clothing_type: ClothingType,
     pub fabric_type: FabricMaterial,
 }
-
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Human {
@@ -105,7 +86,6 @@ pub struct Human {
     pub max_stats: StatsComponent,
 }
 
-
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum EntityType {
     Human(Human),
@@ -114,29 +94,25 @@ pub enum EntityType {
     Mebelj(Mebelj),
 
     Råstlina(PlantType),
-  
+
     None,
 }
 
 impl EntityType {
-
     pub fn minimal_string(&self) -> String {
         match self {
-            EntityType::Human(x) => {x.current_stats.name.clone()}
-            EntityType::Item(x) => {x.minimal_string()}
-            EntityType::Monster(x) => {x.minimal_string()}
-            EntityType::Mebelj(x) => {x.minimal_string()}
-            EntityType::Råstlina(x) => {x.minimal_string()}
-            EntityType::None => String::new()
+            EntityType::Human(x) => x.current_stats.name.clone(),
+            EntityType::Item(x) => x.minimal_string(),
+            EntityType::Monster(x) => x.minimal_string(),
+            EntityType::Mebelj(x) => x.minimal_string(),
+            EntityType::Råstlina(x) => x.minimal_string(),
+            EntityType::None => String::new(),
         }
-
-
     }
 }
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Mebelj {
-   pub mebelj_type: MebeljType,
-   pub material: SolidMaterial,
+    pub mebelj_type: MebeljType,
+    pub material: SolidMaterial,
 }
-

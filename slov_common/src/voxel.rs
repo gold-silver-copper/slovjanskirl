@@ -21,17 +21,16 @@ impl Roof {
 #[derive(Clone, Debug, Display, PartialEq)]
 pub enum Floor {
     Vȯzduh, //air
-    Zemja, //earth
-    Voda, //water
-    Trava, // grass
+    Zemja,  //earth
+    Voda,   //water
+    Trava,  // grass
     Burjan, //grass type
     Kovylj, //grass type
-    Pěsȯk, //sand
-    Mělj, //sandbank
-    Il, //clay
-    Glina, //clay
-    Blåto, //bog
-
+    Pěsȯk,  //sand
+    Mělj,   //sandbank
+    Il,     //clay
+    Glina,  //clay
+    Blåto,  //bog
 }
 
 impl Floor {
@@ -45,9 +44,9 @@ impl Floor {
             Self::Kovylj => Color::Rgb(30, 115, 40),
             Self::Pěsȯk => Color::Rgb(242, 210, 169),
             Self::Mělj => Color::Rgb(232, 200, 159),
-            Self::Il => Color::Rgb(135,133,131),
-            Self::Glina => Color::Rgb(145,143,141),
-            Self::Blåto => Color::Rgb(155,153,161),
+            Self::Il => Color::Rgb(135, 133, 131),
+            Self::Glina => Color::Rgb(145, 143, 141),
+            Self::Blåto => Color::Rgb(155, 153, 161),
         }
     }
 
@@ -77,9 +76,9 @@ impl Floor {
             Self::Kovylj => Color::Rgb(30, 105, 40),
             Self::Pěsȯk => Color::Rgb(242, 200, 169),
             Self::Mělj => Color::Rgb(232, 190, 159),
-            Self::Il => Color::Rgb(135,123,131),
-            Self::Glina => Color::Rgb(145,133,141),
-            Self::Blåto => Color::Rgb(155,143,161),
+            Self::Il => Color::Rgb(135, 123, 131),
+            Self::Glina => Color::Rgb(145, 133, 141),
+            Self::Blåto => Color::Rgb(155, 143, 161),
         }
     }
 }

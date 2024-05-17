@@ -50,8 +50,7 @@ impl MyWorld {
         let mut x = MyWorld::default();
         x.new_entity(
             &(81, 88),
-            &EntityType::Monster(AnimalType::Mammal(MammalType::Jelenj),
-            ),
+            &EntityType::Monster(AnimalType::Mammal(MammalType::Jelenj)),
         );
         x.new_entity(
             &(81, 87),
@@ -262,63 +261,52 @@ impl MyWorld {
         */
         let mut subject_pronoun = String::from("Ty");
         if local_player_id != &act_packet.action_subject {
-            let nomik = self.entity_map.get(&act_packet.action_subject).unwrap_or(&EntityType::None);
+            let nomik = self
+                .entity_map
+                .get(&act_packet.action_subject)
+                .unwrap_or(&EntityType::None);
 
-           subject_pronoun  = nomik.minimal_string();
-
+            subject_pronoun = nomik.minimal_string();
         }
         let meowik = match &act_packet.action {
-            ActionType::Drop(x) => format!(" brosajesz {}",x.minimal_string().to_lowercase()),
-            ActionType::Go(x) => format!(" idesz {}",""),
-            _ => format!(" jhhas {}",""),
-
+            ActionType::Drop(x) => format!(" brosajesz {}", x.minimal_string().to_lowercase()),
+            ActionType::Go(x) => format!(" idesz {}", ""),
+            _ => format!(" jhhas {}", ""),
         };
         subject_pronoun.push_str(&meowik);
-        
+
         let abc = format!(" {:#?}", &act_packet.action_location);
         subject_pronoun.push_str(&abc);
         subject_pronoun
     }
 
-    pub fn get_visible_ents_from_ent(  &self,
-        ent: &EntityID,) -> Vec<EntityID>{
+    pub fn get_visible_ents_from_ent(&self, ent: &EntityID) -> Vec<EntityID> {
+        if let Some(e_pos) = self.ent_loc_index.get(&ent) {
+            let render_width = 100;
+            let render_height = 100;
+            let w_radius = render_width / 2;
+            let h_radius = render_height / 2;
+            let same_z = locate_square(e_pos, w_radius as i64, h_radius as i64);
 
-            if let Some(e_pos) = self.ent_loc_index.get(&ent) {
+            let mut bop = Vec::new();
 
-                let render_width = 100;
-                let render_height = 100;
-                let w_radius = render_width / 2;
-                let h_radius = render_height / 2;
-                let same_z = locate_square(e_pos, w_radius as i64, h_radius as i64);
+            let local_ents = self.entity_tree.locate_in_envelope(&same_z);
 
-                let mut bop = Vec::new();
-    
-                let local_ents = self.entity_tree.locate_in_envelope(&same_z);
-
-                for entt in local_ents {
-                    if &entt.entity_id != ent {
-                        bop.push(entt.clone());
-
-                    }
-                 
+            for entt in local_ents {
+                if &entt.entity_id != ent {
+                    bop.push(entt.clone());
                 }
-
-                bop.sort_by(|a, b| a.distance_2(e_pos).cmp(&b.distance_2(e_pos)));
-
-                let meo = bop.iter().map(|x| x.entity_id).collect();
-
-                
-
-                return meo;
-
             }
 
-            else {return Vec::new();}
+            bop.sort_by(|a, b| a.distance_2(e_pos).cmp(&b.distance_2(e_pos)));
 
+            let meo = bop.iter().map(|x| x.entity_id).collect();
 
-
-
+            return meo;
+        } else {
+            return Vec::new();
         }
+    }
 
     pub fn create_client_render_packet_for_entity(
         &self,
@@ -377,11 +365,14 @@ impl MyWorld {
                     && (0 < ent_relative.0)
                     && (ent_relative.0 < render_width as i64)
                 {
-                    if voxel_grid[ent_relative.1 as usize][ent_relative.0 as usize].0 != String::from("@") {
-                        voxel_grid[ent_relative.1 as usize][ent_relative.0 as usize].0 = ent_graphic.0;
-                        voxel_grid[ent_relative.1 as usize][ent_relative.0 as usize].1 = ent_graphic.1;
+                    if voxel_grid[ent_relative.1 as usize][ent_relative.0 as usize].0
+                        != String::from("@")
+                    {
+                        voxel_grid[ent_relative.1 as usize][ent_relative.0 as usize].0 =
+                            ent_graphic.0;
+                        voxel_grid[ent_relative.1 as usize][ent_relative.0 as usize].1 =
+                            ent_graphic.1;
                     }
-                  
                 }
             }
 
