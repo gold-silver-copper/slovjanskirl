@@ -151,10 +151,10 @@ impl ISV {
         let last_one = ISV::last_n_chars(word, 1);
 
         let last_three = ISV::last_n_chars(word, 3);
-       
+
         assert_eq!("ost́", ISV::last_n_chars("kost́", 4));
 
-        if  ISV::is_ost_class(word) || (last_one == "a") || (last_one == "i") {
+        if ISV::is_ost_class(word) || (last_one == "a") || (last_one == "i") {
             return Gender::Feminine;
         } else if (last_one == "o") || (last_one == "e") {
             return Gender::Neuter;
@@ -170,7 +170,6 @@ impl ISV {
     pub fn is_ost_class(word: &str) -> bool {
         let last_four = ISV::last_n_chars(word, 4);
         last_four == String::from("ost́")
-
     }
 
     pub fn get_stem(word: &str) -> String {
@@ -199,9 +198,11 @@ impl ISV {
                 }
             }
             Gender::Feminine => {
-                if ISV::is_ost_class(word) {return format!("{}{}", word_stem, "");}
-                else {return format!("{}{}", word_stem, "u");}
-                
+                if ISV::is_ost_class(word) {
+                    return format!("{}{}", word_stem, "");
+                } else {
+                    return format!("{}{}", word_stem, "u");
+                }
             }
             Gender::Neuter => {
                 if word_stem_is_soft {
@@ -223,7 +224,9 @@ impl ISV {
                 return format!("{}{}", word_stem, "a");
             }
             Gender::Feminine => {
-                if ISV::is_ost_class(word) {return format!("{}{}", word_stem, "i");}
+                if ISV::is_ost_class(word) {
+                    return format!("{}{}", word_stem, "i");
+                }
                 if word_stem_is_soft {
                     return format!("{}{}", word_stem, "e");
                 } else {
@@ -246,7 +249,9 @@ impl ISV {
                 return format!("{}{}", word_stem, "u");
             }
             Gender::Feminine => {
-                if ISV::is_ost_class(word) {return format!("{}{}", word_stem, "i");}
+                if ISV::is_ost_class(word) {
+                    return format!("{}{}", word_stem, "i");
+                }
                 if word_stem_is_soft {
                     return format!("{}{}", word_stem, "i");
                 } else {
@@ -266,12 +271,16 @@ impl ISV {
 
         match word_gender {
             Gender::Masculine => {
-                if word_stem_is_soft {return format!("{}{}", word_stem, "em");}
-                else{return format!("{}{}", word_stem, "om");}
-                
+                if word_stem_is_soft {
+                    return format!("{}{}", word_stem, "em");
+                } else {
+                    return format!("{}{}", word_stem, "om");
+                }
             }
             Gender::Feminine => {
-                if ISV::is_ost_class(word) {return format!("{}{}", word_stem, "ju");}
+                if ISV::is_ost_class(word) {
+                    return format!("{}{}", word_stem, "ju");
+                }
                 if word_stem_is_soft {
                     return format!("{}{}", word_stem, "eju");
                 } else {
@@ -279,8 +288,11 @@ impl ISV {
                 }
             }
             Gender::Neuter => {
-                if word_stem_is_soft {return format!("{}{}", word_stem, "em");}
-                else{return format!("{}{}", word_stem, "om");}
+                if word_stem_is_soft {
+                    return format!("{}{}", word_stem, "em");
+                } else {
+                    return format!("{}{}", word_stem, "om");
+                }
             }
         }
     }
@@ -293,10 +305,11 @@ impl ISV {
         match word_gender {
             Gender::Masculine => {
                 return format!("{}{}", word_stem, "u");
-                
             }
             Gender::Feminine => {
-                if ISV::is_ost_class(word) {return format!("{}{}", word_stem, "i");}
+                if ISV::is_ost_class(word) {
+                    return format!("{}{}", word_stem, "i");
+                }
                 if word_stem_is_soft {
                     return format!("{}{}", word_stem, "i");
                 } else {

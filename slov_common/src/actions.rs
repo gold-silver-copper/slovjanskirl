@@ -47,8 +47,6 @@ pub struct Action {}
 
 impl Action {
     pub fn go(world: &mut MyWorld, subject: &EntityID, destination: &LocativeID) -> SuccessType {
-        println!("WAIT WHATTT");
-
         match destination {
             LocativeID::Cardinal(cd) => world.move_entity_in_direction(subject, cd), //world.move_entity_in_direction(subject, cd),
             LocativeID::Entity(_) => {

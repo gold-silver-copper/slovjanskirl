@@ -103,6 +103,18 @@ impl LizardType {
 }
 
 impl AnimalType {
+    pub fn random_animaltype(small_rngik: &mut SmallRng) -> AnimalType {
+        let y: f64 = small_rngik.gen(); // generates a float between 0 and 1
+
+        if y < 0.5 {
+            AnimalType::Mammal(MammalType::random_mammal_type(small_rngik))
+        } else if y < 0.8 {
+            AnimalType::Bird(BirdType::random_bird_type(small_rngik))
+        } else {
+            AnimalType::Lizard(LizardType::random_lizard_type(small_rngik))
+        }
+    }
+
     pub fn minimal_string(&self) -> String {
         match &self {
             AnimalType::Bird(x) => {
@@ -200,7 +212,6 @@ impl Default for Human {
             cur_health: HealthComponent::new(),
             max_health: HealthComponent::new(),
             name: NameComponent::new(),
-
         }
     }
 }
@@ -238,6 +249,23 @@ impl PlantType {
 }
 
 impl EntityType {
+    pub fn minimal_string(&self) -> String {
+        match self {
+            EntityType::Human(x) => x.name.name.clone(),
+            EntityType::Item(x) => x.minimal_string(),
+            EntityType::Monster(x) => x.animal_type.minimal_string(),
+            EntityType::Mebelj(x) => x.minimal_string(),
+            EntityType::Råstlina(x) => x.minimal_string(),
+            EntityType::None => String::new(),
+        }
+    }
+    pub fn random_animal(small_rngik: &mut SmallRng) -> EntityType {
+        EntityType::Monster(Animal {
+            animal_type: AnimalType::random_animaltype(small_rngik),
+            cur_health: HealthComponent::new(),
+            max_health: HealthComponent::new(),
+        })
+    }
     pub fn to_displaychar(&self) -> String {
         match self {
             EntityType::Item(x) => x.to_displaychar(),
@@ -287,72 +315,37 @@ impl Mebelj {
     }
 }
 
-
-
-
 impl MammalType {
-    pub fn random_mammal_type(small_rngik:&mut  SmallRng) -> MammalType {
-     
+    pub fn random_mammal_type(small_rngik: &mut SmallRng) -> MammalType {
         let y: f64 = small_rngik.gen(); // generates a float between 0 and 1
         let funny_index = y * MammalType::COUNT as f64;
 
         MammalType::from_repr(funny_index as usize).unwrap_or(MammalType::Jelenj)
-
-        
-        
-
-
-
-
     }
 }
 impl FishType {
     pub fn random_fish_type(small_rngik: &mut SmallRng) -> FishType {
-      
         let y: f64 = small_rngik.gen(); // generates a float between 0 and 1
         let funny_index = y * FishType::COUNT as f64;
 
         FishType::from_repr(funny_index as usize).unwrap_or(FishType::Karas)
-
-        
-        
-
-
-
-
     }
 }
 
 impl BirdType {
     pub fn random_bird_type(small_rngik: &mut SmallRng) -> BirdType {
-     
         let y: f64 = small_rngik.gen(); // generates a float between 0 and 1
         let funny_index = y * BirdType::COUNT as f64;
 
         BirdType::from_repr(funny_index as usize).unwrap_or(BirdType::Sova)
-
-        
-        
-
-
-
-
     }
 }
 
 impl LizardType {
     pub fn random_lizard_type(small_rngik: &mut SmallRng) -> LizardType {
-       
         let y: f64 = small_rngik.gen(); // generates a float between 0 and 1
         let funny_index = y * LizardType::COUNT as f64;
 
         LizardType::from_repr(funny_index as usize).unwrap_or(LizardType::Gad)
-
-        
-        
-
-
-
-
     }
 }

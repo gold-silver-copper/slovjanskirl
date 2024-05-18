@@ -34,8 +34,8 @@ pub use item_impls::*;
 mod server_stuff;
 pub use server_stuff::*;
 
-use rand::{Rng, SeedableRng};
 use rand::rngs::SmallRng;
+use rand::{Rng, SeedableRng};
 
 pub use noise::*;
 pub use ratatui::style::{Color, Style, Stylize};
@@ -45,5 +45,5 @@ pub use rstar::{Envelope, PointDistance, RTree, RTreeObject, SelectionFunction, 
 pub use std::collections::HashMap;
 pub use std::collections::HashSet;
 pub use strum::Display;
-use strum::{EnumIter,EnumCount,FromRepr};
 use strum::IntoEnumIterator;
+use strum::{EnumCount, EnumIter, FromRepr};

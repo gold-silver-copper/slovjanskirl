@@ -23,7 +23,7 @@ impl Default for MyWorld {
             entity_map: HashMap::new(),
             server_stuff: ServerStuff::default(),
             turn_counter: 0,
-            small_rngik:  SmallRng::seed_from_u64(rngik as u64),
+            small_rngik: SmallRng::seed_from_u64(rngik as u64),
 
             world_seed: rngik.clone(),
             entity_counter: 1,
@@ -53,20 +53,11 @@ impl MyWorld {
     pub fn new_test() -> MyWorld {
         let mut x = MyWorld::default();
         let animik = EntityType::random_animal(&mut x.small_rngik);
-        x.new_entity(
-            &(81, 88),
-            &animik,
-        );
+        x.new_entity(&(81, 88), &animik);
         let animik = EntityType::random_animal(&mut x.small_rngik);
-        x.new_entity(
-            &(82, 88),
-            &animik,
-        );
+        x.new_entity(&(82, 88), &animik);
         let animik = EntityType::random_animal(&mut x.small_rngik);
-        x.new_entity(
-            &(84, 88),
-            &animik,
-        );
+        x.new_entity(&(84, 88), &animik);
         x.new_entity(
             &(81, 87),
             &EntityType::Item(ItemType::Melee(MeleeWeapon {
@@ -77,14 +68,12 @@ impl MyWorld {
         x
     }
 
-   
-
     pub fn interpret_and_execute(&mut self) {
         let my_clone = self.server_stuff.input_queue.clone();
         self.server_stuff.input_queue.clear();
         self.server_stuff.output_queue = RTree::new();
 
-        self.turn_counter +=1;
+        self.turn_counter += 1;
 
         for (eid, action) in &my_clone {
             if let Some(ent_loc) = self.ent_loc_index.get(&eid) {
@@ -474,8 +463,6 @@ impl MyWorld {
         cd: &CardinalDirection,
     ) -> SuccessType {
         if let Some(xyz) = self.ent_loc_index.get(ent) {
-            println!("GOT ENT LOC INDEX FOR MOVEMENT");
-
             let dir_point = cd.to_xyz();
             let goal = add_two_points(&xyz, &dir_point);
 

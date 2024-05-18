@@ -26,25 +26,20 @@ impl PointDistance for PositionComponent {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct StatsComponent {
-   
-    pub sila: StatsUnit,        //sila
-    pub bystrost: StatsUnit,    // bystrost
-    pub razum: StatsUnit,       //razum
+    pub sila: StatsUnit,     //sila
+    pub bystrost: StatsUnit, // bystrost
+    pub razum: StatsUnit,    //razum
 }
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct NameComponent {
-   
     pub name: String,
-   
 }
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct HealthComponent {
-   
     pub health: StatsUnit,      //zdravje
     pub stamina_air: StatsUnit, //vozduh
-   
 }
 
 impl HealthComponent {
@@ -58,15 +53,15 @@ impl HealthComponent {
 
 impl NameComponent {
     pub fn new() -> NameComponent {
-        NameComponent { name: String::from("Člověk") }
+        NameComponent {
+            name: String::from("Člověk"),
+        }
     }
 }
-
 
 impl StatsComponent {
     pub fn new_default() -> StatsComponent {
         StatsComponent {
- 
             sila: 100,
             bystrost: 100,
             razum: 100,

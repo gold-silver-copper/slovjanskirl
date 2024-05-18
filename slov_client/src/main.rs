@@ -153,7 +153,7 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
 
         let statiki = &player_data_into.stats;
         let healthik = &player_data_into.cur_health;
-        let nameik =  &player_data_into.name;
+        let nameik = &player_data_into.name;
         let veci = &player_data_into.equipment;
         let mut player_inv = player_data_into.inventory.clone();
 
@@ -169,11 +169,9 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
             let ctotik = player_inv.pop().unwrap_or(ItemType::None);
             let ctotik_string = format! {" {},",ctotik.minimal_string().to_lowercase()};
 
-            if (ctotik == ItemType::None) && (funnumb==1) {
+            if (ctotik == ItemType::None) && (funnumb == 1) {
                 inventory_string.push_str(" ničto...");
             }
-
-
 
             if ctotik != ItemType::None {
                 inventory_string.push_str(&ctotik_string);
@@ -202,10 +200,7 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
             local_items.push_str(&funny_string);
 
             for itemik in items {
-                local_items.push_str(&format!(
-                    " {},",
-                    itemik.1.minimal_string().to_lowercase()
-                ));
+                local_items.push_str(&format!(" {},", itemik.1.minimal_string().to_lowercase()));
             }
         }
 
@@ -219,7 +214,8 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
                     .get(&eid)
                     .unwrap_or(&EntityType::None);
                 if etik != &EntityType::None {
-                    let stringik = format! {" {},", ISV::acc_sg( &etik.minimal_string().to_lowercase()) };
+                    let stringik =
+                        format! {" {},", ISV::acc_sg( &etik.minimal_string().to_lowercase()) };
                     visibility_string.push_str(&stringik);
                 }
             }
@@ -249,7 +245,6 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
         messages_to_show.push(Line::from("Ty vidiš.... "));
 
         messages_to_show.push(Line::from(visibility_string));
-       
 
         messages_to_show.push(Line::from(""));
 
