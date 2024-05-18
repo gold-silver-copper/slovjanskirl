@@ -82,7 +82,7 @@ impl MyWorld {
                 let success_type = match action {
                     ActionType::Go(loc) => Action::go(self, &eid, loc),
                     ActionType::Take(obj) => Action::take(self, &eid, obj),
-                    ActionType::Attack(obj) => Action::attack(self, &eid, obj),
+                    ActionType::MeleeAttack(obj) => Action::melee_attack(self, &eid, obj),
                     ActionType::Drop(itik) => Action::drop(self, &eid, itik),
                     ActionType::Wait => SuccessType::Success,
 
@@ -278,11 +278,23 @@ impl MyWorld {
             subject_pronoun = nomik.minimal_string();
         }
         let meowik = match &act_packet.action {
-            ActionType::Drop(x) => format!(" brosajesz {}", x.minimal_string().to_lowercase()),
-            ActionType::Go(x) => format!(" idesz {}", ""),
-            _ => format!(" jhhas {}", ""),
+            ActionType::Drop(x) => format!(" brosati {}", x.minimal_string().to_lowercase()),
+            ActionType::Go(x) => format!("idti"),
+            ActionType::MeleeAttack(x) => format!(" udarjati {}", ""),
+            _ => format!(" jhxcvhas {}", ""),
         };
-        subject_pronoun.push_str(&meowik);
+
+        let succik = match &act_packet.success {
+            SuccessType::Success => {format!("")}
+            SuccessType::Failure => {format!("ne mozzesz")}
+        };
+
+
+        if succik != "" {subject_pronoun.push_str(&succik);}
+        else {subject_pronoun.push_str(&meowik);}
+
+
+        
 
         let abc = format!(" {:#?}", &act_packet.action_location);
         subject_pronoun.push_str(&abc);

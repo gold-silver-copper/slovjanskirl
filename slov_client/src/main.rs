@@ -609,7 +609,7 @@ fn keyboard_input_system(
 
         if cursor_right {
             client_action =
-                ActionType::Attack(masterok.targeted_ent_id);
+                ActionType::MeleeAttack(masterok.targeted_ent_id);
         }
     } else if ui_state.menu_open == MenuOpen::Drop {
         if char_drop {

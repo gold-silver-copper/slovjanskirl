@@ -4,7 +4,7 @@ use crate::*;
 pub enum ActionType {
     Wait,
     Take(AccusativeID),
-    Attack(AccusativeID),
+    MeleeAttack(AccusativeID),
     Drop(ItemType),
     Give(AccusativeID, DativeID),
     Hit(AccusativeID, InstrumentalID),
@@ -59,10 +59,38 @@ impl Action {
         }
     }
     
-    pub fn attack(world: &mut MyWorld, subject: &EntityID, object: &EntityID) -> SuccessType {
-        println!("WAIT WHATTT");
+    pub fn melee_attack(world: &mut MyWorld, subject: &EntityID, object: &EntityID) -> SuccessType {
 
-        SuccessType::Success
+        //check if ents are within distance
+           //get subj and obj locations
+           let sub_loc = world.ent_loc_index.get(subject).unwrap_or(&(0,0));
+           let obj_loc = world.ent_loc_index.get(object).unwrap_or(&(420,420));
+
+           let disbet = sub_loc.distance_2(obj_loc);
+           let melee_range = match world.entity_map.get(subject).unwrap_or(&EntityType::None) {
+            EntityType::Human(x) => {if let Some(boop) = &x.equipment.melee_weapon {
+              boop.weapon_type.weapon_range()
+            }
+        else {1}},
+        EntityType::Monster(_) => 3,
+        _ => 0
+            
+        
+
+
+           };
+
+           if disbet <=melee_range {
+return SuccessType::Success;
+           }
+           else {return SuccessType::Failure;}
+
+
+
+        //do damage to object
+        //implement system for checking if health is below 0
+       
+
     }
 
    
