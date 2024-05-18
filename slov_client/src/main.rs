@@ -151,13 +151,15 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
             .client_world
             .get_visible_ents_from_ent(&masterok.player_entity_id);
 
-        let statiki = &player_data_into.current_stats;
+        let statiki = &player_data_into.stats;
+        let healthik = &player_data_into.cur_health;
+        let nameik =  &player_data_into.name;
         let veci = &player_data_into.equipment;
         let mut player_inv = player_data_into.inventory.clone();
 
-        let name_string = format! {"{}",statiki.name};
+        let name_string = format! {"{}",nameik.name};
         let health_string =
-            format! {"Zdråvje: {}  Dyhańje {}",statiki.health , statiki.stamina_air };
+            format! {"Zdråvje: {}  Dyhańje {}",healthik.health , healthik.stamina_air };
         let stats_string = format! {"Sila: {}  Bystrost́ {}  Råzum: {} ",statiki.sila , statiki.bystrost , statiki.razum };
         let mut wep_string = String::new();
         let mut local_items = String::new();

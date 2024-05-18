@@ -196,8 +196,11 @@ impl Default for Human {
         Self {
             inventory: Vec::new(),
             equipment: EquipmentComponent::new_hunter(),
-            current_stats: StatsComponent::new_default(),
-            max_stats: StatsComponent::new_default(),
+            stats: StatsComponent::new_default(),
+            cur_health: HealthComponent::new(),
+            max_health: HealthComponent::new(),
+            name: NameComponent::new(),
+
         }
     }
 }
@@ -238,7 +241,7 @@ impl EntityType {
     pub fn to_displaychar(&self) -> String {
         match self {
             EntityType::Item(x) => x.to_displaychar(),
-            EntityType::Monster(x) => x.to_displaychar(), //x.to_displaychar(),
+            EntityType::Monster(x) => x.animal_type.to_displaychar(), //x.to_displaychar(),
             EntityType::Human(_) => "@".into(),
             EntityType::None => "?".into(),
 
@@ -250,7 +253,7 @@ impl EntityType {
     pub fn to_color(&self) -> Color {
         match self {
             EntityType::Item(x) => x.to_color(),
-            EntityType::Monster(x) => x.to_color(),
+            EntityType::Monster(x) => x.animal_type.to_color(),
             EntityType::Human(_) => Color::White,
             EntityType::None => Color::Red,
 
@@ -281,5 +284,75 @@ impl Mebelj {
     }
     pub fn to_color(&self) -> Color {
         self.material.to_color()
+    }
+}
+
+
+
+
+impl MammalType {
+    pub fn random_mammal_type(small_rngik:&mut  SmallRng) -> MammalType {
+     
+        let y: f64 = small_rngik.gen(); // generates a float between 0 and 1
+        let funny_index = y * MammalType::COUNT as f64;
+
+        MammalType::from_repr(funny_index as usize).unwrap_or(MammalType::Jelenj)
+
+        
+        
+
+
+
+
+    }
+}
+impl FishType {
+    pub fn random_fish_type(small_rngik: &mut SmallRng) -> FishType {
+      
+        let y: f64 = small_rngik.gen(); // generates a float between 0 and 1
+        let funny_index = y * FishType::COUNT as f64;
+
+        FishType::from_repr(funny_index as usize).unwrap_or(FishType::Karas)
+
+        
+        
+
+
+
+
+    }
+}
+
+impl BirdType {
+    pub fn random_bird_type(small_rngik: &mut SmallRng) -> BirdType {
+     
+        let y: f64 = small_rngik.gen(); // generates a float between 0 and 1
+        let funny_index = y * BirdType::COUNT as f64;
+
+        BirdType::from_repr(funny_index as usize).unwrap_or(BirdType::Sova)
+
+        
+        
+
+
+
+
+    }
+}
+
+impl LizardType {
+    pub fn random_lizard_type(small_rngik: &mut SmallRng) -> LizardType {
+       
+        let y: f64 = small_rngik.gen(); // generates a float between 0 and 1
+        let funny_index = y * LizardType::COUNT as f64;
+
+        LizardType::from_repr(funny_index as usize).unwrap_or(LizardType::Gad)
+
+        
+        
+
+
+
+
     }
 }

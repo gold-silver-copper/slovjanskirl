@@ -7,6 +7,8 @@ pub struct MyWorld {
     pub entity_map: HashMap<EntityID, EntityType>,
     pub ent_loc_index: HashMap<EntityID, MyPoint>,
     pub server_stuff: ServerStuff,
+    pub turn_counter: u32,
+    pub small_rngik: SmallRng,
 
     pub world_seed: u32,
     pub entity_counter: u64,
@@ -20,6 +22,8 @@ impl Default for MyWorld {
             entity_tree: RTree::new(),
             entity_map: HashMap::new(),
             server_stuff: ServerStuff::default(),
+            turn_counter: 0,
+            small_rngik:  SmallRng::seed_from_u64(rngik as u64),
 
             world_seed: rngik.clone(),
             entity_counter: 1,
@@ -48,9 +52,20 @@ impl MyWorld {
 
     pub fn new_test() -> MyWorld {
         let mut x = MyWorld::default();
+        let animik = EntityType::random_animal(&mut x.small_rngik);
         x.new_entity(
             &(81, 88),
-            &EntityType::Monster(AnimalType::Mammal(MammalType::Jelenj)),
+            &animik,
+        );
+        let animik = EntityType::random_animal(&mut x.small_rngik);
+        x.new_entity(
+            &(82, 88),
+            &animik,
+        );
+        let animik = EntityType::random_animal(&mut x.small_rngik);
+        x.new_entity(
+            &(84, 88),
+            &animik,
         );
         x.new_entity(
             &(81, 87),
@@ -62,10 +77,14 @@ impl MyWorld {
         x
     }
 
+   
+
     pub fn interpret_and_execute(&mut self) {
         let my_clone = self.server_stuff.input_queue.clone();
         self.server_stuff.input_queue.clear();
         self.server_stuff.output_queue = RTree::new();
+
+        self.turn_counter +=1;
 
         for (eid, action) in &my_clone {
             if let Some(ent_loc) = self.ent_loc_index.get(&eid) {

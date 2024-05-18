@@ -1,5 +1,5 @@
 use crate::*;
-#[derive(Clone, Debug, Display, PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq, EnumCount, FromRepr)]
 pub enum MeleeWeaponType {
     Nož,
     Sěkyra,
@@ -11,7 +11,7 @@ pub enum MeleeWeaponType {
     Nagajka,
 }
 
-#[derive(Clone, Debug, Display, PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq, EnumCount, FromRepr)]
 pub enum RangedWeaponType {
     Lųk,
     Proca,
@@ -24,7 +24,7 @@ pub enum RangedWeaponType {
     Arbalet,
 }
 
-#[derive(Clone, Debug, Display, PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq, EnumCount, FromRepr)]
 pub enum StoneType {
     Granit,
     Kremenj,
@@ -32,7 +32,7 @@ pub enum StoneType {
     Mramor,
 }
 
-#[derive(Clone, Debug, Display, PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq, EnumCount, FromRepr)]
 pub enum MetalType {
     Bronza,
     Zlåto,
@@ -41,7 +41,7 @@ pub enum MetalType {
     Medj,
 }
 
-#[derive(Clone, Debug, Display, PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq, EnumCount, FromRepr)]
 pub enum WoodType {
     Brest,
     Jasenj,
@@ -53,7 +53,7 @@ pub enum WoodType {
     Kaštan,
 }
 
-#[derive(Clone, Debug, Display, PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq, EnumCount, FromRepr)]
 pub enum GrassType {
     Trava,
     Kovylj, //needle grass
@@ -62,7 +62,7 @@ pub enum GrassType {
     Jasenėc,
 }
 
-#[derive(Clone, Debug, Display, PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq, EnumCount, FromRepr)]
 pub enum BushType {
     Klubnika,
     Jagoda,     //needle grass
@@ -77,7 +77,7 @@ pub enum BushType {
     Bȯzina,
 }
 
-#[derive(Clone, Debug, Display, PartialEq, EnumIter)]
+#[derive(Clone, Debug, Display, PartialEq, EnumIter, EnumCount, FromRepr)]
 pub enum MammalType {
     Los,
     Jelenj,
@@ -86,14 +86,14 @@ pub enum MammalType {
     Tigr,
 }
 
-#[derive(Clone, Debug, Display, PartialEq, EnumIter)]
+#[derive(Clone, Debug, Display, PartialEq, EnumIter, EnumCount, FromRepr)]
 pub enum FishType {
     Losos,
     Tunec,
     Karas,
 }
 
-#[derive(Clone, Debug, Display, PartialEq, EnumIter)]
+#[derive(Clone, Debug, Display, PartialEq, EnumIter, EnumCount, FromRepr)]
 pub enum BirdType {
     Sova,
     Vrabec,
@@ -103,7 +103,7 @@ pub enum BirdType {
     Gųsę,
 }
 
-#[derive(Clone, Debug, Display, PartialEq, EnumIter)]
+#[derive(Clone, Debug, Display, PartialEq, EnumIter, EnumCount, FromRepr)]
 pub enum LizardType {
     Gad,
     Jaščer,
@@ -112,7 +112,7 @@ pub enum LizardType {
     Žȯlv,
 }
 
-#[derive(Clone, Debug, Display, PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq, EnumCount, FromRepr)]
 pub enum AnimalPartType {
     Meat,
     Feather,
@@ -121,7 +121,7 @@ pub enum AnimalPartType {
     Bone,
 }
 
-#[derive(Clone, Debug, Display, PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq, EnumCount, FromRepr)]
 pub enum ShoulderClothingType {
     Šal,
 
@@ -134,7 +134,7 @@ pub enum ShoulderClothingType {
     Ogrinjalo, //cape
 }
 
-#[derive(Clone, Debug, Display, PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq, EnumCount, FromRepr)]
 pub enum HeadClothingType {
     Kosynka, //headscarf
     Platok,  //headscarf
@@ -154,7 +154,7 @@ pub enum HeadClothingType {
     Šešir, //wide brim hat
 }
 
-#[derive(Clone, Debug, Display, PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq, EnumCount, FromRepr)]
 pub enum TorsoClothingType {
     Košula, // Shirt
     Tunika, // Tunic
@@ -170,7 +170,7 @@ pub enum TorsoClothingType {
     Koĺčuga,
 }
 
-#[derive(Clone, Debug, Display, PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq, EnumCount, FromRepr)]
 pub enum LegsClothingType {
     Pantalony, // Pants
     Hlače,     // Trousers
@@ -180,7 +180,7 @@ pub enum LegsClothingType {
     Spodnjice, // Underpants
 }
 
-#[derive(Clone, Debug, Display, PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq, EnumCount, FromRepr)]
 pub enum MebeljType {
     Stěna,
     Stol,
