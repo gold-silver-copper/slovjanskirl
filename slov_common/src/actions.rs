@@ -4,6 +4,7 @@ use crate::*;
 pub enum ActionType {
     Wait,
     Take(AccusativeID),
+    Attack(AccusativeID),
     Drop(ItemType),
     Give(AccusativeID, DativeID),
     Hit(AccusativeID, InstrumentalID),
@@ -57,22 +58,14 @@ impl Action {
             }
         }
     }
-    /*
-    pub fn attack(world: &mut MyWorld, subject: &EntityID, destination: &LocativeID) -> SuccessType {
+    
+    pub fn attack(world: &mut MyWorld, subject: &EntityID, object: &EntityID) -> SuccessType {
         println!("WAIT WHATTT");
 
-        match destination {
-            LocativeID::Cardinal(cd) => world.attack_entity_in_direction(subject, cd), //world.move_entity_in_direction(subject, cd),
-            LocativeID::Entity(_) => {
-                panic!("not implemented ent")
-            }
-            LocativeID::Point(_) => {
-                panic!("not implemented point")
-            }
-        }
+        SuccessType::Success
     }
 
-    */
+   
     pub fn take(world: &mut MyWorld, subject: &EntityID, object: &EntityID) -> SuccessType {
         //get subj and obj locations
         let sub_loc = world.ent_loc_index.get(subject);

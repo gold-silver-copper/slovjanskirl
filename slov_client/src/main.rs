@@ -55,18 +55,19 @@ fn ui_example_system(
                 .max_width(260.)
                 .frame(Frame::none())
                 .show_inside(ui, |ui| {
+                    let mut menu_panel_string = String::new();
                     if ui_status.menu_open == MenuOpen::Take {
                         draw_take_menu(&mut termres.terminal_menu, &mut masterok);
-                        egui::TopBottomPanel::top("take")
-                            .min_height(200.)
-                            .max_height(200.)
-                            .frame(Frame::none())
-                            .show_inside(ui, |ui| {
-                                ui.add(termres.terminal_menu.backend_mut());
-                            });
+                        menu_panel_string = "take".into();
                     } else if ui_status.menu_open == MenuOpen::Drop {
                         draw_drop_menu(&mut termres.terminal_menu, &mut masterok);
-                        egui::TopBottomPanel::top("drop")
+                        menu_panel_string = "drop".into();
+                    } else if ui_status.menu_open == MenuOpen::Attack {
+                        draw_attack_menu(&mut termres.terminal_menu, &mut masterok);
+                        menu_panel_string = "attack".into();
+                    }
+                    if menu_panel_string != "" {
+                        egui::TopBottomPanel::top(menu_panel_string)
                             .min_height(200.)
                             .max_height(200.)
                             .frame(Frame::none())
@@ -74,6 +75,7 @@ fn ui_example_system(
                                 ui.add(termres.terminal_menu.backend_mut());
                             });
                     }
+
                     egui::TopBottomPanel::bottom("info")
                         .min_height(ui.available_height().clamp(100., 2000.))
                         .max_height(ui.available_height().clamp(100., 2000.))
@@ -269,6 +271,44 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
     }
 }
 
+fn draw_attack_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Masterik) {
+    let mut items = masterok
+        .client_world
+        .get_visible_ents_from_ent(&masterok.player_entity_id);
+  
+    let chosen_item = items.get(&masterok.list_cursor_index % items.len()).unwrap_or(&0);
+    masterok.targeted_ent_id = chosen_item.clone();
+    let mut listitemvec = Vec::new();
+
+    let ciotik = masterok
+        .client_world
+        .entity_map
+        .get(&chosen_item)
+        .unwrap_or(&EntityType::None);
+    let target_string = format!("currently targeting {}", ciotik.minimal_string());
+
+    listitemvec.push(Line::from("Select further / closer with I / K"));
+    listitemvec.push(Line::from(target_string));
+
+    terminal
+        .draw(|frame| {
+            let area = frame.size();
+
+            //neccesary beccause drawing is from the top
+
+            frame.render_widget(
+                List::new(listitemvec).on_gray().block(
+                    Block::new()
+                        .title("press number to choose item to pick up")
+                        .blue()
+                        .borders(Borders::ALL),
+                ),
+                area,
+            );
+        })
+        .expect("epic fail");
+}
+
 fn draw_take_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Masterik) {
     let ent_loc = masterok
         .client_world
@@ -397,6 +437,17 @@ struct Masterik {
     is_logged_in: bool,
     button_entityid_map: HashMap<ItemKey, EntityID>,
     button_itemstruct_map: HashMap<ItemKey, ItemType>,
+    list_cursor_index: usize,
+    targeted_ent_id: EntityID,
+}
+
+impl Masterik {
+    pub fn refresh_menus(&mut self) {
+        self.list_cursor_index = 0;
+        self.targeted_ent_id = 0;
+        self.button_entityid_map.drain();
+        self.button_itemstruct_map.drain();
+    }
 }
 
 impl Default for Masterik {
@@ -408,6 +459,8 @@ impl Default for Masterik {
             messages: Vec::new(),
             client_world: MyWorld::new_test(),
             is_logged_in: false,
+            list_cursor_index: 0,
+            targeted_ent_id: 0,
             button_entityid_map: HashMap::new(),
             button_itemstruct_map: HashMap::new(),
         }
@@ -478,13 +531,16 @@ fn keyboard_input_system(
     let char_down = input.any_pressed([KeyCode::KeyS]);
     let char_left = input.any_pressed([KeyCode::KeyA]);
     let char_right = input.any_pressed([KeyCode::KeyD]);
-    let char_backspace = input.any_pressed([KeyCode::Backspace, KeyCode::Delete]);
-    let char_quit = input.any_just_pressed([KeyCode::KeyQ]);
 
-    let char_take = input.any_just_pressed([KeyCode::KeyJ]); // jęti (jme) / vzeti
-    let char_drop = input.any_just_pressed([KeyCode::KeyI]); //izbaviti se
-    let char_help = input.any_just_pressed([KeyCode::KeyP]); //pokazati pomoc ?
-    let char_throw = input.any_just_pressed([KeyCode::KeyM]); //metnuti  imej target range do ktorogo mozno metati dla praktiki zeby povysati skil be ubijstva
+    let cursor_up = input.any_just_pressed([KeyCode::KeyI]);
+    let cursor_down = input.any_just_pressed([KeyCode::KeyK]);
+    let cursor_left = input.any_just_pressed([KeyCode::KeyJ]);
+    let cursor_right = input.any_just_pressed([KeyCode::KeyL]);
+
+    let char_attack = input.any_just_pressed([KeyCode::KeyY]); // jęti (jme) / vzeti
+    let char_take = input.any_just_pressed([KeyCode::KeyG]); // jęti (jme) / vzeti metnuti  imej target range do ktorogo mozno metati dla praktiki zeby povysati skil be ubijstva
+    let char_drop = input.any_just_pressed([KeyCode::KeyB]); //izbaviti se
+    let char_help = input.any_just_pressed([KeyCode::KeyT]); //pokazati pomoc ?
 
     let char_one = input.any_just_pressed([KeyCode::Digit1]);
     let char_two = input.any_just_pressed([KeyCode::Digit2]);
@@ -496,6 +552,9 @@ fn keyboard_input_system(
     let char_eight = input.any_just_pressed([KeyCode::Digit8]);
     let char_nine = input.any_just_pressed([KeyCode::Digit9]);
     let char_zero = input.any_just_pressed([KeyCode::Digit0]);
+
+    let char_backspace = input.any_pressed([KeyCode::Backspace, KeyCode::Delete]);
+    let char_quit = input.any_just_pressed([KeyCode::KeyQ]);
 
     let mut client_action = ActionType::Wait;
     let client_id = masterok.player_account_id.clone();
@@ -520,9 +579,12 @@ fn keyboard_input_system(
         if char_drop {
             ui_state.menu_open = MenuOpen::Drop;
         }
+        if char_attack {
+            ui_state.menu_open = MenuOpen::Attack;
+        }
     } else if ui_state.menu_open == MenuOpen::Take {
         if char_take {
-            masterok.button_entityid_map.drain();
+            masterok.refresh_menus();
             ui_state.menu_open = MenuOpen::None;
         }
 
@@ -530,9 +592,28 @@ fn keyboard_input_system(
             client_action =
                 ActionType::Take(masterok.button_entityid_map.get(&1).unwrap_or(&0).clone());
         }
+    } else if ui_state.menu_open == MenuOpen::Attack {
+        if char_attack {
+            masterok.refresh_menus();
+            ui_state.menu_open = MenuOpen::None;
+        }
+
+        if cursor_down {
+            masterok.list_cursor_index += 1;
+        }
+        if cursor_up {
+            if masterok.list_cursor_index > 0 {
+                masterok.list_cursor_index -= 1;
+            }
+        }
+
+        if cursor_right {
+            client_action =
+                ActionType::Attack(masterok.targeted_ent_id);
+        }
     } else if ui_state.menu_open == MenuOpen::Drop {
         if char_drop {
-            masterok.button_entityid_map.drain();
+            masterok.refresh_menus();
             ui_state.menu_open = MenuOpen::None;
         }
 

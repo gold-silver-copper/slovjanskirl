@@ -82,6 +82,7 @@ impl MyWorld {
                 let success_type = match action {
                     ActionType::Go(loc) => Action::go(self, &eid, loc),
                     ActionType::Take(obj) => Action::take(self, &eid, obj),
+                    ActionType::Attack(obj) => Action::attack(self, &eid, obj),
                     ActionType::Drop(itik) => Action::drop(self, &eid, itik),
                     ActionType::Wait => SuccessType::Success,
 
