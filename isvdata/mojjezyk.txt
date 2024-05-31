@@ -1,0 +1,50 @@
+A B C Č D DŽ E Ě F G H I J K L LJ M N NJ O P R S Š T U V Y Z Ž Ę Ų Å Ė Ȯ   Ć Đ   Ĺ Ń Ŕ T́ D́ Ś Ź
+
+a b c cz d dzz e 'e f g h i j k l lj m n nj o p r s sz t u w y z zz e' u' a* e^ o^ c' dz l' n' r' t' d' s' z'
+
+
+minimal variant
+
+A B C Č D DŽ E Ě F G H I J K L LJ M N NJ O P R S Š T U V Y Z Ž Ć Đ Ĺ Ń Ŕ T́ D́ Ś Ź
+
+a b c cz d dzz e 'e f g h i j k l lj m n nj o p r s sz t u w y z zz c' dz l' n' r' t' d' s' z'
+
+
+w instead of v for better readbility vs u , also helps denote words with v as foreign 'visual' 
+
+cz sz like in polish, zz for Ž to continue the pattern
+
+uses ASCII only for easy typing , replacement characters are chosen based on linguistic principles
+
+'e for Ě better demonstrates the palatizing nature and removes an unneccesary character
+
+e' and u' for nasals is slightly confusing but its okay for parsing purposes since the apostrophe would never appear after those letters
+
+the high graphic nature of the apostrophe signifies the movement of the tongue to the back nasal
+
+digraphs such as dz lj and nj are reduced to basic components since there is no visual disambiguation but are replicated for prosperity
+
+a* e^ and o^ are mostly placeholder for now , i think Å is a very good character and wish to reproduce its meaning better later
+
+without a* e^ and o^ the whole alphabet then is simply the english alphabet with extra utilization of the apostrophe
+this minimalism is good for use with computers and programming languages
+
+
+
+
+
+minimal variant v2
+
+A B C Č D DŽ E Ě F G H I J K L LJ M N NJ O P R S Š T U V Y Z Ž Ć Đ Ĺ Ń Ŕ T́ D́ Ś Ź  Ę Ų
+
+a b c cz d dzz e 'e f g h i j k l lj m n nj o p r s sz t u v y z zz c' dz l' n' r' t' d' s' z' e' u'
+
+
+w reverted to v for standardization
+
+added nasalized e and u to minimal variant
+
+for cases of ambiguity a dash - can be used such as in 
+
+råzžigati -> raz-zzigati / razzzigati 
+

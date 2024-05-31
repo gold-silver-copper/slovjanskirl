@@ -238,7 +238,7 @@ fn draw_ascii_info(terminal: &mut Terminal<RataguiBackend>, masterok: &Masterik)
         messages_to_show.push(Line::from(stats_string));
         messages_to_show.push(Line::from(""));
         messages_to_show.push(Line::from(wep_string));
-        messages_to_show.push(Line::from("Věči...."));
+        messages_to_show.push(Line::from("Vě'x's'z'd'f'dzz'či...."));
 
         messages_to_show.push(Line::from(inventory_string));
 
