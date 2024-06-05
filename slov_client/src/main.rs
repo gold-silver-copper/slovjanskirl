@@ -4,6 +4,7 @@ use bevy_egui::{
     egui::{self, Frame},
     EguiContexts, EguiPlugin,
 };
+use crate::egui::{FontDefinitions,FontData,FontFamily};
 use ratatui::{
     layout::Rect,
     prelude::{Line, Stylize, Terminal},
@@ -27,6 +28,7 @@ fn main() {
         .add_systems(PreUpdate, local_world_process)
         .add_systems(PostUpdate, keyboard_input_system)
         .add_systems(Startup, create_local_account)
+        .add_systems(PostStartup, set_custom_font)
         .run();
 }
 // Render to the terminal and to egui , both are immediate mode
@@ -47,8 +49,8 @@ fn ui_example_system(
     egui::CentralPanel::default()
         .frame(Frame::none())
         .show(contexts.ctx_mut(), |ui| {
-            let av_height = ui.available_height().clamp(100., 2000.);
-            let av_width = ui.available_width().clamp(100., 2000.);
+            let av_height = ui.available_height().clamp(100., 1500.);
+            let av_width = ui.available_width().clamp(100., 1500.);
 
             egui::SidePanel::right("containeeee")
                 .min_width(260.)
@@ -77,15 +79,15 @@ fn ui_example_system(
                     }
 
                     egui::TopBottomPanel::bottom("info")
-                        .min_height(ui.available_height().clamp(100., 2000.))
-                        .max_height(ui.available_height().clamp(100., 2000.))
+                        .min_height(ui.available_height().clamp(100., 1500.))
+                        .max_height(ui.available_height().clamp(100., 1500.))
                         .frame(Frame::none())
                         .show_inside(ui, |ui| {
                             ui.add(termres.terminal_info.backend_mut());
                         });
                 });
 
-            let remain_height = ui.available_height().clamp(100., 2000.);
+            let remain_height = ui.available_height().clamp(100., 1500.);
             egui::TopBottomPanel::top("game")
                 .min_height(remain_height)
                 .max_height(remain_height)
@@ -414,10 +416,10 @@ impl Default for BevyTerminal<RataguiBackend> {
         let mut terminal1 = Terminal::new(backend1).unwrap();
 
         let mut backend2 = RataguiBackend::new(20, 20);
-        backend2.set_font_size(10);
+        backend2.set_font_size(15);
         let mut terminal2 = Terminal::new(backend2).unwrap();
         let mut backend3 = RataguiBackend::new(20, 20);
-        backend3.set_font_size(11);
+        backend3.set_font_size(15);
         let mut terminal3 = Terminal::new(backend3).unwrap();
         BevyTerminal {
             terminal_game: terminal1,
@@ -521,6 +523,30 @@ fn create_local_account(mut masterok: ResMut<Masterik>) {
     masterok.player_account_id = local_info.0;
     masterok.player_entity_id = local_info.1;
 }
+
+
+
+fn set_custom_font(mut contexts: EguiContexts) {
+
+
+    let mut fonts = FontDefinitions::default();
+
+// Install my own font (maybe supporting non-latin characters):
+fonts.font_data.insert("my_font".to_owned(),
+   FontData::from_static(include_bytes!("../../assets/fonts/Iosevka-Regular.ttf"))); // .ttf and .otf supported
+
+// Put my font first (highest priority):
+fonts.families.get_mut(&FontFamily::Proportional).unwrap()
+    .insert(0, "my_font".to_owned());
+
+// Put my font as last fallback for monospace:
+fonts.families.get_mut(&FontFamily::Monospace).unwrap()
+.insert(0, "my_font".to_owned());
+
+    contexts.ctx_mut().set_fonts(fonts);
+}
+
+
 
 fn keyboard_input_system(
     input: Res<ButtonInput<KeyCode>>,
