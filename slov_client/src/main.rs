@@ -10,7 +10,7 @@ use ratatui::{
     text::Text,
     widgets::{Block, Borders, Paragraph, Wrap, *},
 };
-use ratframe::RataguiBackend;
+use egui_ratatui::RataguiBackend;
 use slov_common::*;
 
 fn main() {

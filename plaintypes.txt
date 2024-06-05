@@ -60,3 +60,8 @@ toki game
 
 
 SLOVhAcK
+
+
+stone metal wood		cloth leater			
+	wound points	armor penetration			
+	each material is better or worse for stab or slash				
