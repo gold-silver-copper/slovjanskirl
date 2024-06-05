@@ -412,14 +412,14 @@ struct BevyTerminal<RataguiBackend: ratatui::backend::Backend> {
 impl Default for BevyTerminal<RataguiBackend> {
     fn default() -> Self {
         let mut backend1 = RataguiBackend::new(20, 20);
-        backend1.set_font_size(15);
+        backend1.set_font_size(20);
         let mut terminal1 = Terminal::new(backend1).unwrap();
 
         let mut backend2 = RataguiBackend::new(20, 20);
-        backend2.set_font_size(15);
+        backend2.set_font_size(12);
         let mut terminal2 = Terminal::new(backend2).unwrap();
         let mut backend3 = RataguiBackend::new(20, 20);
-        backend3.set_font_size(15);
+        backend3.set_font_size(12);
         let mut terminal3 = Terminal::new(backend3).unwrap();
         BevyTerminal {
             terminal_game: terminal1,
@@ -533,7 +533,7 @@ fn set_custom_font(mut contexts: EguiContexts) {
 
 // Install my own font (maybe supporting non-latin characters):
 fonts.font_data.insert("my_font".to_owned(),
-   FontData::from_static(include_bytes!("../../assets/fonts/Iosevka-Regular.ttf"))); // .ttf and .otf supported
+   FontData::from_static(include_bytes!("../../assets/fonts/egypt_mono.ttf"))); // .ttf and .otf supported
 
 // Put my font first (highest priority):
 fonts.families.get_mut(&FontFamily::Proportional).unwrap()

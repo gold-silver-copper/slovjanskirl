@@ -279,7 +279,7 @@ impl EntityType {
         match self {
             EntityType::Item(x) => x.to_displaychar(),
             EntityType::Monster(x) => x.animal_type.to_displaychar(), //x.to_displaychar(),
-            EntityType::Human(_) => "@".into(),
+            EntityType::Human(_) => "𓀙".into(),
             EntityType::None => "?".into(),
 
             EntityType::Råstlina(x) => x.to_displaychar(),
