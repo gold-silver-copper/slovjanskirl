@@ -1,0 +1,13 @@
+id,isv,variations,item_type,primary_material,secondary_material,symbol
+shawl,šal,,clothing,flexible,,
+veil,vualj,,clothing,flexible,,
+cape_garment,pelerina,,clothing,flexible,,
+hat,šapka,klobuk,clothing,flexible,,
+leather_coat,kožuh,,clothing,leather,,
+hood,kapuca,kapjušon,clothing,flexible,,
+pants,nogavice,nogavky pantalony,clothing,flexible,,
+shirt,košulja,,clothing,flexible,,
+dress,suknja,,clothing,flexible,,
+coat,frak,paljto šuba pola sako,clothing,flexible,,
+armor,pancyŕ,brȯnja,clothing,solid,,
+helmet,šlěm,helma,clothing,solid,,

@@ -533,7 +533,7 @@ fn set_custom_font(mut contexts: EguiContexts) {
 
 // Install my own font (maybe supporting non-latin characters):
 fonts.font_data.insert("my_font".to_owned(),
-   FontData::from_static(include_bytes!("../../assets/fonts/egypt_mono.ttf"))); // .ttf and .otf supported
+   FontData::from_static(include_bytes!("../../assets/fonts/hiero_mono.ttf"))); // .ttf and .otf supported
 
 // Put my font first (highest priority):
 fonts.families.get_mut(&FontFamily::Proportional).unwrap()
