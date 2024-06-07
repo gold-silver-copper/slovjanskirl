@@ -20,6 +20,9 @@ pub use components::*;
 mod actions;
 pub use actions::*;
 
+mod csv_structs;
+pub use csv_structs::*;
+
 mod item_types;
 pub use item_types::*;
 

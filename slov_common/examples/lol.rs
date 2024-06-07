@@ -1,5 +1,20 @@
 use noise::{NoiseFn, Perlin, Seedable};
 use slov_common::*;
+use serde_derive::Deserialize;
+use std::error::Error;
+use std::fs::File;
+use csv::ReaderBuilder;
+
+#[derive(Debug, Deserialize)]
+struct Animal {
+    id: String,
+    isv: String,
+    variations: Option<String>,
+    animal_type: String,
+    symbol: Option<String>,
+    color: String,
+}
+
 
 fn main() {
     let kost = "kost";
@@ -34,6 +49,19 @@ fn main() {
     println!("{}", ISV::ins_sg("masina"));
 
     println!("{}", ISV::ins_sg("jelenj"));
+
+    let csv = File::open("../assets/data/isv_animals.csv").unwrap();
+
+    let mut reader = csv::Reader::from_reader(csv);
+
+    for animal in reader.deserialize() {
+        let animal:Animal = animal.unwrap();
+       
+        println!("{:?}", animal);
+    }
+
+    
+   
 
     /*
 
