@@ -14,6 +14,7 @@ impl RTreeObject for PositionComponent {
     }
 }
 
+
 impl PointDistance for PositionComponent {
     fn distance_2(&self, point: &(i64, i64)) -> i64 {
         self.point.distance_2(point)
