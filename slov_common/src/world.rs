@@ -285,16 +285,19 @@ impl MyWorld {
         };
 
         let succik = match &act_packet.success {
-            SuccessType::Success => {format!("")}
-            SuccessType::Failure => {format!("ne mozzesz")}
+            SuccessType::Success => {
+                format!("")
+            }
+            SuccessType::Failure => {
+                format!("ne mozzesz")
+            }
         };
 
-
-        if succik != "" {subject_pronoun.push_str(&succik);}
-        else {subject_pronoun.push_str(&meowik);}
-
-
-        
+        if succik != "" {
+            subject_pronoun.push_str(&succik);
+        } else {
+            subject_pronoun.push_str(&meowik);
+        }
 
         let abc = format!(" {:#?}", &act_packet.action_location);
         subject_pronoun.push_str(&abc);

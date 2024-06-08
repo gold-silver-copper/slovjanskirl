@@ -35,18 +35,15 @@ fn main() {
 
     println!("{}", ISV::ins_sg("jelenj"));
 
-    let csv = include_bytes!("../../assets/data/isv_animals.csv");
+    let animals_csv = include_bytes!("../../assets/data/isv_animals.csv");
 
-    let mut reader = csv::Reader::from_reader(csv.as_slice());
+    let mut animal_reader = csv::Reader::from_reader(animals_csv.as_slice());
 
-    for animal in reader.deserialize() {
-        let animal:AnimalCSV = animal.unwrap();
-       
+    for animal in animal_reader.deserialize() {
+        let animal: AnimalCSV = animal.unwrap();
+
         println!("{:?}", animal);
     }
-
-    
-   
 
     /*
 

@@ -11,7 +11,6 @@ pub enum MeleeWeaponType {
     Nagajka,
 }
 
-
 #[derive(Clone, Debug, Display, PartialEq, EnumCount, FromRepr)]
 pub enum RangedWeaponType {
     Lųk,

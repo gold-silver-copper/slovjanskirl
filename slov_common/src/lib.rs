@@ -52,5 +52,3 @@ use strum::IntoEnumIterator;
 use strum::{EnumCount, EnumIter, FromRepr};
 
 pub use serde::{Deserialize, Deserializer};
-
-

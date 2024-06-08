@@ -157,9 +157,9 @@ impl MeleeWeapon {
 impl MeleeWeaponType {
     pub fn weapon_range(&self) -> StatsUnit {
         match self {
-            MeleeWeaponType::Kopje =>{10}
-         //   MeleeWeaponType::Nož =>{100}
-            _ => {3}
+            MeleeWeaponType::Kopje => 10,
+            //   MeleeWeaponType::Nož =>{100}
+            _ => 3,
         }
     }
 }
