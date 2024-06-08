@@ -98,3 +98,96 @@ where
 
     Ok(Color::Rgb(parts[0], parts[1], parts[2]))
 }
+
+pub fn load_csv_data() -> CSVTypeStore {
+
+    let data_csv = include_bytes!("../../assets/data/isv_animals.csv");
+   
+
+    let mut csv_reader = csv::Reader::from_reader(data_csv.as_slice());
+
+    let mut animals_vec = Vec::new();
+    for data_item in csv_reader.deserialize() {
+        let data_item: AnimalCSV = data_item.unwrap();
+
+        animals_vec.push(data_item);
+    }
+
+
+    let data_csv = include_bytes!("../../assets/data/isv_clothing.csv");
+   
+
+    let mut csv_reader = csv::Reader::from_reader(data_csv.as_slice());
+
+    let  mut clothing_vec = Vec::new();
+    for data_item in csv_reader.deserialize() {
+        let data_item: ClothingCSV = data_item.unwrap();
+
+        clothing_vec.push(data_item);
+    }
+
+    let data_csv = include_bytes!("../../assets/data/isv_furniture.csv");
+   
+
+    let mut csv_reader = csv::Reader::from_reader(data_csv.as_slice());
+
+    let  mut furniture_vec = Vec::new();
+    for data_item in csv_reader.deserialize() {
+        let data_item: FurnitureCSV = data_item.unwrap();
+
+        furniture_vec.push(data_item);
+    }
+
+    let data_csv = include_bytes!("../../assets/data/isv_materials.csv");
+   
+
+    let mut csv_reader = csv::Reader::from_reader(data_csv.as_slice());
+
+    let mut  material_vec = Vec::new();
+    for data_item in csv_reader.deserialize() {
+        let data_item: MaterialCSV = data_item.unwrap();
+
+        material_vec.push(data_item);
+    }
+    
+    let data_csv = include_bytes!("../../assets/data/isv_plants.csv");
+   
+
+    let mut csv_reader = csv::Reader::from_reader(data_csv.as_slice());
+
+    let  mut plant_vec = Vec::new();
+    for data_item in csv_reader.deserialize() {
+        let data_item: PlantCSV = data_item.unwrap();
+
+        plant_vec.push(data_item);
+    }
+
+    let data_csv = include_bytes!("../../assets/data/isv_weapons.csv");
+   
+
+    let mut csv_reader = csv::Reader::from_reader(data_csv.as_slice());
+
+    let  mut weapon_vec = Vec::new();
+    for data_item in csv_reader.deserialize() {
+        let data_item: WeaponCSV = data_item.unwrap();
+
+        weapon_vec.push(data_item);
+    }
+
+    CSVTypeStore{
+        animals: animals_vec,
+        clothing: clothing_vec,
+        furniture: furniture_vec,
+        materials: material_vec,
+        plants: plant_vec,
+        weapons: weapon_vec
+
+
+
+
+
+
+
+    }
+
+}
