@@ -1,40 +1,5 @@
 use noise::{NoiseFn, Perlin, Seedable};
 use slov_common::*;
-use serde_derive::Deserialize;
-use serde::{Deserialize, Deserializer};
-use std::error::Error;
-use std::fs::File;
-use csv::ReaderBuilder;
-
-#[derive(Debug, Deserialize)]
-struct Animal {
-    id: String,
-    isv: String,
-    variations: String,
-    animal_type: String,
-    symbol: String,
-    #[serde(deserialize_with = "deserialize_color")]
-    color: Color,
-}
-
-
-
-fn deserialize_color<'de, D>(deserializer: D) -> Result<Color, D::Error>
-where
-    D: Deserializer<'de>,
-{
-    let s: String = Deserialize::deserialize(deserializer)?;
-    let parts: Vec<u8> = s.split(',')
-        .map(|part| part.trim().parse().unwrap_or(0))
-        .collect();
-
-    if parts.len() != 3 {
-        return Err(serde::de::Error::custom("invalid color format"));
-    }
-
-    Ok(Color::Rgb(parts[0],parts[1],parts[2]))
-}
-
 
 fn main() {
     let kost = "kost";
@@ -70,12 +35,12 @@ fn main() {
 
     println!("{}", ISV::ins_sg("jelenj"));
 
-    let csv = File::open("../assets/data/isv_animals.csv").unwrap();
+    let csv = include_bytes!("../../assets/data/isv_animals.csv");
 
-    let mut reader = csv::Reader::from_reader(csv);
+    let mut reader = csv::Reader::from_reader(csv.as_slice());
 
     for animal in reader.deserialize() {
-        let animal:Animal = animal.unwrap();
+        let animal:AnimalCSV = animal.unwrap();
        
         println!("{:?}", animal);
     }
