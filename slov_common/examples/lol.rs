@@ -1,6 +1,7 @@
 use noise::{NoiseFn, Perlin, Seedable};
 use slov_common::*;
 use serde_derive::Deserialize;
+use serde::{Deserialize, Deserializer};
 use std::error::Error;
 use std::fs::File;
 use csv::ReaderBuilder;
@@ -9,10 +10,38 @@ use csv::ReaderBuilder;
 struct Animal {
     id: String,
     isv: String,
-    variations: Option<String>,
+    variations: String,
     animal_type: String,
-    symbol: Option<String>,
-    color: String,
+    symbol: String,
+    #[serde(deserialize_with = "deserialize_color")]
+    color: Color,
+}
+
+#[derive(Debug)]
+struct Color {
+    r: u8,
+    g: u8,
+    b: u8,
+}
+
+fn deserialize_color<'de, D>(deserializer: D) -> Result<Color, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let s: String = Deserialize::deserialize(deserializer)?;
+    let parts: Vec<u8> = s.split(',')
+        .map(|part| part.trim().parse().unwrap_or(0))
+        .collect();
+
+    if parts.len() != 3 {
+        return Err(serde::de::Error::custom("invalid color format"));
+    }
+
+    Ok(Color {
+        r: parts[0],
+        g: parts[1],
+        b: parts[2],
+    })
 }
 
 
