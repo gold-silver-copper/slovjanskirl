@@ -1,10 +1,8 @@
 use crate::*;
 
-use csv::ReaderBuilder;
-use std::error::Error;
-use std::fs::File;
 
-#[derive(Debug, Deserialize)]
+
+#[derive(Debug, Deserialize, Clone)]
 pub struct AnimalCSV {
     pub id: String,
     pub isv: String,
@@ -13,7 +11,7 @@ pub struct AnimalCSV {
     #[serde(deserialize_with = "deserialize_color")]
     pub color: Color,
 }
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct ClothingCSV {
     pub id: String,
     pub isv: String,
@@ -23,7 +21,7 @@ pub struct ClothingCSV {
 
     pub symbol: String,
 }
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct FurnitureCSV {
     pub id: String,
     pub isv: String,
@@ -35,7 +33,7 @@ pub struct FurnitureCSV {
     pub vision_block: String,
     pub container: String,
 }
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct MaterialCSV {
     pub id: String,
     pub isv: String,
@@ -45,7 +43,7 @@ pub struct MaterialCSV {
     pub color: Color,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct PlantCSV {
     pub id: String,
     pub isv: String,
@@ -55,7 +53,7 @@ pub struct PlantCSV {
     pub color: Color,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct WeaponCSV {
     pub id: String,
     pub isv: String,
@@ -72,7 +70,7 @@ pub struct WeaponCSV {
 
 
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct CSVTypeStore {
     pub animals: Vec<AnimalCSV>,
     pub clothing: Vec<ClothingCSV>,

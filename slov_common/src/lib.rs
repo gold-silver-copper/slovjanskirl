@@ -40,6 +40,9 @@ pub use server_stuff::*;
 use rand::rngs::SmallRng;
 use rand::{Rng, SeedableRng};
 
+mod entity_structs;
+pub use entity_structs::*;
+
 pub use noise::*;
 pub use ratatui::style::{Color, Style, Stylize};
 pub use ratatui::text::Span;

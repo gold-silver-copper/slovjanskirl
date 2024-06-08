@@ -9,6 +9,7 @@ pub struct MyWorld {
     pub server_stuff: ServerStuff,
     pub turn_counter: u32,
     pub small_rngik: SmallRng,
+    pub csv_types: CSVTypeStore,
 
     pub world_seed: u32,
     pub entity_counter: u64,
@@ -24,6 +25,7 @@ impl Default for MyWorld {
             server_stuff: ServerStuff::default(),
             turn_counter: 0,
             small_rngik: SmallRng::seed_from_u64(rngik as u64),
+            csv_types: load_csv_data(),
 
             world_seed: rngik.clone(),
             entity_counter: 1,
