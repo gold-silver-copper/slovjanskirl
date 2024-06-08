@@ -17,12 +17,7 @@ struct Animal {
     color: Color,
 }
 
-#[derive(Debug)]
-struct Color {
-    r: u8,
-    g: u8,
-    b: u8,
-}
+
 
 fn deserialize_color<'de, D>(deserializer: D) -> Result<Color, D::Error>
 where
@@ -37,11 +32,7 @@ where
         return Err(serde::de::Error::custom("invalid color format"));
     }
 
-    Ok(Color {
-        r: parts[0],
-        g: parts[1],
-        b: parts[2],
-    })
+    Ok(Color::Rgb(parts[0],parts[1],parts[2]))
 }
 
 
