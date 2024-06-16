@@ -31,7 +31,7 @@ pub struct FurnitureCSV {
     pub symbol: String,
     pub move_block: String,
     pub vision_block: String,
-    pub container: String,
+  
 }
 #[derive(Debug, Deserialize, Clone)]
 pub struct MaterialCSV {
