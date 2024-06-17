@@ -37,17 +37,13 @@ fn ui_example_system(
     draw_attack_menu(&mut termres.terminal_info, &mut masterok);
 
     egui::CentralPanel::default()
-        .frame(Frame::none())
+     //   .frame(Frame::none())
         .show(contexts.ctx_mut(), |ui| {
-            let av_height = ui.available_height().clamp(100., 1500.);
-            let av_width = ui.available_width().clamp(100., 1500.);
-
            
-            let remain_height = ui.available_height().clamp(100., 1500.);
             egui::TopBottomPanel::top("game")
-                .min_height(remain_height)
-                .max_height(remain_height)
-                .frame(Frame::none())
+                .min_height(ui.available_height())
+                .max_height(ui.available_height())
+             //   .frame(Frame::none())
                 .show_inside(ui, |ui| {
                     ui.add(termres.terminal_info.backend_mut());
                 });
