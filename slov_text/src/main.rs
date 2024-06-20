@@ -3,7 +3,7 @@ use bevy::{input::keyboard::Key, prelude::*, render::view::visibility};
 
 use bevy_egui::{
     egui::{self, Frame,FontData, FontDefinitions, FontFamily},
-    EguiContexts, EguiPlugin,
+    EguiContexts, EguiPlugin,EguiSet
 };
 use egui_ratatui::RataguiBackend;
 use ratatui::{
@@ -25,29 +25,39 @@ fn main() {
         // or after the `EguiSet::BeginFrame` system (which belongs to the `CoreSet::PreUpdate` set).
         .add_systems(Update, ui_example_system)
       
+      
         .add_systems(PostUpdate, keyboard_input_system)
         .run();
 }
+
+
+
 // Render to the terminal and to egui , both are immediate mode
 fn ui_example_system(
     mut contexts: EguiContexts,
     mut termres: ResMut<BevyTerminal<RataguiBackend>>,
     mut masterok: ResMut<Masterik>,
 ) {
+   
+  
     draw_attack_menu(&mut termres.terminal_info, &mut masterok);
 
     egui::CentralPanel::default()
      //   .frame(Frame::none())
         .show(contexts.ctx_mut(), |ui| {
            
+
+           
+            let remain_height = ui.available_height();
             egui::TopBottomPanel::top("game")
-                .min_height(ui.available_height())
-                .max_height(ui.available_height())
+                .min_height(remain_height)
+                .max_height(remain_height)
              //   .frame(Frame::none())
                 .show_inside(ui, |ui| {
                     ui.add(termres.terminal_info.backend_mut());
                 });
         });
+        
 }
 
 fn draw_attack_menu(terminal: &mut Terminal<RataguiBackend>, masterok: &mut Masterik) {
