@@ -48,3 +48,20 @@ for cases of ambiguity a dash - can be used such as in
 
 råzžigati -> raz-zzigati / razzzigati 
 
+
+Hey there, I wanted to let you know that I will probably be putting all my interslavic projects currently on hold. 
+I found it rather difficult to find fitting words for all the things I wanted to add to my game.
+And it often felt like I would be too biased towards my native language when trying to coin new words.
+
+Also with time I feel more biased towards some of the grammar and orthography aspects of interslavic, and wish it was a bit different.
+
+I really appreciate your help when I was working on the universal dependencies model.
+You really helped me learn a lot.
+
+
+I still like the idea of interslavic, it is a really cool project.
+Maybe I will finally start participating in the saturday beseda more, instead of just thinking about programming stuff for interslavic.
+But I am not going to work on my interslavic game anymore, maybe I will return to it later. 
+
+Thank you for all your support up to this.
+
