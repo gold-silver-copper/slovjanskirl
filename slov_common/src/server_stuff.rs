@@ -6,7 +6,7 @@ pub struct ServerStuff {
     pub output_queue: RTree<ActionPacket>,
     pub account_counter: u64,
 
-    pub entity_accid_map: HashMap<EntityID, AccountID>,
+    pub accid_entid_map: HashMap<AccountID, EntityID>,
 }
 
 impl Default for ServerStuff {
@@ -16,7 +16,7 @@ impl Default for ServerStuff {
             output_queue: RTree::default(),
             account_counter: 1,
 
-            entity_accid_map: HashMap::default(),
+            accid_entid_map: HashMap::default(),
         }
     }
 }

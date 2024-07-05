@@ -41,9 +41,6 @@ same with bushes but they provide vines or berries
 have saplings for trees i guess
 
 
-game should probably be built on bevy
-
-but idk about networking...replicon mebe
 
 add a game guide in the game that players can read and find out about things that can be done in the game.
 
@@ -52,8 +49,6 @@ tech stack
 
 common: rstar world
 
-server: ezsocket http server... but which
-alternative client: macroquad-egui , reqwest
 
 bevy_rtc 
 
@@ -70,6 +65,7 @@ You then are spawned randomly in a forest where you can pick berries
 
 
 you can sharpen a weapon to make it sharp , through use it becomes dull and has to be resharpened occasionally
+
 
 
 woodcrafting skill, metalworking, rock knapping
@@ -101,3 +97,76 @@ quit-quit
 
 the overworld is singleplayer and has random seeds for players
 the dungeons are randomly generated and each linked to its own multiplayer instance
+
+ 
+speed of thrown object determines how many tiles it moves
+it also follows direction of thing it is thrown at maybe? or no too op, maybe thats like a spell
+starting speed for sling is 4 tiles a tick, arrow is 8 tiles a tick, bullet is 40 tiles or more  1000 ft pr sec
+
+
+
+no bullets
+
+furnace made out of clay with fan out of wood burns iron ore make metal for dagger stone for mrotar
+
+make pipe to smoke weed
+
+sandy beach with infinite rocks, each rock u pick up is a random mineral
+
+furnitures and some plants like trees should be entities because they will be often deleted and stuffor like idk have inventory for chest
+
+
+combat system:  melee attacks are automatic and affect all within a radius of player/monster . ranged attacks have to be triggered manually
+short sword - 1 tile radius, long sword, 2 tile radius hope i dont hit thru wall idk, 
+
+to create an infinite throwing weapon like throwing knives u need three knives of the same type
+
+
+combat - press M , cursor is automatically set to nearest non friendly living entity, then player can press TAB key to switch to next nearest entity.
+or player can start using VI keys to move cursor around and manually choose area to throw to or attack. player can press ENTER to melee or 
+
+
+general ride mechanic, ride cows and horses and any animalia gis game
+attack from range
+
+drawbridge
+
+
+
+
+dalekobojno oruzje - prasca tkanina s zlatymi kuljami
+
+blizkobojno oruzje - mecz zlaty s drevenoj rukojetju
+
+tulec dla luka s strelami // quiver bow n arrow
+měšek s kamenjami 
+vrěća s puljami dla procy
+
+
+sila , srųčnost' , bystrost́ , råzum , 
+
+lokacija- czarovny les
+ime - zlotik
+zdravje - zdravy
+derzhysz - mecz
+dalnoboj - kidajesz nozz
+
+tut na polu :
+sword 10 gold knife body
+
+ty vidisz:
+
+                zver  
+
+
+
+                NW N NE
+                W  @  E
+                SW S SE
+
+
+messagelog : rest of ths tuf
+
+
+
+

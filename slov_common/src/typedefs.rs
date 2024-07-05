@@ -1,10 +1,11 @@
 use crate::*;
 
 pub type EntityID = u64;
+pub type ItemKey = u16;
 pub type AccountID = u64;
-pub type Health = u64;
+pub type StatsUnit = i64;
 pub type CoordinateUnit = i64;
-pub const LOCAL_RANGE: i64 = 4000;
+pub const LOCAL_RANGE: i64 = 2000;
 pub type MyPoint = (CoordinateUnit, CoordinateUnit);
 pub type GraphicTriple = (String, Color, Color);
 
@@ -13,8 +14,6 @@ pub type AccusativeID = EntityID;
 pub type DativeID = EntityID;
 pub type InstrumentalID = EntityID;
 pub type PlayerMessage = String;
-
-
 
 #[derive(Clone, Debug)]
 pub struct GameDataPacket {
@@ -28,10 +27,6 @@ pub struct EntityPacket {
     pub entity_type: EntityType,
     pub entity_id: EntityID,
 }
-
-
-
-
 
 pub fn add_two_points(p1: &MyPoint, p2: &MyPoint) -> MyPoint {
     let mut result = (0, 0);
@@ -54,7 +49,6 @@ pub fn locate_square(e_pos: &MyPoint, w_radius: i64, h_radius: i64) -> AABB<MyPo
     )
 }
 
-
 #[derive(Debug)]
 pub struct RenderPacket {
     pub spans_to_render: Vec<Vec<GraphicTriple>>,
@@ -69,25 +63,6 @@ impl RenderPacket {
 
             messages_to_render: Vec::new(),
         }
-    }
-}
-
-
-#[derive(Clone, Debug)]
-pub enum EntityType {
-    Player,
-    Item,
-    Monster,
-}
-
-impl EntityType {
-    pub fn to_graphictriple(&self) -> GraphicTriple {
-        let ent_char = match self {
-            EntityType::Item => "i",
-            EntityType::Monster => "M",
-            EntityType::Player => "@",
-        };
-        (ent_char.into(), Color::Red, Color::Black)
     }
 }
 
@@ -113,5 +88,14 @@ impl CardinalDirection {
             CardinalDirection::South => (0, -1),
             CardinalDirection::East => (1, 0),
         }
+    }
+}
+
+pub fn remove_first_instance<T: PartialEq>(vec: &mut Vec<T>, item: &T) -> SuccessType {
+    if let Some(index) = vec.iter().position(|x| x == item) {
+        vec.remove(index);
+        SuccessType::Success
+    } else {
+        SuccessType::Failure
     }
 }

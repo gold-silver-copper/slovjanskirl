@@ -2,31 +2,72 @@ use crate::*;
 
 #[derive(Clone, Debug)]
 pub struct MyWorld {
-    pub terrain: Terrain,
+    pub voxeltile_grid: RTree<Voxel>,
+    pub entity_tree: RTree<PositionComponent>,
+    pub entity_map: HashMap<EntityID, EntityType>,
+    pub ent_loc_index: HashMap<EntityID, MyPoint>,
     pub server_stuff: ServerStuff,
-    pub components: Components,
-    pub world_seed: i64,
+    pub turn_counter: u32,
+    pub small_rngik: SmallRng,
+    pub csv_types: CSVTypeStore,
+
+    pub world_seed: u32,
+    pub entity_counter: u64,
 }
 
 impl Default for MyWorld {
     fn default() -> Self {
-        let rngik = 100;
+        let rngik: u32 = 87243563;
 
         Self {
-            terrain: Terrain::new(rngik.clone()),
+            entity_tree: RTree::new(),
+            entity_map: HashMap::new(),
             server_stuff: ServerStuff::default(),
-            components: Components::default(),
+            turn_counter: 0,
+            small_rngik: SmallRng::seed_from_u64(rngik as u64),
+            csv_types: load_csv_data(),
+
             world_seed: rngik.clone(),
+            entity_counter: 1,
+            ent_loc_index: HashMap::new(),
+            voxeltile_grid: MyWorld::generate_test(rngik),
         }
     }
 }
 
 impl MyWorld {
-    pub fn receive(&mut self, input_pair: (ActionType, EntityID)) {
-        self.server_stuff
-            .input_queue
-            .insert(input_pair.1, input_pair.0);
+    pub fn receive(&mut self, input_pair: (ActionType, AccountID)) {
+        let entity_id_of_account = self
+            .server_stuff
+            .accid_entid_map
+            .get(&input_pair.1)
+            .unwrap_or(&0);
+
+        if entity_id_of_account != &(0 as u64) {
+            self.server_stuff
+                .input_queue
+                .insert(entity_id_of_account.clone(), input_pair.0);
+        }
+
         //   println!("inserted");
+    }
+
+    pub fn new_test() -> MyWorld {
+        let mut x = MyWorld::default();
+        let animik = EntityType::random_animal(&mut x.small_rngik);
+        x.new_entity(&(81, 88), &animik);
+        let animik = EntityType::random_animal(&mut x.small_rngik);
+        x.new_entity(&(82, 88), &animik);
+        let animik = EntityType::random_animal(&mut x.small_rngik);
+        x.new_entity(&(84, 88), &animik);
+        x.new_entity(
+            &(81, 87),
+            &EntityType::Item(ItemType::Melee(MeleeWeapon {
+                weapon_type: MeleeWeaponType::Kopje,
+                material_type: SolidMaterial::Kamenj(StoneType::Kremenj),
+            })),
+        );
+        x
     }
 
     pub fn interpret_and_execute(&mut self) {
@@ -34,12 +75,17 @@ impl MyWorld {
         self.server_stuff.input_queue.clear();
         self.server_stuff.output_queue = RTree::new();
 
+        self.turn_counter += 1;
+
         for (eid, action) in &my_clone {
-            if let Some(ent_loc) = self.components.ent_loc_index.get(&eid) {
+            if let Some(ent_loc) = self.ent_loc_index.get(&eid) {
                 let caller_loc = ent_loc.clone();
 
                 let success_type = match action {
                     ActionType::Go(loc) => Action::go(self, &eid, loc),
+                    ActionType::Take(obj) => Action::take(self, &eid, obj),
+                    ActionType::MeleeAttack(obj) => Action::melee_attack(self, &eid, obj),
+                    ActionType::Drop(itik) => Action::drop(self, &eid, itik),
                     ActionType::Wait => SuccessType::Success,
 
                     _ => panic!("not implemented"),
@@ -56,84 +102,101 @@ impl MyWorld {
         // Extend with actual game logic
     }
     //z must be above 0 for movement
-    pub fn make_account(&mut self) -> (EntityID,MyPoint) {
-        let eid = self.new_entity(&(9, 9), &EntityType::Player);
-        self.server_stuff.account_counter+=1;
+    pub fn make_account(&mut self) -> (AccountID, EntityID, MyPoint) {
+        let pp = (80, 80);
+        let eid = self.new_entity(&pp, &EntityType::Human(Human::default()));
 
-        self.server_stuff.entity_accid_map.insert(eid.clone(), self.server_stuff.account_counter.clone());
+        //increment then use value for creating account , send account and entity id to Human
+        self.server_stuff.account_counter += 17;
 
-        let my_point = self.components.ent_loc_index.get(&eid).unwrap() ;
+        let aid = self.server_stuff.account_counter.clone();
 
-        (eid,my_point.clone())
+        self.server_stuff
+            .accid_entid_map
+            .insert(self.server_stuff.account_counter.clone(), eid.clone());
+
+        (aid, eid, pp)
     }
 
     pub fn new_entity(&mut self, point: &MyPoint, spawn_type: &EntityType) -> EntityID {
-        self.components.entity_counter += 1;
+        self.entity_counter += 1;
 
         //GET ENTITY ID AND START ADDING COMPONENTS AFTER IT
-        let eid = self.components.entity_counter.clone();
+        let eid = self.entity_counter.clone();
 
-        self.components.entities.insert(eid.clone());
-
-        self.components.positions.insert(PositionComponent {
+        let pc = PositionComponent {
             entity_id: eid.clone(),
             point: point.clone(),
-        });
-        self.components
-            .ent_loc_index
-            .insert(eid.clone(), point.clone());
+        };
 
-        self.components
-            .entity_types
-            .insert(eid.clone(), spawn_type.clone());
+        self.ent_loc_index.insert(eid.clone(), point.clone());
 
-        self.components.healths.insert(
-            eid.clone(),
-            HealthComponent {
-                cur_health: 100,
-                max_health: 100,
-            },
-        );
+        self.entity_tree.insert(pc);
+        self.entity_map.insert(eid.clone(), spawn_type.clone());
 
         //END ADDING COMPONENTS HERE EXTRA INCREMENT CAUSE WHY NOT
-        self.components.entity_counter += 1;
+        self.entity_counter += 1;
 
         return eid;
     }
 
-    pub fn get_ents_at_point(&self, point: &MyPoint) -> Vec<EntityID> {
-        let mut mvec = Vec::new();
-        let boop = self.components.positions.locate_all_at_point(point);
+    pub fn delete_entity(&mut self, eidik: &EntityID) -> SuccessType {
+        let ahahaha = self.ent_loc_index.get(eidik).unwrap_or(&(0, 0));
 
-        for player in boop {
-            mvec.push(player.entity_id.clone());
-        }
-        mvec
-    }
+        let pc = PositionComponent {
+            entity_id: eidik.clone(),
+            point: ahahaha.clone(),
+        };
 
-    pub fn get_ents_in_aabb(&self, p1: &(i64, i64), p2: &(i64, i64)) -> Vec<EntityID> {
-        let mut mvec = Vec::new();
+        self.ent_loc_index.remove(eidik);
 
-        let unit_square = AABB::from_corners(p1.clone(), p2.clone());
-        for player in self.components.positions.locate_in_envelope(&unit_square) {
-            mvec.push(player.entity_id.clone());
-        }
-        mvec
+        self.entity_tree.remove(&pc);
+        self.entity_map.remove(eidik);
+
+        return SuccessType::Success;
     }
 
     // World initialization function.
-    pub fn init_world() -> RTree<Voxel> {
+    pub fn init_world(&mut self) -> RTree<Voxel> {
+        let rngik = self.world_seed.clone();
+
+        let a = MyWorld::generate_test(rngik);
+
+        a
+    }
+
+    pub fn generate_test(seed: u32) -> RTree<Voxel> {
+        let hasher = noise::permutationtable::PermutationTable::new(seed);
+        let boop = noise::utils::PlaneMapBuilder::new_fn(|point| {
+            noise::core::open_simplex::open_simplex_2d(point.into(), &hasher)
+        })
+        .set_size(300, 300)
+        .set_x_bounds(-5.0, 5.0)
+        .set_y_bounds(-5.0, 5.0)
+        .build();
+
         let mut batchvec = Vec::new();
-        for x in 0..100 {
-            for y in 0..100 {
-               
-                    batchvec.push(Voxel {
-                        floor: Floor::Dirt,
-                        furniture: Furniture::Air,
-                        roof: Roof::Air,
-                        voxel_pos: (x, y),
-                    });
-                
+        for x in 0..300 {
+            for y in 0..300 {
+                let val = boop.get_value(x as usize, y as usize);
+                let floor = if val > 0.4 {
+                    Floor::Burjan
+                } else if val > -0.1 {
+                    Floor::Trava
+                } else if val > -0.2 {
+                    Floor::Zemja
+                } else if val > -0.3 {
+                    Floor::Pěsȯk
+                } else {
+                    Floor::Voda
+                };
+
+                batchvec.push(Voxel {
+                    floor: floor,
+
+                    roof: Roof::Sky,
+                    voxel_pos: (x, y),
+                });
             }
         }
         let newtree = RTree::bulk_load(batchvec);
@@ -142,60 +205,53 @@ impl MyWorld {
     }
 
     pub fn set_voxel_at(&mut self, vox: &Voxel) {
-        if let Some(boop) = self
-            .terrain
-            .voxeltile_grid
-            .locate_at_point_mut(&vox.voxel_pos)
-        {
+        if let Some(boop) = self.voxeltile_grid.locate_at_point_mut(&vox.voxel_pos) {
             *boop = vox.clone();
         } else {
-            self.terrain.voxeltile_grid.insert(vox.clone())
+            self.voxeltile_grid.insert(vox.clone())
         }
     }
 
     pub fn get_voxel_at(&self, point: &MyPoint) -> Option<Voxel> {
-        if let Some(boop) = self.terrain.voxeltile_grid.locate_at_point(point) {
+        if let Some(boop) = self.voxeltile_grid.locate_at_point(point) {
             Some(boop.clone())
         } else {
             None
         }
     }
 
-    pub fn voxel_blocks_movement_at(&self, point: &MyPoint) -> bool {
-        if let Some(got_point) = self.get_voxel_at(point) {
-            //todo!("implement voxel blocking movements");
-            return false;
-        } else {
-            if point.0 > 0 && point.1 > 0 {
-                return false;
-            } else {
-                return true;
+    pub fn get_items_at_point(&self, point: &MyPoint) -> Vec<(EntityID, ItemType)> {
+        let mut item_vec = Vec::new();
+        let boop = self.entity_tree.locate_all_at_point(point);
+        for x in boop {
+            let ent_typ = self.entity_map.get(&x.entity_id);
+            if let Some(meow) = ent_typ {
+                match meow {
+                    EntityType::Item(wut) => item_vec.push((x.entity_id.clone(), wut.clone())),
+                    _ => (),
+                }
             }
         }
+        item_vec
     }
 
     pub fn entity_blocks_movement_at(&self, point: &MyPoint) -> bool {
-        let ents_at = self.get_ents_at_point(point);
+        let entsatpoint = self.entity_tree.locate_all_at_point(point);
 
-        for ent in ents_at {
-            if let Some(etype) = self.components.entity_types.get(&ent) {
-                match etype {
-                    EntityType::Item => {
-                        return false;
-                    }
-                    EntityType::Player => {
-                        return true;
-                    }
-                    EntityType::Monster => {
-                        return true;
-                    }
-                }
+        for entt in entsatpoint {
+            let enttype = self
+                .entity_map
+                .get(&entt.entity_id)
+                .unwrap_or(&EntityType::None);
+
+            match enttype {
+                EntityType::Human(_) => return true,
+                EntityType::Monster(_) => return true,
+                EntityType::Item(_) => (),
+                _ => (),
             }
-
-            // let obj = self.en
         }
-
-        if point.0 > 0 && point.1 > 0  {
+        if point.0 > 0 && point.1 > 0 {
             return false;
         } else {
             return true;
@@ -214,8 +270,68 @@ impl MyWorld {
                 Person::Third
             };
         */
-        let abc = format!("HELLOᐂᐂᐂ𓀀𓀀𓀀 {:#?}", &act_packet.action_location);
-        abc
+        let mut subject_pronoun = String::from("Ty");
+        if local_player_id != &act_packet.action_subject {
+            let nomik = self
+                .entity_map
+                .get(&act_packet.action_subject)
+                .unwrap_or(&EntityType::None);
+
+            subject_pronoun = nomik.minimal_string();
+        }
+        let meowik = match &act_packet.action {
+            ActionType::Drop(x) => format!(" brosati {}", x.minimal_string().to_lowercase()),
+            ActionType::Go(x) => format!("idti"),
+            ActionType::MeleeAttack(x) => format!(" udarjati {}", ""),
+            _ => format!(" jhxcvhas {}", ""),
+        };
+
+        let succik = match &act_packet.success {
+            SuccessType::Success => {
+                format!("")
+            }
+            SuccessType::Failure => {
+                format!("ne mozzesz")
+            }
+        };
+
+        if succik != "" {
+            subject_pronoun.push_str(&succik);
+        } else {
+            subject_pronoun.push_str(&meowik);
+        }
+
+        let abc = format!(" {:#?}", &act_packet.action_location);
+        subject_pronoun.push_str(&abc);
+        subject_pronoun
+    }
+
+    pub fn get_visible_ents_from_ent(&self, ent: &EntityID) -> Vec<EntityID> {
+        if let Some(e_pos) = self.ent_loc_index.get(&ent) {
+            let render_width = 100;
+            let render_height = 100;
+            let w_radius = render_width / 2;
+            let h_radius = render_height / 2;
+            let same_z = locate_square(e_pos, w_radius as i64, h_radius as i64);
+
+            let mut bop = Vec::new();
+
+            let local_ents = self.entity_tree.locate_in_envelope(&same_z);
+
+            for entt in local_ents {
+                if &entt.entity_id != ent {
+                    bop.push(entt.clone());
+                }
+            }
+
+            bop.sort_by(|a, b| a.distance_2(e_pos).cmp(&b.distance_2(e_pos)));
+
+            let meo = bop.iter().map(|x| x.entity_id).collect();
+
+            return meo;
+        } else {
+            return Vec::new();
+        }
     }
 
     pub fn create_client_render_packet_for_entity(
@@ -223,27 +339,22 @@ impl MyWorld {
         ent: &EntityID,
         render_rect: &Rect,
     ) -> RenderPacket {
-        if let Some(e_pos) = self.components.ent_loc_index.get(ent) {
+        if let Some(e_pos) = self.ent_loc_index.get(ent) {
             let render_width = render_rect.width;
             let render_height = render_rect.height;
             let w_radius = render_width / 2;
             let h_radius = render_height / 2;
             let same_z = locate_square(e_pos, w_radius as i64, h_radius as i64);
 
-            let local_ents = self.components.positions.locate_in_envelope(&same_z);
-            let local_voxels = self.terrain.voxeltile_grid.locate_in_envelope(&same_z);
-
-            let local_voxel_diffs = self.terrain.voxeltile_diffs.locate_in_envelope(&same_z);
+            let local_ents = self.entity_tree.locate_in_envelope(&same_z);
+            let local_voxels = self.voxeltile_grid.locate_in_envelope(&same_z);
 
             let local_actions = self
-                .server_stuff.output_queue
+                .server_stuff
+                .output_queue
                 .locate_within_distance(e_pos.clone(), LOCAL_RANGE);
 
-            let bottom_left_of_game_screen = (
-                e_pos.0 - w_radius as i64,
-                e_pos.1 - h_radius as i64,
-               
-            );
+            let bottom_left_of_game_screen = (e_pos.0 - w_radius as i64, e_pos.1 - h_radius as i64);
 
             // THIS GRID IS INDEXD Y FIRST
             let mut voxel_grid = create_2d_array(render_width.into(), render_height.into());
@@ -253,15 +364,9 @@ impl MyWorld {
             for pc in local_ents {
                 let relative_point_x = pc.point.0 - bottom_left_of_game_screen.0;
                 let relative_point_y = pc.point.1 - bottom_left_of_game_screen.1;
-                if let Some(ent_type) = self.components.entity_types.get(&pc.entity_id) {
-                    let et = ent_type.clone();
-                    ent_vec.push(((relative_point_x, relative_point_y), et.to_graphictriple()))
-                } else {
-                    ent_vec.push((
-                        (relative_point_x, relative_point_y),
-                        ("?".into(), Color::LightCyan, Color::LightCyan),
-                    ))
-                }
+                let et = self.entity_map.get(&pc.entity_id).unwrap().clone();
+
+                ent_vec.push(((relative_point_x, relative_point_y), et.to_graphictriple()))
             }
 
             for lv in local_voxels {
@@ -277,18 +382,6 @@ impl MyWorld {
                     voxel_grid[relative_point_y as usize][relative_point_x as usize] = boop;
                 }
             }
-            for vd in local_voxel_diffs {
-                let relative_point_x = vd.voxel_pos.0 - bottom_left_of_game_screen.0;
-                let relative_point_y = vd.voxel_pos.1 - bottom_left_of_game_screen.1;
-                if (0 < relative_point_y)
-                    && (relative_point_y < render_height as i64)
-                    && (0 < relative_point_x)
-                    && (relative_point_x < render_width as i64)
-                {
-                    let boop2 = vd.to_graphic();
-                    voxel_grid[relative_point_y as usize][relative_point_x as usize] = boop2;
-                }
-            }
 
             //merge grids
 
@@ -298,8 +391,14 @@ impl MyWorld {
                     && (0 < ent_relative.0)
                     && (ent_relative.0 < render_width as i64)
                 {
-                    voxel_grid[ent_relative.1 as usize][ent_relative.0 as usize].0 = ent_graphic.0;
-                    voxel_grid[ent_relative.1 as usize][ent_relative.0 as usize].1 = ent_graphic.1;
+                    if voxel_grid[ent_relative.1 as usize][ent_relative.0 as usize].0
+                        != String::from("@")
+                    {
+                        voxel_grid[ent_relative.1 as usize][ent_relative.0 as usize].0 =
+                            ent_graphic.0;
+                        voxel_grid[ent_relative.1 as usize][ent_relative.0 as usize].1 =
+                            ent_graphic.1;
+                    }
                 }
             }
 
@@ -313,21 +412,22 @@ impl MyWorld {
                 messages_to_render: Vec::new(),
             }
         } else {
-              // println!("DESSSSSS");
+            // println!("DESSSSSS");
             RenderPacket::new()
         }
     }
 
     pub fn create_game_data_packet_for_entity(&self, ent: &EntityID) -> Option<GameDataPacket> {
-        if let Some(e_pos) = self.components.ent_loc_index.get(ent) {
+        if let Some(e_pos) = self.ent_loc_index.get(ent) {
             let local_ents = self
-                .components.positions
+                .entity_tree
                 .locate_within_distance(e_pos.clone(), LOCAL_RANGE * 2);
             let local_voxels = self
-                .terrain.voxeltile_diffs
+                .voxeltile_grid
                 .locate_within_distance(e_pos.clone(), LOCAL_RANGE / 2);
             let local_actions = self
-                .server_stuff.output_queue
+                .server_stuff
+                .output_queue
                 .locate_within_distance(e_pos.clone(), LOCAL_RANGE / 8);
 
             let mut e_info = Vec::new();
@@ -335,10 +435,11 @@ impl MyWorld {
             let mut actions = Vec::new();
 
             for pc in local_ents {
+                let et = self.entity_map.get(&pc.entity_id).unwrap().clone();
                 e_info.push(EntityPacket {
                     entity_pos: pc.point.clone(),
                     entity_id: pc.entity_id.clone(),
-                    entity_type: self.components.entity_types.get(ent).unwrap().clone(),
+                    entity_type: et.clone(),
                 })
             }
 
@@ -360,25 +461,17 @@ impl MyWorld {
         }
     }
 
-    pub fn voxel_blocks_vision_at(&self, point: &MyPoint) -> bool {
-        if let Some(got_point) = MyWorld::get_voxel_at(&self, point) {
-            return false;
-        } else {
-            return false;
-        }
-    }
-
     pub fn set_ent_loc(&mut self, ent: &EntityID, destination: &MyPoint) {
-        if let Some(xyz) = self.components.ent_loc_index.get(ent) {
-            self.components.positions.remove(&PositionComponent {
+        if let Some(xyz) = self.ent_loc_index.get(ent) {
+            self.entity_tree.remove(&PositionComponent {
                 entity_id: ent.clone(),
                 point: xyz.clone(),
             });
-            self.components.positions.insert(PositionComponent {
+            self.entity_tree.insert(PositionComponent {
                 entity_id: ent.clone(),
                 point: destination.clone(),
             });
-            self.components.ent_loc_index.insert(ent.clone(), destination.clone());
+            self.ent_loc_index.insert(ent.clone(), destination.clone());
         }
     }
 
@@ -387,19 +480,13 @@ impl MyWorld {
         ent: &EntityID,
         cd: &CardinalDirection,
     ) -> SuccessType {
-        if let Some(xyz) = self.components.ent_loc_index.get(ent) {
-            println!("GOT ENT LOC INDEX FOR MOVEMENT");
-
+        if let Some(xyz) = self.ent_loc_index.get(ent) {
             let dir_point = cd.to_xyz();
             let goal = add_two_points(&xyz, &dir_point);
 
-            if !self.voxel_blocks_movement_at(&goal) {
-                if !self.entity_blocks_movement_at(&goal) {
-                    self.set_ent_loc(ent, &goal);
-                    return SuccessType::Success;
-                } else {
-                    SuccessType::Failure
-                }
+            if !self.entity_blocks_movement_at(&goal) {
+                self.set_ent_loc(ent, &goal);
+                return SuccessType::Success;
             } else {
                 SuccessType::Failure
             }
